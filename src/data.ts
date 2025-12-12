@@ -49,9 +49,9 @@ const unit4Videos: Video[] = [
 
 // 5. Sınıf Ünite 5: Mimarimizde Dini Motifler (3 video)
 const unit5Videos: Video[] = [
-    { id: '5-1', title: 'Dinin Mimarimize Etkisi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '5-2', title: 'Camileri Tanıyalım', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '5-3', title: 'Kültürümüzden Cami Örnekleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '5-1', title: 'Dinin Mimarimize Etkisi', youtubeId: 'vXGAtsLy8so', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '5-2', title: 'Camileri Tanıyalım', youtubeId: 'DioXJEN6FAk', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '5-3', title: 'Kültürümüzden Cami Örnekleri', youtubeId: 'KlLmjQ7k964', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
 ];
 
 // Sınıflar ve Üniteler

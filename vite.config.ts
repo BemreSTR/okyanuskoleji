@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-    base: '/alioflu/',  // GitHub repo adınız
+    base: '/Dinakademi/',  // GitHub repo adınız
     build: {
         outDir: 'dist'
     }

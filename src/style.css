@@ -1,9 +1,9 @@
 :root {
-  /* Color Palette - Modern Dark Theme */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #1a1a25;
-  --bg-card-hover: #222230;
+  /* Color Palette - Light Theme */
+  --bg-primary: #f8f9fc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
 
   /* Accent Colors */
   --accent-primary: #6366f1;
@@ -12,15 +12,21 @@
   --accent-kahoot: #10b981;
 
   /* Text Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --gradient-wordwall: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
   --gradient-kahoot: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-  --gradient-header: linear-gradient(180deg, rgba(99, 102, 241, 0.15) 0%, transparent 100%);
+  --gradient-header: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+
+  /* Grade Colors */
+  --grade-5-color: #ef4444;
+  --grade-6-color: #3b82f6;
+  --grade-7-color: #fde047;
+  --grade-8-color: #22c55e;
 
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -56,6 +62,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
+  font-size: 18px;
 }
 
 #app {
@@ -113,7 +120,7 @@ body {
 }
 
 .tagline {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: var(--text-secondary);
   font-weight: 400;
   max-width: 600px;
@@ -141,12 +148,12 @@ body {
 
 .video-count-text {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
 }
 
 /* Section Title */
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 32px;
@@ -183,31 +190,72 @@ body {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1;
-  background: var(--bg-card);
   border-radius: var(--radius-xl);
-  border: 2px solid rgba(99, 102, 241, 0.2);
+  border: none;
   text-decoration: none;
   transition: all var(--transition-normal);
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.grade-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
+/* Grade Card Filled Colors */
+.grade-card--5 {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
-.grade-card:hover {
+.grade-card--6 {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.grade-card--7 {
+  background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
+}
+
+.grade-card--8 {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.grade-card .grade-number {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: white;
+  color: white;
+}
+
+.grade-card .grade-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.grade-card--5:hover {
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
   transform: translateY(-8px) scale(1.02);
-  border-color: var(--accent-primary);
-  box-shadow: var(--shadow-glow);
 }
 
-.grade-card:hover::before {
-  opacity: 0.1;
+.grade-card--6:hover {
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.grade-card--7:hover {
+  box-shadow: 0 8px 30px rgba(234, 179, 8, 0.4);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.grade-card--8:hover {
+  box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Header Banner */
+.header-banner {
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  margin: 20px auto;
+  border-radius: var(--radius-lg);
+  object-fit: contain;
 }
 
 .grade-card-content {
@@ -230,7 +278,7 @@ body {
 }
 
 .grade-label {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 500;
   color: var(--text-secondary);
 }
@@ -245,11 +293,11 @@ body {
 .coming-soon {
   position: absolute;
   bottom: 16px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 /* Unit Grid */
@@ -299,13 +347,13 @@ body {
   height: 48px;
   background: var(--gradient-primary);
   border-radius: 50%;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: white;
 }
 
 .unit-name {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--text-primary);
   text-align: center;
@@ -313,7 +361,7 @@ body {
 }
 
 .unit-video-count {
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--text-muted);
   padding: 6px 14px;
   background: var(--bg-secondary);
@@ -361,7 +409,7 @@ body {
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   transition: all var(--transition-fast);
   margin-bottom: 20px;
 }
@@ -479,7 +527,7 @@ body {
 /* Video Title */
 .video-title {
   padding: 16px 16px 12px;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.4;
@@ -524,7 +572,7 @@ body {
   border-radius: var(--radius-md);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
@@ -557,16 +605,16 @@ body {
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
 }
 
-/* Kahoot Button */
+/* Kahoot Button - Mavi */
 .link-btn--kahoot {
-  background: var(--gradient-kahoot);
-  color: #1a1a25;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
 }
 
 .link-btn--kahoot:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 /* Wordwall Buttons Container */
@@ -578,31 +626,31 @@ body {
 .wordwall-buttons .link-btn {
   flex: 1;
   padding: 10px 12px;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
-/* Wordwall Kitaplık Button */
+/* Wordwall Kitaplık Button - Sarı */
 .link-btn--wordwall-kitaplik {
-  background: var(--gradient-wordwall);
+  background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
   color: #1a1a25;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 14px rgba(253, 224, 71, 0.4);
 }
 
 .link-btn--wordwall-kitaplik:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 6px 20px rgba(253, 224, 71, 0.5);
 }
 
-/* Wordwall Çarkıfelek Button */
+/* Wordwall Çarkıfelek Button - Kırmızı */
 .link-btn--wordwall-carkifelek {
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-  color: #1a1a25;
-  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.3);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
 }
 
 .link-btn--wordwall-carkifelek:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
 }
 
 /* Link Icon */
@@ -639,7 +687,7 @@ body {
 
 .footer-text {
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 
 /* Scroll Animation */
@@ -725,4 +773,163 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bg-card-hover);
+}
+
+/* ==================== GRADE-SPECIFIC THEMES ==================== */
+
+/* Header Grade Themes */
+.header--grade-5 {
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+}
+
+.header--grade-6 {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+}
+
+.header--grade-7 {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.15) 0%, transparent 100%);
+}
+
+.header--grade-8 {
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.1) 0%, transparent 100%);
+}
+
+/* Logo Grade Themes */
+.logo--grade-5 {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo--grade-6 {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo--grade-7 {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo--grade-8 {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Back Button Grade Themes */
+.back-button--grade-5 {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.back-button--grade-5:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.back-button--grade-6 {
+  background: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+}
+
+.back-button--grade-6:hover {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.back-button--grade-7 {
+  background: rgba(251, 191, 36, 0.2);
+  color: #b45309;
+}
+
+.back-button--grade-7:hover {
+  background: rgba(251, 191, 36, 0.35);
+}
+
+.back-button--grade-8 {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.back-button--grade-8:hover {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+/* Unit Card Grade Themes */
+.unit-card--grade-5 .unit-number {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.unit-card--grade-5:hover {
+  border-color: #ef4444;
+  box-shadow: 0 8px 30px rgba(239, 68, 68, 0.2);
+}
+
+.unit-card--grade-6 .unit-number {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.unit-card--grade-6:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2);
+}
+
+.unit-card--grade-7 .unit-number {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.unit-card--grade-7:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.2);
+}
+
+.unit-card--grade-8 .unit-number {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.unit-card--grade-8:hover {
+  border-color: #22c55e;
+  box-shadow: 0 8px 30px rgba(34, 197, 94, 0.2);
+}
+
+/* Video Count Grade Themes */
+.video-count--grade-5 {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+.video-count--grade-5 .video-count-number {
+  color: #ef4444;
+}
+
+.video-count--grade-6 {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+}
+
+.video-count--grade-6 .video-count-number {
+  color: #3b82f6;
+}
+
+.video-count--grade-7 {
+  border-color: rgba(251, 191, 36, 0.3);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.15);
+}
+
+.video-count--grade-7 .video-count-number {
+  color: #f59e0b;
+}
+
+.video-count--grade-8 {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+}
+
+.video-count--grade-8 .video-count-number {
+  color: #22c55e;
 }

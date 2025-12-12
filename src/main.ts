@@ -57,7 +57,7 @@ function createVideoCard(video: Video): string {
 // ==================== HOME PAGE ====================
 function renderHomePage(): string {
   const gradeCards = grades.map(grade => `
-    <a href="#/sinif/${grade.id}" class="grade-card ${!grade.isActive ? 'grade-card--disabled' : ''}">
+    <a href="#/sinif/${grade.id}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
       <div class="grade-card-content">
         <span class="grade-number">${grade.id}</span>
         <span class="grade-label">Sınıf</span>
@@ -69,7 +69,8 @@ function renderHomePage(): string {
   return `
     <header class="header">
       <div class="header-content">
-        <h1 class="logo">🎓 Ali Öflü</h1>
+        <h1 class="logo">DİN AKADEMİ</h1>
+        <img src="/images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
         <p class="tagline">Çocuklar için eğlenceli ve öğretici videolar, interaktif aktiviteler</p>
       </div>
     </header>
@@ -80,7 +81,7 @@ function renderHomePage(): string {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} Ali Öflü - Tüm hakları saklıdır</p>
+      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
     </footer>
   `;
 }
@@ -88,7 +89,7 @@ function renderHomePage(): string {
 // ==================== UNITS PAGE ====================
 function renderUnitsPage(grade: Grade): string {
   const unitCards = grade.units.map(unit => `
-    <a href="#/sinif/${grade.id}/unite/${unit.id}" class="unit-card">
+    <a href="#/sinif/${grade.id}/unite/${unit.id}" class="unit-card unit-card--grade-${grade.id}">
       <span class="unit-number">${unit.id}</span>
       <span class="unit-name">${unit.name}</span>
       <span class="unit-video-count">${unit.videos.length} Video</span>
@@ -96,10 +97,10 @@ function renderUnitsPage(grade: Grade): string {
   `).join('');
 
   return `
-    <header class="header header--compact">
+    <header class="header header--compact header--grade-${grade.id}">
       <div class="header-content">
-        <a href="#/" class="back-button">${backIcon} Ana Sayfa</a>
-        <h1 class="logo logo--small">🎓 ${grade.displayName}</h1>
+        <a href="#/" class="back-button back-button--grade-${grade.id}">${backIcon} Ana Sayfa</a>
+        <h1 class="logo logo--small logo--grade-${grade.id}">${grade.displayName}</h1>
         <p class="tagline">Üniteleri keşfet, videoları izle!</p>
       </div>
     </header>
@@ -110,7 +111,7 @@ function renderUnitsPage(grade: Grade): string {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} Ali Öflü - Tüm hakları saklıdır</p>
+      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
     </footer>
   `;
 }
@@ -120,12 +121,12 @@ function renderVideosPage(grade: Grade, unit: Unit): string {
   const videoCards = unit.videos.map(createVideoCard).join('');
 
   return `
-    <header class="header header--compact">
+    <header class="header header--compact header--grade-${grade.id}">
       <div class="header-content">
-        <a href="#/sinif/${grade.id}" class="back-button">${backIcon} Üniteler</a>
-        <h1 class="logo logo--small">🎓 ${grade.displayName}</h1>
+        <a href="#/sinif/${grade.id}" class="back-button back-button--grade-${grade.id}">${backIcon} Üniteler</a>
+        <h1 class="logo logo--small logo--grade-${grade.id}">${grade.displayName}</h1>
         <p class="tagline">${unit.name}</p>
-        <div class="video-count">
+        <div class="video-count video-count--grade-${grade.id}">
           <span class="video-count-number">${unit.videos.length}</span>
           <span class="video-count-text">Video</span>
         </div>
@@ -137,7 +138,7 @@ function renderVideosPage(grade: Grade, unit: Unit): string {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} Ali Öflü - Tüm hakları saklıdır</p>
+      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
     </footer>
   `;
 }
@@ -147,7 +148,7 @@ function render404Page(): string {
   return `
     <header class="header">
       <div class="header-content">
-        <h1 class="logo">🎓 Ali Öflü</h1>
+        <h1 class="logo">🎓 DİN AKADEMİ</h1>
       </div>
     </header>
     <main class="container">

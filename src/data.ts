@@ -1,20 +1,58 @@
 import type { Grade, Video } from './types';
 
-// Örnek video şablonu
-function createTestVideos(unitId: string, count: number): Video[] {
-    const videos: Video[] = [];
-    for (let i = 1; i <= count; i++) {
-        videos.push({
-            id: `${unitId}-video-${i}`,
-            title: `Ünite ${unitId} - Video ${i}`,
-            youtubeId: 'pQxsdeU7MaI',
-            kahootLink: 'https://create.kahoot.it/share/5-sini',
-            wordwallKitaplik: 'https://wordwall.net/play/97566/048/300',
-            wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250'
-        });
-    }
-    return videos;
-}
+// 5. Sınıf Ünite 1: Allah İnancı (8 video)
+const unit1Videos: Video[] = [
+    { id: '1-1', title: 'Evrendeki Mükemmel Düzen', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-2', title: 'Allah\'ın Varlığı ve Birliği', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-3', title: 'Allah\'ın Güzel İsimleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-4', title: 'Allah Rahman ve Rahîm\'dir', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-5', title: 'Allah Her Şeyi Bilir', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-6', title: 'Allah Her Şeyi Görür ve İşitir', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-7', title: 'Allah\'ın Her Şeye Gücü Yeter', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '1-8', title: 'Bir Sure Öğreniyorum: İhlas Suresi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+];
+
+// 5. Sınıf Ünite 2: Namaz (7 video)
+const unit2Videos: Video[] = [
+    { id: '2-1', title: 'Allah\'ın Huzurunda Olmak: Namaz İbadeti', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-2', title: 'Namaz Çeşitleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-3', title: 'Namazın Kılınışı', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-4', title: 'Namazın Hazırlık Şartları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-5', title: 'Namazın Kılınış Şartları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-6', title: 'Namaz İbadetinin İnsana Kazandırdıkları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-7', title: 'Bir Dua Öğreniyorum: Tahiyyat Duası', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+];
+
+// 5. Sınıf Ünite 3: Kur'an-ı Kerim (8 video)
+const unit3Videos: Video[] = [
+    { id: '3-1', title: 'Kur\'an-ı Kerim\'in İç Düzeni', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-2', title: 'Kur\'an-ı Kerim\'in Temel Özellikleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-3', title: 'Kur\'an-ı Kerim\'in Ana Konuları: İnanç', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-4', title: 'Kur\'an-ı Kerim\'in Ana Konuları: İbadet', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-5', title: 'Kur\'an-ı Kerim\'in Ana Konuları: Ahlak', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-6', title: 'Kur\'an-ı Kerim\'in Ana Konuları: Sosyal Hayat', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-7', title: 'Kur\'an-ı Kerim\'in Ana Konuları: Kıssalar', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '3-8', title: 'Bir Sure Öğreniyorum: Kevser Suresi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+];
+
+// 5. Sınıf Ünite 4: Peygamber Kıssaları (8 video)
+const unit4Videos: Video[] = [
+    { id: '4-1', title: 'Allah\'ın Elçileri: Peygamberler', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-2', title: 'Kur\'an-ı Kerim\'den Öğütler: Peygamber Kıssaları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-3', title: 'Hz. Nuh', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-4', title: 'Hz. İbrahim', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-5', title: 'Hz. Musa', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-6', title: 'Hz. İsa', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-7', title: 'Peygamber Kıssalarında Verilen Mesajlar', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-8', title: 'Bir Sure Öğreniyorum: Kureyş Suresi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+];
+
+// 5. Sınıf Ünite 5: Mimarimizde Dini Motifler (3 video)
+const unit5Videos: Video[] = [
+    { id: '5-1', title: 'Dinin Mimarimize Etkisi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '5-2', title: 'Camileri Tanıyalım', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '5-3', title: 'Kültürümüzden Cami Örnekleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+];
 
 // Sınıflar ve Üniteler
 export const grades: Grade[] = [
@@ -24,36 +62,11 @@ export const grades: Grade[] = [
         displayName: '5. Sınıf',
         isActive: true,
         units: [
-            {
-                id: '1',
-                name: '1. Ünite - Güneş Sistemi',
-                videos: createTestVideos('1', 5)
-            },
-            {
-                id: '2',
-                name: '2. Ünite - Canlılar Dünyası',
-                videos: createTestVideos('2', 5)
-            },
-            {
-                id: '3',
-                name: '3. Ünite - Kuvvet ve Hareket',
-                videos: createTestVideos('3', 5)
-            },
-            {
-                id: '4',
-                name: '4. Ünite - Madde ve Değişim',
-                videos: createTestVideos('4', 5)
-            },
-            {
-                id: '5',
-                name: '5. Ünite - Işık ve Ses',
-                videos: createTestVideos('5', 5)
-            },
-            {
-                id: '6',
-                name: '6. Ünite - Elektrik',
-                videos: createTestVideos('6', 5)
-            }
+            { id: '1', name: '1. Ünite: Allah İnancı', videos: unit1Videos },
+            { id: '2', name: '2. Ünite: Namaz', videos: unit2Videos },
+            { id: '3', name: '3. Ünite: Kur\'an-ı Kerim', videos: unit3Videos },
+            { id: '4', name: '4. Ünite: Peygamber Kıssaları', videos: unit4Videos },
+            { id: '5', name: '5. Ünite: Mimarimizde Dini Motifler', videos: unit5Videos },
         ]
     },
     {

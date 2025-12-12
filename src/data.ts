@@ -37,14 +37,14 @@ const unit3Videos: Video[] = [
 
 // 5. Sınıf Ünite 4: Peygamber Kıssaları (8 video)
 const unit4Videos: Video[] = [
-    { id: '4-1', title: 'Allah\'ın Elçileri: Peygamberler', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-2', title: 'Kur\'an-ı Kerim\'den Öğütler: Peygamber Kıssaları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-3', title: 'Hz. Nuh', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-4', title: 'Hz. İbrahim', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-5', title: 'Hz. Musa', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-6', title: 'Hz. İsa', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-7', title: 'Peygamber Kıssalarında Verilen Mesajlar', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '4-8', title: 'Bir Sure Öğreniyorum: Kureyş Suresi', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-1', title: 'Allah\'ın Elçileri: Peygamberler', youtubeId: '2CR7hFC3LEA', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-2', title: 'Kur\'an-ı Kerim\'den Öğütler: Peygamber Kıssaları', youtubeId: 'OaxA4eXGpAs', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-3', title: 'Hz. Nuh', youtubeId: 'Rq0ssVnKLo0', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-4', title: 'Hz. İbrahim', youtubeId: 'hFIeOL5jK-4', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-5', title: 'Hz. Musa', youtubeId: 'ir-LjrH5uFU', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-6', title: 'Hz. İsa', youtubeId: 'kZq8LOJY164', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-7', title: 'Peygamber Kıssalarında Verilen Mesajlar', youtubeId: '5Ce-gquXDY4', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '4-8', title: 'Bir Sure Öğreniyorum: Kureyş Suresi', youtubeId: 'CVdpIpWCgWk', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
 ];
 
 // 5. Sınıf Ünite 5: Mimarimizde Dini Motifler (3 video)

@@ -70,7 +70,7 @@ function renderHomePage(): string {
     <header class="header">
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
-        <img src="/images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
+        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
         <p class="tagline">Çocuklar için eğlenceli ve öğretici videolar, interaktif aktiviteler</p>
       </div>
     </header>

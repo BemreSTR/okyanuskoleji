@@ -60,6 +60,43 @@ function showDashboard() {
 async function loadData() {
     currentGrades = await loadGrades();
     renderCurrentView();
+
+    // Restore state from sessionStorage
+    restoreState();
+}
+
+// State persistence
+function saveState() {
+    sessionStorage.setItem('admin_selectedGradeId', selectedGradeId);
+    sessionStorage.setItem('admin_selectedUnitId', selectedUnitId);
+    sessionStorage.setItem('admin_currentView', currentView);
+}
+
+function restoreState() {
+    const savedGradeId = sessionStorage.getItem('admin_selectedGradeId');
+    const savedUnitId = sessionStorage.getItem('admin_selectedUnitId');
+    const savedView = sessionStorage.getItem('admin_currentView');
+
+    if (savedView) {
+        currentView = savedView as 'videos' | 'units';
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-view') === savedView);
+        });
+    }
+
+    if (savedGradeId && currentView === 'videos') {
+        gradeSelect.value = savedGradeId;
+        selectedGradeId = savedGradeId;
+        gradeSelect.dispatchEvent(new Event('change'));
+
+        if (savedUnitId) {
+            setTimeout(() => {
+                unitSelect.value = savedUnitId;
+                selectedUnitId = savedUnitId;
+                unitSelect.dispatchEvent(new Event('change'));
+            }, 100);
+        }
+    }
 }
 
 // ==================== NAVIGATION ====================
@@ -114,11 +151,13 @@ gradeSelect.addEventListener('change', () => {
         unitSelect.innerHTML = '<option value="">Önce sınıf seçin</option>';
     }
 
+    saveState();
     renderVideosList();
 });
 
 unitSelect.addEventListener('change', () => {
     selectedUnitId = unitSelect.value;
+    saveState();
     renderVideosList();
 });
 
@@ -145,15 +184,15 @@ function renderVideosList() {
         return;
     }
 
-    videosListEl.innerHTML = unit.videos.map(video => `
+    videosListEl.innerHTML = unit.videos.map((video: any) => `
     <div class="item-card">
       <div class="item-info">
         <h4>${video.title}</h4>
         <p class="item-meta">YouTube ID: ${video.youtubeId}</p>
       </div>
       <div class="item-actions">
-        <button class="btn btn-sm btn-secondary" onclick="editVideo('${video.id}')">Düzenle</button>
-        <button class="btn btn-sm btn-danger" onclick="removeVideo('${video.id}')">Sil</button>
+        <button class="btn btn-sm btn-secondary" onclick="editVideo('${video._docId}')">Düzenle</button>
+        <button class="btn btn-sm btn-danger" onclick="removeVideo('${video._docId}')">Sil</button>
       </div>
     </div>
   `).join('');
@@ -171,11 +210,11 @@ addVideoBtn.addEventListener('click', () => {
 const videoModal = document.getElementById('video-modal')!;
 const videoForm = document.getElementById('video-form') as HTMLFormElement;
 
-function openVideoModal(video?: Video) {
+function openVideoModal(video?: any) {
     document.getElementById('video-modal-title')!.textContent = video ? 'Video Düzenle' : 'Yeni Video';
 
     if (video) {
-        (document.getElementById('video-id') as HTMLInputElement).value = video.id;
+        (document.getElementById('video-id') as HTMLInputElement).value = video._docId || '';
         (document.getElementById('video-title') as HTMLInputElement).value = video.title;
         (document.getElementById('youtube-id') as HTMLInputElement).value = video.youtubeId;
         (document.getElementById('kahoot-link') as HTMLInputElement).value = video.kahootLink || '';
@@ -257,18 +296,18 @@ document.querySelectorAll('.modal-close, .modal-cancel').forEach(btn => {
 });
 
 // Global functions for onclick handlers
-(window as any).editVideo = function (videoId: string) {
+(window as any).editVideo = function (videoDocId: string) {
     const grade = currentGrades.find(g => g.id === selectedGradeId);
     const unit = grade?.units.find(u => u.id === selectedUnitId);
-    const video = unit?.videos.find(v => v.id === videoId);
+    const video = unit?.videos.find((v: any) => v._docId === videoDocId);
     if (video) openVideoModal(video);
 };
 
-(window as any).removeVideo = async function (videoId: string) {
+(window as any).removeVideo = async function (videoDocId: string) {
     if (!confirm('Bu videoyu silmek istediğinize emin misiniz?')) return;
 
     try {
-        await deleteVideo(selectedGradeId, selectedUnitId, videoId);
+        await deleteVideo(selectedGradeId, selectedUnitId, videoDocId);
         await loadData();
         alert('Video silindi!');
     } catch (error) {

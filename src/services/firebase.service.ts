@@ -91,14 +91,16 @@ export async function loadVideos(gradeId: string, unitId: string): Promise<Video
         const videosRef = collection(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS);
         const videosSnapshot = await getDocs(query(videosRef, orderBy('id')));
 
-        return videosSnapshot.docs.map(doc => ({
-            id: doc.data().id,
-            title: doc.data().title,
-            youtubeId: doc.data().youtubeId,
-            kahootLink: doc.data().kahootLink,
-            wordwallKitaplik: doc.data().wordwallKitaplik,
-            wordwallCarkifelek: doc.data().wordwallCarkifelek
-        }));
+        return videosSnapshot.docs.map(docSnap => ({
+            id: docSnap.data().id,
+            title: docSnap.data().title,
+            youtubeId: docSnap.data().youtubeId,
+            kahootLink: docSnap.data().kahootLink,
+            wordwallKitaplik: docSnap.data().wordwallKitaplik,
+            wordwallCarkifelek: docSnap.data().wordwallCarkifelek,
+            // Store Firestore doc ID for deletion
+            _docId: docSnap.id
+        } as any));
     } catch (error) {
         console.error('Error loading videos:', error);
         return [];
@@ -113,15 +115,15 @@ export async function addVideo(gradeId: string, unitId: string, video: Video): P
     });
 }
 
-export async function updateVideo(gradeId: string, unitId: string, videoId: string, video: Partial<Video>): Promise<void> {
-    const videoRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS, videoId);
+export async function updateVideo(gradeId: string, unitId: string, videoDocId: string, video: Partial<Video>): Promise<void> {
+    const videoRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS, videoDocId);
     await updateDoc(videoRef, {
         ...video,
         updatedAt: Timestamp.now()
     });
 }
 
-export async function deleteVideo(gradeId: string, unitId: string, videoId: string): Promise<void> {
-    const videoRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS, videoId);
+export async function deleteVideo(gradeId: string, unitId: string, videoDocId: string): Promise<void> {
+    const videoRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS, videoDocId);
     await deleteDoc(videoRef);
 }

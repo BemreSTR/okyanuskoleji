@@ -159,10 +159,10 @@ gradeSelect.addEventListener('change', () => {
         unitSelect.disabled = false;
         unitSelect.innerHTML = '<option value="">Ünite Seçin</option>';
 
-        grade?.units.forEach(unit => {
+        grade?.units.forEach((unit, index) => {
             const option = document.createElement('option');
             option.value = unit.id;
-            option.textContent = `${unit.id}. ${unit.name}`;
+            option.textContent = `${index + 1}. ${unit.name}`;
             unitSelect.appendChild(option);
         });
     } else {

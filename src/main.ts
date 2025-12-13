@@ -2,12 +2,12 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Visitor Counter - Image Badge (guaranteed to work)
+// Visitor Counter - Image Badge (Komarev service - reliable)
 function createVisitorCounter(): string {
   return `
     <div class="visitor-counter">
       <img 
-        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemrestr.github.io%2FDinakademi&count_bg=%236366F1&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Ziyaret%C3%A7i&edge_flat=true" 
+        src="https://komarev.com/ghpvc/?username=bemrestr-Dinakademi&label=Ziyaret%C3%A7i&color=6366f1&style=flat&abbreviated=true" 
         alt="Ziyaretçi Sayısı" 
         class="visitor-badge"
       />

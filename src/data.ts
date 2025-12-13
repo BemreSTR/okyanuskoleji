@@ -14,13 +14,13 @@ const unit1Videos: Video[] = [
 
 // 5. Sınıf Ünite 2: Namaz (7 video)
 const unit2Videos: Video[] = [
-    { id: '2-1', title: 'Allah\'ın Huzurunda Olmak: Namaz İbadeti', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-2', title: 'Namaz Çeşitleri', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-3', title: 'Namazın Kılınışı', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-4', title: 'Namazın Hazırlık Şartları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-5', title: 'Namazın Kılınış Şartları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-6', title: 'Namaz İbadetinin İnsana Kazandırdıkları', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
-    { id: '2-7', title: 'Bir Dua Öğreniyorum: Tahiyyat Duası', youtubeId: 'pQxsdeU7MaI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-1', title: 'Allah\'ın Huzurunda Olmak: Namaz İbadeti', youtubeId: 'a36PjD9m9DI', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-2', title: 'Namaz Çeşitleri', youtubeId: 's_OUa7Gj_a4', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-3', title: 'Namazın Kılınışı', youtubeId: 'YPXZDxmChs0', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-4', title: 'Namazın Hazırlık Şartları', youtubeId: 'e6jUfrCNYrU', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-5', title: 'Namazın Kılınış Şartları', youtubeId: 'e6jUfrCNYrU', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-6', title: 'Namaz İbadetinin İnsana Kazandırdıkları', youtubeId: '5eSHCsN9vNw', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
+    { id: '2-7', title: 'Bir Dua Öğreniyorum: Tahiyyat Duası', youtubeId: 'KPGsmM9a23s', kahootLink: 'https://create.kahoot.it/share/5-sini', wordwallKitaplik: 'https://wordwall.net/play/97566/048/300', wordwallCarkifelek: 'https://wordwall.net/play/97566/048/250' },
 ];
 
 // 5. Sınıf Ünite 3: Kur'an-ı Kerim (8 video)

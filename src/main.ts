@@ -1,5 +1,5 @@
 import './style.css';
-import { grades, getGradeById, getUnitById } from './data';
+import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
 // Visitor Counter - CounterAPI.dev (CORS-friendly JSON API)
@@ -90,7 +90,9 @@ function createVideoCard(video: Video): string {
 }
 
 // ==================== HOME PAGE ====================
-function renderHomePage(): string {
+async function renderHomePage(): Promise<string> {
+  const grades = await getGrades();
+
   const gradeCards = grades.map(grade => `
     <a href="${grade.isActive ? `#/sinif/${grade.id}` : '#/'}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
       <span class="grade-number">${grade.id}</span>
@@ -121,7 +123,7 @@ function renderHomePage(): string {
 }
 
 // ==================== UNITS PAGE ====================
-function renderUnitsPage(grade: Grade): string {
+async function renderUnitsPage(grade: Grade): Promise<string> {
   const unitCards = grade.units.map(unit => `
     <a href="#/sinif/${grade.id}/unite/${unit.id}" class="unit-card unit-card--grade-${grade.id}">
       <span class="unit-number">${unit.id}</span>
@@ -152,7 +154,7 @@ function renderUnitsPage(grade: Grade): string {
 }
 
 // ==================== VIDEOS PAGE ====================
-function renderVideosPage(grade: Grade, unit: Unit): string {
+async function renderVideosPage(grade: Grade, unit: Unit): Promise<string> {
   const videoCards = unit.videos.map(createVideoCard).join('');
 
   return `
@@ -191,15 +193,18 @@ function render404Page(): string {
 }
 
 // ==================== ROUTER ====================
-function router(): void {
+async function router(): Promise<void> {
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
+
+  // Show loading
+  app.innerHTML = '<div class="loading">Yükleniyor...</div>';
 
   const hash = window.location.hash || '#/';
 
   // Ana sayfa
   if (hash === '#/' || hash === '') {
-    app.innerHTML = renderHomePage();
+    app.innerHTML = await renderHomePage();
     updateVisitorCount();
     return;
   }
@@ -208,9 +213,9 @@ function router(): void {
   const gradeMatch = hash.match(/^#\/sinif\/(\d+)$/);
   if (gradeMatch) {
     const gradeId = gradeMatch[1];
-    const grade = getGradeById(gradeId);
+    const grade = await getGradeById(gradeId);
     if (grade && grade.isActive) {
-      app.innerHTML = renderUnitsPage(grade);
+      app.innerHTML = await renderUnitsPage(grade);
       updateVisitorCount();
     } else {
       app.innerHTML = render404Page();
@@ -223,10 +228,10 @@ function router(): void {
   if (unitMatch) {
     const gradeId = unitMatch[1];
     const unitId = unitMatch[2];
-    const grade = getGradeById(gradeId);
-    const unit = getUnitById(gradeId, unitId);
+    const grade = await getGradeById(gradeId);
+    const unit = await getUnitById(gradeId, unitId);
     if (grade && unit) {
-      app.innerHTML = renderVideosPage(grade, unit);
+      app.innerHTML = await renderVideosPage(grade, unit);
       updateVisitorCount();
     } else {
       app.innerHTML = render404Page();
@@ -241,3 +246,4 @@ function router(): void {
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
 window.addEventListener('DOMContentLoaded', router);
+router();

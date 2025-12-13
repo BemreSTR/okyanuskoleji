@@ -44,7 +44,7 @@
         <div id="dashboard-screen" class="dashboard-screen" style="display: none;">
             <!-- Header -->
             <header class="admin-header">
-                <h1>DİN AKADEMİ Admin</h1>
+                <h1>Din Akademi Admin Panel</h1>
                 <div class="header-actions">
                     <span id="user-email" class="user-email"></span>
                     <button id="logout-btn" class="btn btn-secondary">Çıkış</button>
@@ -179,7 +179,11 @@
                 </div>
 
                 <form id="unit-form" class="modal-form">
-                    <input type="hidden" id="unit-id" />
+                    <div class="form-group">
+                        <label for="unit-id">Ünite Numarası *</label>
+                        <input type="text" id="unit-id" placeholder="1" required />
+                        <small>Ünite numarası girin (örn: 1, 2, 3)</small>
+                    </div>
 
                     <div class="form-group">
                         <label for="unit-name">Ünite Adı *</label>

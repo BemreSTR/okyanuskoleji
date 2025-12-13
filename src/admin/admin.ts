@@ -428,12 +428,16 @@ function openUnitModal(gradeId: string, unit?: Unit) {
     editingUnitGradeId = gradeId;
     document.getElementById('unit-modal-title')!.textContent = unit ? 'Ünite Düzenle' : 'Yeni Ünite';
 
+    const unitIdInput = document.getElementById('unit-id') as HTMLInputElement;
+
     if (unit) {
-        (document.getElementById('unit-id') as HTMLInputElement).value = unit.id;
+        unitIdInput.value = unit.id;
+        unitIdInput.readOnly = true; // ID değiştirilemez
         (document.getElementById('unit-name') as HTMLInputElement).value = unit.name;
     } else {
         unitForm.reset();
-        (document.getElementById('unit-id') as HTMLInputElement).value = '';
+        unitIdInput.readOnly = false;
+        unitIdInput.value = '';
     }
 
     unitModal.style.display = 'flex';
@@ -447,16 +451,32 @@ function closeUnitModal() {
 unitForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const unitId = (document.getElementById('unit-id') as HTMLInputElement).value;
+    const unitId = (document.getElementById('unit-id') as HTMLInputElement).value.trim();
+    const unitName = (document.getElementById('unit-name') as HTMLInputElement).value.trim();
+
+    if (!unitName) {
+        alert('Ünite adını doldurun!');
+        return;
+    }
+
+    if (!unitId) {
+        alert('Ünite numarası zorunludur! (örn: 1, 2, 3)');
+        return;
+    }
+
     const unitData = {
-        id: unitId || String(Date.now()),
-        name: (document.getElementById('unit-name') as HTMLInputElement).value
+        id: unitId,
+        name: unitName
     };
 
     try {
-        if (unitId) {
-            await updateUnit(editingUnitGradeId, unitId, unitData);
+        // Check if editing (readonly input) or creating new
+        const unitIdInput = document.getElementById('unit-id') as HTMLInputElement;
+        if (unitIdInput.readOnly) {
+            // Editing existing unit - update name only
+            await updateUnit(editingUnitGradeId, unitId, { name: unitName });
         } else {
+            // Creating new unit
             await addUnit(editingUnitGradeId, unitData);
         }
 

@@ -3,7 +3,7 @@ import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: '/Dinakademi/',  // GitHub repo adınız
+    base: '/',  // Custom domain için root path
     build: {
         outDir: 'dist',
         rollupOptions: {

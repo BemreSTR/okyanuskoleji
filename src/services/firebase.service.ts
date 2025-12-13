@@ -89,18 +89,22 @@ export async function deleteUnit(gradeId: string, unitId: string): Promise<void>
 export async function loadVideos(gradeId: string, unitId: string): Promise<Video[]> {
     try {
         const videosRef = collection(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS);
-        const videosSnapshot = await getDocs(query(videosRef, orderBy('id')));
+        const videosSnapshot = await getDocs(videosRef);
 
-        return videosSnapshot.docs.map(docSnap => ({
+        const videos = videosSnapshot.docs.map(docSnap => ({
             id: docSnap.data().id,
             title: docSnap.data().title,
             youtubeId: docSnap.data().youtubeId,
             kahootLink: docSnap.data().kahootLink,
             wordwallKitaplik: docSnap.data().wordwallKitaplik,
             wordwallCarkifelek: docSnap.data().wordwallCarkifelek,
+            order: docSnap.data().order || 0,
             // Store Firestore doc ID for deletion
             _docId: docSnap.id
         } as any));
+
+        // Sort by order field
+        return videos.sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
     } catch (error) {
         console.error('Error loading videos:', error);
         return [];
@@ -111,6 +115,7 @@ export async function addVideo(gradeId: string, unitId: string, video: Video): P
     const videosRef = collection(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS);
     await addDoc(videosRef, {
         ...video,
+        order: Date.now(), // Use timestamp to ensure newest videos go last
         createdAt: Timestamp.now()
     });
 }
@@ -121,6 +126,11 @@ export async function updateVideo(gradeId: string, unitId: string, videoDocId: s
         ...video,
         updatedAt: Timestamp.now()
     });
+}
+
+export async function updateVideoOrder(gradeId: string, unitId: string, videoDocId: string, order: number): Promise<void> {
+    const videoRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId, COLLECTIONS.VIDEOS, videoDocId);
+    await updateDoc(videoRef, { order });
 }
 
 export async function deleteVideo(gradeId: string, unitId: string, videoDocId: string): Promise<void> {

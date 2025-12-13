@@ -199,6 +199,34 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+    cursor: move;
+    transition: all 0.2s;
+}
+
+.item-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.drag-handle {
+    font-size: 1.5rem;
+    color: #94a3b8;
+    cursor: grab;
+    user-select: none;
+    padding: 0 5px;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.sortable-ghost {
+    opacity: 0.4;
+    background: #f1f5f9;
+}
+
+.item-info {
+    flex: 1;
 }
 
 .item-info h4 {

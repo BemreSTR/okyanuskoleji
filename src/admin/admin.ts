@@ -1,8 +1,9 @@
 import './admin.css';
 import { auth } from '../firebase.config';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit } from '../services/firebase.service';
+import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit, updateVideoOrder } from '../services/firebase.service';
 import type { Grade, Unit, Video } from '../types';
+import Sortable from 'sortablejs';
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen')!;
@@ -70,12 +71,19 @@ function saveState() {
     sessionStorage.setItem('admin_selectedGradeId', selectedGradeId);
     sessionStorage.setItem('admin_selectedUnitId', selectedUnitId);
     sessionStorage.setItem('admin_currentView', currentView);
+
+    // Save unit view grade selection
+    const unitsGradeSelect = document.getElementById('units-grade-select') as HTMLSelectElement;
+    if (unitsGradeSelect) {
+        sessionStorage.setItem('admin_unitsGradeId', unitsGradeSelect.value);
+    }
 }
 
 function restoreState() {
     const savedGradeId = sessionStorage.getItem('admin_selectedGradeId');
     const savedUnitId = sessionStorage.getItem('admin_selectedUnitId');
     const savedView = sessionStorage.getItem('admin_currentView');
+    const savedUnitsGradeId = sessionStorage.getItem('admin_unitsGradeId');
 
     if (savedView) {
         currentView = savedView as 'videos' | 'units';
@@ -96,6 +104,17 @@ function restoreState() {
                 unitSelect.dispatchEvent(new Event('change'));
             }, 100);
         }
+    }
+
+    // Restore unit view
+    if (savedUnitsGradeId && currentView === 'units') {
+        setTimeout(() => {
+            const unitsGradeSelect = document.getElementById('units-grade-select') as HTMLSelectElement;
+            if (unitsGradeSelect) {
+                unitsGradeSelect.value = savedUnitsGradeId;
+                unitsGradeSelect.dispatchEvent(new Event('change'));
+            }
+        }, 100);
     }
 }
 
@@ -185,7 +204,8 @@ function renderVideosList() {
     }
 
     videosListEl.innerHTML = unit.videos.map((video: any) => `
-    <div class="item-card">
+    <div class="item-card" data-id="${video._docId}">
+      <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
         <h4>${video.title}</h4>
         <p class="item-meta">YouTube ID: ${video.youtubeId}</p>
@@ -196,6 +216,37 @@ function renderVideosList() {
       </div>
     </div>
   `).join('');
+
+    // Initialize Sortable for drag-drop
+    Sortable.create(videosListEl, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: async function (evt) {
+            if (evt.oldIndex === evt.newIndex) return;
+
+            // Get all video elements in new order
+            const videoElements = Array.from(videosListEl.querySelectorAll('.item-card'));
+            const videoOrder = videoElements.map((el, index) => ({
+                docId: el.getAttribute('data-id'),
+                order: index
+            }));
+
+            // Update Firebase with new order
+            try {
+                for (const item of videoOrder) {
+                    if (item.docId) {
+                        await updateVideoOrder(selectedGradeId, selectedUnitId, item.docId, item.order);
+                    }
+                }
+                // Reload data to reflect changes
+                await loadData();
+            } catch (error) {
+                console.error('Error updating video order:', error);
+                alert('Sıralama kaydedilemedi!');
+            }
+        }
+    });
 }
 
 addVideoBtn.addEventListener('click', () => {
@@ -320,7 +371,10 @@ const unitsGradeSelect = document.getElementById('units-grade-select') as HTMLSe
 const unitsListEl = document.getElementById('units-list')!;
 const addUnitBtn = document.getElementById('add-unit-btn')!;
 
-unitsGradeSelect.addEventListener('change', renderUnitsList);
+unitsGradeSelect.addEventListener('change', () => {
+    saveState();
+    renderUnitsList();
+});
 
 function renderUnitsView() {
     unitsGradeSelect.value = '';

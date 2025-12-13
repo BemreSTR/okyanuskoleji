@@ -5,6 +5,7 @@ export interface Video {
   kahootLink?: string;
   wordwallKitaplik?: string;
   wordwallCarkifelek?: string;
+  order?: number; // For drag-drop ordering
 }
 
 export interface Unit {

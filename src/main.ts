@@ -2,6 +2,38 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
+// Visitor Counter
+const visitorIcon = `<svg class="visitor-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+
+let visitorCount = 0;
+
+async function updateVisitorCount(): Promise<void> {
+  try {
+    // CountAPI ile ziyaretçi sayısını artır ve al
+    const response = await fetch('https://api.countapi.xyz/hit/dinakademi.github.io/visits');
+    const data = await response.json();
+    visitorCount = data.value;
+
+    // Sayacı güncelle
+    const counterElement = document.getElementById('visitor-count');
+    if (counterElement) {
+      counterElement.textContent = visitorCount.toLocaleString('tr-TR');
+    }
+  } catch (error) {
+    console.log('Ziyaretçi sayısı alınamadı');
+  }
+}
+
+function createVisitorCounter(): string {
+  return `
+    <div class="visitor-counter">
+      ${visitorIcon}
+      <span id="visitor-count">...</span>
+      <span class="visitor-label">Ziyaretçi</span>
+    </div>
+  `;
+}
+
 // SVG Icons
 const kahootIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
 const bookIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>`;
@@ -67,6 +99,7 @@ function renderHomePage(): string {
   `).join('');
 
   return `
+    ${createVisitorCounter()}
     <header class="header">
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
@@ -226,5 +259,8 @@ function router(): void {
 
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
-window.addEventListener('DOMContentLoaded', router);
+window.addEventListener('DOMContentLoaded', () => {
+  router();
+  updateVisitorCount();
+});
 router();

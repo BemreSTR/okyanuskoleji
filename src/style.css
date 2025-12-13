@@ -67,6 +67,61 @@ body {
 
 #app {
   min-height: 100vh;
+  position: relative;
+}
+
+/* Visitor Counter */
+.visitor-counter {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  z-index: 1000;
+  color: white;
+}
+
+.visitor-icon {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+#visitor-count {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.visitor-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .visitor-counter {
+    top: 10px;
+    right: 10px;
+    padding: 8px 14px;
+    gap: 6px;
+  }
+
+  .visitor-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  #visitor-count {
+    font-size: 1.1rem;
+  }
+
+  .visitor-label {
+    font-size: 0.75rem;
+  }
 }
 
 /* Header Styles */

@@ -9,10 +9,14 @@ let visitorCount = 0;
 
 async function updateVisitorCount(): Promise<void> {
   try {
-    // CountAPI ile ziyaretçi sayısını artır ve al
-    const response = await fetch('https://api.countapi.xyz/hit/dinakademi.github.io/visits');
-    const data = await response.json();
-    visitorCount = data.value;
+    // hits.seeyoufarm.com ile ziyaretçi sayısını al
+    const response = await fetch('https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemrestr.github.io%2FDinakademi&count_bg=%236366F1&title_bg=%23555555&icon=&emoji_mode=false&hide_title=true');
+    const text = await response.text();
+    // SVG içinden sayıyı çek
+    const match = text.match(/>(\d+)</);
+    if (match) {
+      visitorCount = parseInt(match[1]);
+    }
 
     // Sayacı güncelle
     const counterElement = document.getElementById('visitor-count');
@@ -20,7 +24,15 @@ async function updateVisitorCount(): Promise<void> {
       counterElement.textContent = visitorCount.toLocaleString('tr-TR');
     }
   } catch (error) {
-    console.log('Ziyaretçi sayısı alınamadı');
+    // Hata durumunda localStorage'dan oku
+    const stored = localStorage.getItem('dinakademi_visits');
+    const count = stored ? parseInt(stored) + 1 : 1;
+    localStorage.setItem('dinakademi_visits', count.toString());
+
+    const counterElement = document.getElementById('visitor-count');
+    if (counterElement) {
+      counterElement.textContent = count.toLocaleString('tr-TR');
+    }
   }
 }
 

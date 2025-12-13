@@ -34,7 +34,7 @@ async function updateVisitorCount(): Promise<void> {
 function createVisitorCounter(): string {
   return `
     <div class="visitor-counter">
-      <span class="visitor-label">👁️ Ziyaretçi:</span>
+      <span class="visitor-label">Ziyaretçi:</span>
       <span id="visitor-count-number" class="visitor-number">...</span>
     </div>
   `;
@@ -241,4 +241,3 @@ function router(): void {
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
 window.addEventListener('DOMContentLoaded', router);
-router();

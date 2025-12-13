@@ -2,46 +2,15 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Visitor Counter
-const visitorIcon = `<svg class="visitor-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
-
-let visitorCount = 0;
-
-async function updateVisitorCount(): Promise<void> {
-  try {
-    // hits.seeyoufarm.com ile ziyaretçi sayısını al
-    const response = await fetch('https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemrestr.github.io%2FDinakademi&count_bg=%236366F1&title_bg=%23555555&icon=&emoji_mode=false&hide_title=true');
-    const text = await response.text();
-    // SVG içinden sayıyı çek
-    const match = text.match(/>(\d+)</);
-    if (match) {
-      visitorCount = parseInt(match[1]);
-    }
-
-    // Sayacı güncelle
-    const counterElement = document.getElementById('visitor-count');
-    if (counterElement) {
-      counterElement.textContent = visitorCount.toLocaleString('tr-TR');
-    }
-  } catch (error) {
-    // Hata durumunda localStorage'dan oku
-    const stored = localStorage.getItem('dinakademi_visits');
-    const count = stored ? parseInt(stored) + 1 : 1;
-    localStorage.setItem('dinakademi_visits', count.toString());
-
-    const counterElement = document.getElementById('visitor-count');
-    if (counterElement) {
-      counterElement.textContent = count.toLocaleString('tr-TR');
-    }
-  }
-}
-
+// Visitor Counter - Image Badge (guaranteed to work)
 function createVisitorCounter(): string {
   return `
     <div class="visitor-counter">
-      ${visitorIcon}
-      <span id="visitor-count">...</span>
-      <span class="visitor-label">Ziyaretçi</span>
+      <img 
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fbemrestr.github.io%2FDinakademi&count_bg=%236366F1&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Ziyaret%C3%A7i&edge_flat=true" 
+        alt="Ziyaretçi Sayısı" 
+        class="visitor-badge"
+      />
     </div>
   `;
 }
@@ -58,41 +27,38 @@ function createVideoCard(video: Video): string {
     ? `<a href="${video.kahootLink}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--kahoot">
         ${kahootIcon}
         <span>Kahoot</span>
-       </a>`
+      </a>`
     : '';
 
-  const wordwallKitaplikButton = video.wordwallKitaplik
-    ? `<a href="${video.wordwallKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
+  const wordwallButtons = `
+    <div class="wordwall-buttons">
+      <a href="${video.wordwallKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
         ${bookIcon}
         <span>Kitaplık</span>
-       </a>`
-    : '';
-
-  const wordwallCarkifelekButton = video.wordwallCarkifelek
-    ? `<a href="${video.wordwallCarkifelek}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
+      </a>
+      <a href="${video.wordwallCarkifelek}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
         ${wheelIcon}
         <span>Çarkıfelek</span>
-       </a>`
-    : '';
+      </a>
+    </div>
+  `;
 
   return `
     <article class="video-card">
       <h3 class="video-title">${video.title}</h3>
-      <div class="video-embed">
-        <iframe 
-          src="https://www.youtube.com/embed/${video.youtubeId}" 
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/${video.youtubeId}"
           title="${video.title}"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
           loading="lazy"
         ></iframe>
       </div>
       <div class="video-links">
         ${kahootButton}
-        <div class="wordwall-buttons">
-          ${wordwallKitaplikButton}
-          ${wordwallCarkifelekButton}
-        </div>
+        ${wordwallButtons}
       </div>
     </article>
   `;
@@ -101,11 +67,9 @@ function createVideoCard(video: Video): string {
 // ==================== HOME PAGE ====================
 function renderHomePage(): string {
   const gradeCards = grades.map(grade => `
-    <a href="#/sinif/${grade.id}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
-      <div class="grade-card-content">
-        <span class="grade-number">${grade.id}</span>
-        <span class="grade-label">Sınıf</span>
-      </div>
+    <a href="${grade.isActive ? `#/sinif/${grade.id}` : '#/'}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
+      <span class="grade-number">${grade.id}</span>
+      <span class="grade-label">${grade.displayName}</span>
       ${!grade.isActive ? '<span class="coming-soon">Yakında</span>' : ''}
     </a>
   `).join('');
@@ -142,6 +106,7 @@ function renderUnitsPage(grade: Grade): string {
   `).join('');
 
   return `
+    ${createVisitorCounter()}
     <header class="header header--compact header--grade-${grade.id}">
       <div class="header-content">
         <a href="#/" class="back-button back-button--grade-${grade.id}">${backIcon} Ana Sayfa</a>
@@ -166,6 +131,7 @@ function renderVideosPage(grade: Grade, unit: Unit): string {
   const videoCards = unit.videos.map(createVideoCard).join('');
 
   return `
+    ${createVisitorCounter()}
     <header class="header header--compact header--grade-${grade.id}">
       <div class="header-content">
         <a href="#/sinif/${grade.id}" class="back-button back-button--grade-${grade.id}">${backIcon} Üniteler</a>
@@ -191,18 +157,11 @@ function renderVideosPage(grade: Grade, unit: Unit): string {
 // ==================== 404 PAGE ====================
 function render404Page(): string {
   return `
-    <header class="header">
-      <div class="header-content">
-        <h1 class="logo">🎓 DİN AKADEMİ</h1>
-      </div>
-    </header>
-    <main class="container">
-      <div class="empty-state">
-        <div class="empty-state-icon">🔍</div>
-        <p class="empty-state-text">Sayfa bulunamadı</p>
-        <a href="#/" class="back-button back-button--large">${backIcon} Ana Sayfaya Dön</a>
-      </div>
-    </main>
+    <div class="error-page">
+      <h1>404</h1>
+      <p>Sayfa bulunamadı</p>
+      <a href="#/" class="back-button">${backIcon} Ana Sayfa</a>
+    </div>
   `;
 }
 
@@ -213,50 +172,32 @@ function router(): void {
 
   const hash = window.location.hash || '#/';
 
-  // Route: Home
-  if (hash === '#/' || hash === '' || hash === '#') {
+  // Ana sayfa
+  if (hash === '#/' || hash === '') {
     app.innerHTML = renderHomePage();
     return;
   }
 
-  // Route: /sinif/:gradeId
+  // Sınıf sayfası: #/sinif/5
   const gradeMatch = hash.match(/^#\/sinif\/(\d+)$/);
   if (gradeMatch) {
     const gradeId = gradeMatch[1];
     const grade = getGradeById(gradeId);
-
     if (grade && grade.isActive) {
       app.innerHTML = renderUnitsPage(grade);
-    } else if (grade && !grade.isActive) {
-      app.innerHTML = `
-        <header class="header">
-          <div class="header-content">
-            <a href="#/" class="back-button">${backIcon} Ana Sayfa</a>
-            <h1 class="logo">🎓 ${grade.displayName}</h1>
-          </div>
-        </header>
-        <main class="container">
-          <div class="empty-state">
-            <div class="empty-state-icon">🚧</div>
-            <p class="empty-state-text">Bu sınıfın içerikleri yakında eklenecek!</p>
-            <a href="#/" class="back-button back-button--large">${backIcon} Ana Sayfaya Dön</a>
-          </div>
-        </main>
-      `;
     } else {
       app.innerHTML = render404Page();
     }
     return;
   }
 
-  // Route: /sinif/:gradeId/unite/:unitId
+  // Ünite sayfası: #/sinif/5/unite/1
   const unitMatch = hash.match(/^#\/sinif\/(\d+)\/unite\/(\d+)$/);
   if (unitMatch) {
     const gradeId = unitMatch[1];
     const unitId = unitMatch[2];
     const grade = getGradeById(gradeId);
     const unit = getUnitById(gradeId, unitId);
-
     if (grade && unit) {
       app.innerHTML = renderVideosPage(grade, unit);
     } else {
@@ -271,8 +212,5 @@ function router(): void {
 
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
-window.addEventListener('DOMContentLoaded', () => {
-  router();
-  updateVisitorCount();
-});
+window.addEventListener('DOMContentLoaded', router);
 router();

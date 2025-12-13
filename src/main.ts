@@ -127,9 +127,9 @@ async function renderHomePage(): Promise<string> {
 
 // ==================== UNITS PAGE ====================
 async function renderUnitsPage(grade: Grade): Promise<string> {
-  const unitCards = grade.units.map(unit => `
+  const unitCards = grade.units.map((unit, index) => `
     <a href="#/sinif/${grade.id}/unite/${unit.id}" class="unit-card unit-card--grade-${grade.id}">
-      <span class="unit-number">${unit.id}</span>
+      <span class="unit-number">${index + 1}</span>
       <span class="unit-name">${unit.name}</span>
       <span class="unit-video-count">${unit.videos.length} Video</span>
     </a>

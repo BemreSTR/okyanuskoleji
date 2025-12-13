@@ -58,16 +58,30 @@ function createVideoCard(video: Video): string {
         <span>Kahoot</span>
       </button>`;
 
-  const wordwallButtons = `
-    <div class="wordwall-buttons">
-      <a href="${video.wordwallKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
+  const kitaplikButton = video.wordwallKitaplik
+    ? `<a href="${video.wordwallKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
         ${bookIcon}
         <span>Kitaplık</span>
-      </a>
-      <a href="${video.wordwallCarkifelek}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
+      </a>`
+    : `<button class="link-btn link-btn--wordwall-kitaplik link-btn--disabled" disabled>
+        ${bookIcon}
+        <span>Kitaplık</span>
+      </button>`;
+
+  const carkifelekButton = video.wordwallCarkifelek
+    ? `<a href="${video.wordwallCarkifelek}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
         ${wheelIcon}
         <span>Çarkıfelek</span>
-      </a>
+      </a>`
+    : `<button class="link-btn link-btn--wordwall-carkifelek link-btn--disabled" disabled>
+        ${wheelIcon}
+        <span>Çarkıfelek</span>
+      </button>`;
+
+  const wordwallButtons = `
+    <div class="wordwall-buttons">
+      ${kitaplikButton}
+      ${carkifelekButton}
     </div>
   `;
 

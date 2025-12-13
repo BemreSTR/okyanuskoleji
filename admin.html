@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - DİN AKADEMİ</title>
+    <meta name="description" content="Din Akademi Admin Panel" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="admin-app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="login-screen">
+            <div class="login-card">
+                <h1 class="admin-logo">🔐 DİN AKADEMİ</h1>
+                <p class="admin-subtitle">Admin Panel</p>
+
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="dinakademi@gmail.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <input type="password" id="password" placeholder="••••••••" required />
+                    </div>
+
+                    <div id="login-error" class="error-message" style="display: none;"></div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Giriş Yap
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboard-screen" class="dashboard-screen" style="display: none;">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1>DİN AKADEMİ Admin</h1>
+                <div class="header-actions">
+                    <span id="user-email" class="user-email"></span>
+                    <button id="logout-btn" class="btn btn-secondary">Çıkış</button>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <!-- Sidebar -->
+                <aside class="admin-sidebar">
+                    <nav class="admin-nav">
+                        <button class="nav-btn active" data-view="videos">📹 Videolar</button>
+                        <button class="nav-btn" data-view="units">📚 Üniteler</button>
+                    </nav>
+                </aside>
+
+                <!-- Content Area -->
+                <section class="admin-content">
+                    <!-- Videos View -->
+                    <div id="videos-view" class="content-view">
+                        <div class="view-header">
+                            <h2>Video Yönetimi</h2>
+                            <button id="add-video-btn" class="btn btn-primary">+ Yeni Video</button>
+                        </div>
+
+                        <!-- Grade & Unit Selector -->
+                        <div class="selectors">
+                            <div class="form-group">
+                                <label>Sınıf</label>
+                                <select id="grade-select" class="select-input">
+                                    <option value="">Sınıf Seçin</option>
+                                    <option value="5">5. Sınıf</option>
+                                    <option value="6">6. Sınıf</option>
+                                    <option value="7">7. Sınıf</option>
+                                    <option value="8">8. Sınıf</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ünite</label>
+                                <select id="unit-select" class="select-input" disabled>
+                                    <option value="">Önce sınıf seçin</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Videos List -->
+                        <div id="videos-list" class="items-list">
+                            <p class="empty-state">Sınıf ve ünite seçin</p>
+                        </div>
+                    </div>
+
+                    <!-- Units View -->
+                    <div id="units-view" class="content-view" style="display: none;">
+                        <div class="view-header">
+                            <h2>Ünite Yönetimi</h2>
+                            <button id="add-unit-btn" class="btn btn-primary">+ Yeni Ünite</button>
+                        </div>
+
+                        <!-- Grade Selector -->
+                        <div class="form-group">
+                            <label>Sınıf</label>
+                            <select id="units-grade-select" class="select-input">
+                                <option value="">Sınıf Seçin</option>
+                                <option value="5">5. Sınıf</option>
+                                <option value="6">6. Sınıf</option>
+                                <option value="7">7. Sınıf</option>
+                                <option value="8">8. Sınıf</option>
+                            </select>
+                        </div>
+
+                        <!-- Units List -->
+                        <div id="units-list" class="items-list">
+                            <p class="empty-state">Sınıf seçin</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Video Modal -->
+        <div id="video-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="video-modal-title">Yeni Video</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+
+                <form id="video-form" class="modal-form">
+                    <input type="hidden" id="video-id" />
+
+                    <div class="form-group">
+                        <label for="video-title">Video Başlığı *</label>
+                        <input type="text" id="video-title" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="youtube-id">YouTube Video ID *</label>
+                        <input type="text" id="youtube-id" placeholder="qllnCxGt6ns" required />
+                        <small>YouTube linki: https://youtu.be/<strong>qllnCxGt6ns</strong></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kahoot-link">Kahoot Link</label>
+                        <input type="url" id="kahoot-link" placeholder="https://create.kahoot.it/..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wordwall-kitaplik">Wordwall Kitaplık Link</label>
+                        <input type="url" id="wordwall-kitaplik" placeholder="https://wordwall.net/..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wordwall-carkifelek">Wordwall Çarkıfelek Link</label>
+                        <input type="url" id="wordwall-carkifelek" placeholder="https://wordwall.net/..." />
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary modal-cancel">İptal</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Unit Modal -->
+        <div id="unit-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="unit-modal-title">Yeni Ünite</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+
+                <form id="unit-form" class="modal-form">
+                    <input type="hidden" id="unit-id" />
+
+                    <div class="form-group">
+                        <label for="unit-name">Ünite Adı *</label>
+                        <input type="text" id="unit-name" placeholder="Allah İnancı" required />
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary modal-cancel">İptal</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/src/admin/admin.ts"></script>
+</body>
+
+</html>

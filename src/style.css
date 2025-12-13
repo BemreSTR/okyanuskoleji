@@ -115,6 +115,29 @@ body {
   }
 }
 
+/* Footer */
+.footer {
+  padding: 60px 20px 40px;
+  text-align: center;
+}
+
+.footer-text {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  color: #667eea;
+  font-weight: 600;
+}
+
 /* Header Styles */
 .header {
   position: relative;

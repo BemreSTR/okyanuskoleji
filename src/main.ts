@@ -2,19 +2,32 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Visitor Counter - Moe Counter (website visit counter)
+// Visitor Counter - API based with custom styling
+async function updateVisitorCount(): Promise<void> {
+  try {
+    // moe-counter'dan count değerini al
+    const response = await fetch('https://moe-counter.glitch.me/get/@dinakademi-website');
+    const data = await response.json();
+    const count = data.count || 0;
+
+    const counterElement = document.getElementById('visitor-count-number');
+    if (counterElement) {
+      counterElement.textContent = count.toLocaleString('tr-TR');
+    }
+  } catch (error) {
+    console.log('Ziyaretçi sayısı alınamadı');
+  }
+}
+
 function createVisitorCounter(): string {
   return `
     <div class="visitor-counter">
       <span class="visitor-label">👁️ Ziyaretçi:</span>
-      <img 
-        src="https://moe-counter.glitch.me/get/@dinakademi-website?theme=gelbooru" 
-        alt="Ziyaretçi Sayısı" 
-        class="visitor-badge"
-      />
+      <span id="visitor-count-number" class="visitor-number">...</span>
     </div>
   `;
 }
+
 
 // SVG Icons
 const kahootIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
@@ -82,7 +95,7 @@ function renderHomePage(): string {
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
         <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
-        <p class="tagline">Öğrenciler için eğitici YouTube videoları, Wordwall ve Kahoot yarışmaları</p>
+        <p class="tagline">Öğrenciler için eğitici videolar,<br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>
     <main class="container">
@@ -177,6 +190,7 @@ function router(): void {
   // Ana sayfa
   if (hash === '#/' || hash === '') {
     app.innerHTML = renderHomePage();
+    void updateVisitorCount();
     return;
   }
 
@@ -187,6 +201,7 @@ function router(): void {
     const grade = getGradeById(gradeId);
     if (grade && grade.isActive) {
       app.innerHTML = renderUnitsPage(grade);
+      void updateVisitorCount();
     } else {
       app.innerHTML = render404Page();
     }
@@ -202,6 +217,7 @@ function router(): void {
     const unit = getUnitById(gradeId, unitId);
     if (grade && unit) {
       app.innerHTML = renderVideosPage(grade, unit);
+      void updateVisitorCount();
     } else {
       app.innerHTML = render404Page();
     }
@@ -213,6 +229,13 @@ function router(): void {
 }
 
 // ==================== INIT ====================
-window.addEventListener('hashchange', router);
-window.addEventListener('DOMContentLoaded', router);
+window.addEventListener('hashchange', () => {
+  router();
+  updateVisitorCount();
+});
+window.addEventListener('DOMContentLoaded', () => {
+  router();
+  updateVisitorCount();
+});
 router();
+updateVisitorCount();

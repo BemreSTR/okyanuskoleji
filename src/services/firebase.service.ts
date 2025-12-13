@@ -5,6 +5,7 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    setDoc,
     query,
     orderBy,
     Timestamp
@@ -71,8 +72,8 @@ export async function loadUnits(gradeId: string): Promise<Unit[]> {
 }
 
 export async function addUnit(gradeId: string, unit: Omit<Unit, 'videos'>): Promise<void> {
-    const unitsRef = collection(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS);
-    await addDoc(unitsRef, unit);
+    const unitRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unit.id);
+    await setDoc(unitRef, unit);
 }
 
 export async function updateUnit(gradeId: string, unitId: string, unit: Partial<Unit>): Promise<void> {

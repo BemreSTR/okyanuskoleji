@@ -53,7 +53,10 @@ function createVideoCard(video: Video): string {
         ${kahootIcon}
         <span>Kahoot</span>
       </a>`
-    : '';
+    : `<button class="link-btn link-btn--kahoot link-btn--disabled" disabled>
+        ${kahootIcon}
+        <span>Kahoot</span>
+      </button>`;
 
   const wordwallButtons = `
     <div class="wordwall-buttons">

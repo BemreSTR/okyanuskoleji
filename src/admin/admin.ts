@@ -194,14 +194,41 @@ function closeVideoModal() {
     videoForm.reset();
 }
 
+// Helper: Extract YouTube ID from URL or return as-is if already an ID
+function extractYouTubeId(input: string): string {
+    const trimmed = input.trim();
+
+    // If it's already just an ID (11 characters, alphanumeric), return it
+    if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+        return trimmed;
+    }
+
+    // Try to extract from various YouTube URL formats
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+        /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+    ];
+
+    for (const pattern of patterns) {
+        const match = trimmed.match(pattern);
+        if (match) return match[1];
+    }
+
+    // If no pattern matched, return original (might be invalid, will be caught later)
+    return trimmed;
+}
+
 videoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const videoId = (document.getElementById('video-id') as HTMLInputElement).value;
+    const youtubeInput = (document.getElementById('youtube-id') as HTMLInputElement).value;
+
     const videoData: Video = {
         id: videoId || `${selectedUnitId}-${Date.now()}`,
         title: (document.getElementById('video-title') as HTMLInputElement).value,
-        youtubeId: (document.getElementById('youtube-id') as HTMLInputElement).value,
+        youtubeId: extractYouTubeId(youtubeInput),
         kahootLink: (document.getElementById('kahoot-link') as HTMLInputElement).value,
         wordwallKitaplik: (document.getElementById('wordwall-kitaplik') as HTMLInputElement).value,
         wordwallCarkifelek: (document.getElementById('wordwall-carkifelek') as HTMLInputElement).value

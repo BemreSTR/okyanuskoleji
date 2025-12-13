@@ -107,7 +107,7 @@ async function renderHomePage(): Promise<string> {
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
         <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
-        <p class="tagline">Öğrenciler için eğitici YouTube videoları, Wordwall ve Kahoot yarışmaları</p>
+        <p class="tagline">Öğrenciler için eğitici videolar, <br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>
     <main class="container">

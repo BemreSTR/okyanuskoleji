@@ -2,12 +2,13 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Visitor Counter - Image Badge (Komarev service - reliable)
+// Visitor Counter - Moe Counter (website visit counter)
 function createVisitorCounter(): string {
   return `
     <div class="visitor-counter">
+      <span class="visitor-label">👁️ Ziyaretçi:</span>
       <img 
-        src="https://komarev.com/ghpvc/?username=bemrestr-Dinakademi&label=Ziyaret%C3%A7i&color=6366f1&style=flat&abbreviated=true" 
+        src="https://moe-counter.glitch.me/get/@dinakademi-website?theme=rule34" 
         alt="Ziyaretçi Sayısı" 
         class="visitor-badge"
       />

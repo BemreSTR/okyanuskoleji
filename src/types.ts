@@ -12,6 +12,7 @@ export interface Unit {
   id: string;
   name: string;
   videos: Video[];
+  order?: number; // For drag-drop ordering
 }
 
 export interface Grade {

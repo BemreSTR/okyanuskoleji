@@ -1,7 +1,7 @@
 import './admin.css';
 import { auth } from '../firebase.config';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit, updateVideoOrder } from '../services/firebase.service';
+import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit, updateVideoOrder, updateUnitOrder } from '../services/firebase.service';
 import type { Grade, Unit, Video } from '../types';
 import Sortable from 'sortablejs';
 
@@ -396,10 +396,11 @@ function renderUnitsList() {
         return;
     }
 
-    unitsListEl.innerHTML = grade.units.map(unit => `
-    <div class="item-card">
+    unitsListEl.innerHTML = grade.units.map((unit, index) => `
+    <div class="item-card" data-id="${unit.id}">
+      <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
-        <h4>${unit.id}. ${unit.name}</h4>
+        <h4>${index + 1}. ${unit.name}</h4>
         <p class="item-meta">${unit.videos.length} video</p>
       </div>
       <div class="item-actions">
@@ -408,6 +409,37 @@ function renderUnitsList() {
       </div>
     </div>
   `).join('');
+
+    // Initialize Sortable for drag-drop
+    Sortable.create(unitsListEl, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        onEnd: async function (evt) {
+            if (evt.oldIndex === evt.newIndex) return;
+
+            // Get all unit elements in new order
+            const unitElements = Array.from(unitsListEl.querySelectorAll('.item-card'));
+            const unitOrder = unitElements.map((el, index) => ({
+                id: el.getAttribute('data-id'),
+                order: index
+            }));
+
+            // Update Firebase with new order
+            try {
+                for (const item of unitOrder) {
+                    if (item.id) {
+                        await updateUnitOrder(gradeId, item.id, item.order);
+                    }
+                }
+                // Reload data to reflect changes
+                await loadData();
+            } catch (error) {
+                console.error('Error updating unit order:', error);
+                alert('Sıralama kaydedilemedi!');
+            }
+        }
+    });
 }
 
 addUnitBtn.addEventListener('click', () => {
@@ -432,11 +464,9 @@ function openUnitModal(gradeId: string, unit?: Unit) {
 
     if (unit) {
         unitIdInput.value = unit.id;
-        unitIdInput.readOnly = true; // ID değiştirilemez
         (document.getElementById('unit-name') as HTMLInputElement).value = unit.name;
     } else {
         unitForm.reset();
-        unitIdInput.readOnly = false;
         unitIdInput.value = '';
     }
 
@@ -459,25 +489,13 @@ unitForm.addEventListener('submit', async (e) => {
         return;
     }
 
-    if (!unitId) {
-        alert('Ünite numarası zorunludur! (örn: 1, 2, 3)');
-        return;
-    }
-
-    const unitData = {
-        id: unitId,
-        name: unitName
-    };
-
     try {
-        // Check if editing (readonly input) or creating new
-        const unitIdInput = document.getElementById('unit-id') as HTMLInputElement;
-        if (unitIdInput.readOnly) {
-            // Editing existing unit - update name only
+        if (unitId) {
+            // Editing existing unit
             await updateUnit(editingUnitGradeId, unitId, { name: unitName });
         } else {
-            // Creating new unit
-            await addUnit(editingUnitGradeId, unitData);
+            // Creating new unit - ID will be auto-generated
+            await addUnit(editingUnitGradeId, { id: '', name: unitName });
         }
 
         closeUnitModal();

@@ -6,8 +6,6 @@ import {
     deleteDoc,
     doc,
     setDoc,
-    query,
-    orderBy,
     Timestamp
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
@@ -50,7 +48,7 @@ export async function loadGrades(): Promise<Grade[]> {
 export async function loadUnits(gradeId: string): Promise<Unit[]> {
     try {
         const unitsRef = collection(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS);
-        const unitsSnapshot = await getDocs(query(unitsRef, orderBy('id')));
+        const unitsSnapshot = await getDocs(unitsRef);
         const units: Unit[] = [];
 
         for (const unitDoc of unitsSnapshot.docs) {
@@ -60,11 +58,13 @@ export async function loadUnits(gradeId: string): Promise<Unit[]> {
             units.push({
                 id: unitDoc.id,
                 name: unitData.name,
+                order: unitData.order || 0,
                 videos
             });
         }
 
-        return units;
+        // Sort by order
+        return units.sort((a, b) => (a.order || 0) - (b.order || 0));
     } catch (error) {
         console.error('Error loading units:', error);
         return [];
@@ -72,13 +72,24 @@ export async function loadUnits(gradeId: string): Promise<Unit[]> {
 }
 
 export async function addUnit(gradeId: string, unit: Omit<Unit, 'videos'>): Promise<void> {
-    const unitRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unit.id);
-    await setDoc(unitRef, unit);
+    // Generate auto ID if not provided
+    const unitId = unit.id || String(Date.now());
+    const unitRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId);
+    await setDoc(unitRef, {
+        id: unitId,
+        name: unit.name,
+        order: Date.now() // Use timestamp to ensure newest units go last
+    });
 }
 
 export async function updateUnit(gradeId: string, unitId: string, unit: Partial<Unit>): Promise<void> {
     const unitRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId);
     await updateDoc(unitRef, unit);
+}
+
+export async function updateUnitOrder(gradeId: string, unitId: string, order: number): Promise<void> {
+    const unitRef = doc(db, COLLECTIONS.GRADES, gradeId, COLLECTIONS.UNITS, unitId);
+    await updateDoc(unitRef, { order });
 }
 
 export async function deleteUnit(gradeId: string, unitId: string): Promise<void> {

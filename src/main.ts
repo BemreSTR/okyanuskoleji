@@ -2,20 +2,22 @@ import './style.css';
 import { grades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Visitor Counter - API based with custom styling
+// Visitor Counter - CounterAPI.dev (CORS-friendly JSON API)
 async function updateVisitorCount(): Promise<void> {
+  const counterElement = document.getElementById('visitor-count-number');
+  if (!counterElement) return;
+
   try {
-    // moe-counter'dan count değerini al
-    const response = await fetch('https://moe-counter.glitch.me/get/@dinakademi-website');
+    // CounterAPI.dev - CORS destekli ve JSON döner
+    const response = await fetch('https://api.counterapi.dev/v1/dinakademi-website/visits/up');
     const data = await response.json();
     const count = data.count || 0;
-
-    const counterElement = document.getElementById('visitor-count-number');
-    if (counterElement) {
-      counterElement.textContent = count.toLocaleString('tr-TR');
-    }
+    counterElement.textContent = count.toLocaleString('tr-TR');
+    localStorage.setItem('dinakademi_visits', count.toString());
   } catch (error) {
-    console.log('Ziyaretçi sayısı alınamadı');
+    // API başarısız olursa localStorage'dan göster
+    const stored = localStorage.getItem('dinakademi_visits');
+    counterElement.textContent = stored ? parseInt(stored).toLocaleString('tr-TR') : '0';
   }
 }
 

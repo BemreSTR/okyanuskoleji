@@ -123,13 +123,12 @@ async function renderHomePage(): Promise<string> {
     <header class="header">
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
+        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
         <p class="tagline">Öğrenciler için eğitici videolar, <br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>
     <main class="container">
-      <div class="banner">
-        <img src="${import.meta.env.BASE_URL}images/5sinif.png" alt="Din Akademi Banner" class="banner-image">
-      </div>
+      <h2 class="section-title">Sınıfını Seç</h2>
       <div class="grade-grid">
         ${gradeCards}
       </div>

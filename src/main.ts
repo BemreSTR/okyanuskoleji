@@ -114,7 +114,7 @@ async function renderHomePage(): Promise<string> {
     <a href="${grade.isActive ? `#/sinif/${grade.id}` : '#/'}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
       <span class="grade-number">${grade.id}</span>
       <span class="grade-label">${grade.displayName}</span>
-      ${!grade.isActive ? '<span class="coming-soon">Yakında</span>' : ''}
+      ${grade.units.length === 0 ? '<span class="coming-soon">Yakında</span>' : ''}
     </a>
   `).join('');
 
@@ -123,12 +123,13 @@ async function renderHomePage(): Promise<string> {
     <header class="header">
       <div class="header-content">
         <h1 class="logo">DİN AKADEMİ</h1>
-        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
         <p class="tagline">Öğrenciler için eğitici videolar, <br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>
     <main class="container">
-      <h2 class="section-title">Sınıfını Seç</h2>
+      <div class="banner">
+        <img src="${import.meta.env.BASE_URL}images/5sinif.png" alt="Din Akademi Banner" class="banner-image">
+      </div>
       <div class="grade-grid">
         ${gradeCards}
       </div>

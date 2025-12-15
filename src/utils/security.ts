@@ -1,5 +1,9 @@
 import DOMPurify from 'dompurify';
 
+const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
+const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
+const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
+
 /**
  * HTML içeriğini XSS saldırılarından korumak için temizler
  */
@@ -31,20 +35,19 @@ export function validateVideoForm(data: {
     }
 
     // YouTube ID validation
-    const youtubeIdRegex = /^[a-zA-Z0-9_-]{11}$/;
-    if (!data.youtubeId || !youtubeIdRegex.test(data.youtubeId)) {
+    if (!data.youtubeId || !YOUTUBE_ID_PATTERN.test(data.youtubeId)) {
         errors.push('Geçersiz YouTube video ID (11 karakter olmalı)');
     }
 
     // Optional URL validations
-    if (data.kahootLink && !isValidUrl(data.kahootLink)) {
-        errors.push('Geçersiz Kahoot URL');
+    if (data.kahootLink && !isValidUrl(data.kahootLink, ALLOWED_KAHOOT_HOSTS)) {
+        errors.push('Geçersiz veya desteklenmeyen Kahoot URL (https, kahoot.it)');
     }
-    if (data.wordwallKitaplik && !isValidUrl(data.wordwallKitaplik)) {
-        errors.push('Geçersiz Wordwall Kitaplık URL');
+    if (data.wordwallKitaplik && !isValidUrl(data.wordwallKitaplik, ALLOWED_WORDWALL_HOSTS)) {
+        errors.push('Geçersiz veya desteklenmeyen Wordwall Kitaplık URL (https, wordwall.net)');
     }
-    if (data.wordwallCarkifelek && !isValidUrl(data.wordwallCarkifelek)) {
-        errors.push('Geçersiz Wordwall Çarkıfelek URL');
+    if (data.wordwallCarkifelek && !isValidUrl(data.wordwallCarkifelek, ALLOWED_WORDWALL_HOSTS)) {
+        errors.push('Geçersiz veya desteklenmeyen Wordwall Çarkıfelek URL (https, wordwall.net)');
     }
 
     return {
@@ -76,14 +79,21 @@ export function validateUnitForm(data: { name: string }): { valid: boolean; erro
 /**
  * URL format validation
  */
-export function isValidUrl(urlString: string): boolean {
+export function isValidUrl(urlString: string, allowedHosts?: Set<string>): boolean {
     if (!urlString || urlString.trim().length === 0) {
         return true; // Empty is valid (optional field)
     }
 
     try {
         const url = new URL(urlString);
-        return url.protocol === 'http:' || url.protocol === 'https:';
+        const isProtocolAllowed = url.protocol === 'https:';
+        if (!isProtocolAllowed) return false;
+
+        if (allowedHosts && !allowedHosts.has(url.hostname.toLowerCase())) {
+            return false;
+        }
+
+        return true;
     } catch {
         return false;
     }

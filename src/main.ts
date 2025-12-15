@@ -2,6 +2,39 @@ import './style.css';
 import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
+// Basic output sanitizers to reduce XSS surface when rendering Firestore data
+const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
+const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
+const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
+
+function escapeHTML(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeYouTubeId(value: string | undefined): string | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  return YOUTUBE_ID_PATTERN.test(trimmed) ? trimmed : null;
+}
+
+function sanitizeExternalLink(raw: string | undefined | null, allowedHosts: Set<string>): string | null {
+  if (!raw) return null;
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== 'https:') return null;
+    const host = url.hostname.toLowerCase();
+    if (!allowedHosts.has(host)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 // Visitor Counter - CounterAPI.dev (CORS-friendly JSON API)
 let hasIncrementedThisSession = false;
 
@@ -48,8 +81,14 @@ const backIcon = `<svg class="back-icon" viewBox="0 0 24 24" fill="currentColor"
 
 // ==================== VIDEO CARD ====================
 function createVideoCard(video: Video): string {
-  const kahootButton = video.kahootLink
-    ? `<a href="${video.kahootLink}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--kahoot">
+  const safeTitle = escapeHTML(video.title);
+  const safeYoutubeId = sanitizeYouTubeId(video.youtubeId);
+  const safeKahoot = sanitizeExternalLink(video.kahootLink, ALLOWED_KAHOOT_HOSTS);
+  const safeKitaplik = sanitizeExternalLink(video.wordwallKitaplik, ALLOWED_WORDWALL_HOSTS);
+  const safeCarki = sanitizeExternalLink(video.wordwallCarkifelek, ALLOWED_WORDWALL_HOSTS);
+
+  const kahootButton = safeKahoot
+    ? `<a href="${safeKahoot}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--kahoot">
         ${kahootIcon}
         <span>Kahoot</span>
       </a>`
@@ -58,8 +97,8 @@ function createVideoCard(video: Video): string {
         <span>Kahoot</span>
       </button>`;
 
-  const kitaplikButton = video.wordwallKitaplik
-    ? `<a href="${video.wordwallKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
+  const kitaplikButton = safeKitaplik
+    ? `<a href="${safeKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
         ${bookIcon}
         <span>Kitaplık</span>
       </a>`
@@ -68,8 +107,8 @@ function createVideoCard(video: Video): string {
         <span>Kitaplık</span>
       </button>`;
 
-  const carkifelekButton = video.wordwallCarkifelek
-    ? `<a href="${video.wordwallCarkifelek}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
+  const carkifelekButton = safeCarki
+    ? `<a href="${safeCarki}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
         ${wheelIcon}
         <span>Çarkıfelek</span>
       </a>`
@@ -85,18 +124,22 @@ function createVideoCard(video: Video): string {
     </div>
   `;
 
-  return `
-    <article class="video-card">
-      <h3 class="video-title">${video.title}</h3>
-      <div class="video-wrapper">
-        <iframe
-          src="https://www.youtube.com/embed/${video.youtubeId}"
-          title="${video.title}"
+  const videoEmbed = safeYoutubeId
+    ? `<iframe
+          src="https://www.youtube.com/embed/${safeYoutubeId}"
+          title="${safeTitle}"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
           loading="lazy"
-        ></iframe>
+        ></iframe>`
+    : '<div class="video-error">Video ID geçersiz</div>';
+
+  return `
+    <article class="video-card">
+      <h3 class="video-title">${safeTitle}</h3>
+      <div class="video-wrapper">
+        ${videoEmbed}
       </div>
       <div class="video-links">
         ${kahootButton}
@@ -110,13 +153,18 @@ function createVideoCard(video: Video): string {
 async function renderHomePage(): Promise<string> {
   const grades = await getGrades();
 
-  const gradeCards = grades.map(grade => `
-    <a href="${grade.isActive ? `#/sinif/${grade.id}` : '#/'}" class="grade-card grade-card--${grade.id} ${!grade.isActive ? 'grade-card--disabled' : ''}">
-      <span class="grade-number">${grade.id}</span>
-      <span class="grade-label">${grade.displayName}</span>
-      ${grade.units.length === 0 ? '<span class="coming-soon">Yakında</span>' : ''}
-    </a>
-  `).join('');
+  const gradeCards = grades.map(grade => {
+    const safeDisplayName = escapeHTML(grade.displayName);
+    const safeId = escapeHTML(grade.id);
+
+    return `
+      <a href="${grade.isActive ? `#/sinif/${safeId}` : '#/'}" class="grade-card grade-card--${safeId} ${!grade.isActive ? 'grade-card--disabled' : ''}">
+        <span class="grade-number">${safeId}</span>
+        <span class="grade-label">${safeDisplayName}</span>
+        ${grade.units.length === 0 ? '<span class="coming-soon">Yakında</span>' : ''}
+      </a>
+    `;
+  }).join('');
 
   return `
     ${createVisitorCounter()}
@@ -141,10 +189,13 @@ async function renderHomePage(): Promise<string> {
 
 // ==================== UNITS PAGE ====================
 async function renderUnitsPage(grade: Grade): Promise<string> {
+  const safeGradeId = escapeHTML(grade.id);
+  const safeGradeDisplayName = escapeHTML(grade.displayName);
+
   const unitCards = grade.units.map((unit, index) => `
-    <a href="#/sinif/${grade.id}/unite/${unit.id}" class="unit-card unit-card--grade-${grade.id}">
+    <a href="#/sinif/${safeGradeId}/unite/${escapeHTML(unit.id)}" class="unit-card unit-card--grade-${safeGradeId}">
       <span class="unit-number">${index + 1}</span>
-      <span class="unit-name">${unit.name}</span>
+      <span class="unit-name">${escapeHTML(unit.name)}</span>
       <span class="unit-video-count">${unit.videos.length} Video</span>
     </a>
   `).join('');
@@ -153,8 +204,8 @@ async function renderUnitsPage(grade: Grade): Promise<string> {
     ${createVisitorCounter()}
     <header class="header header--compact header--grade-${grade.id}">
       <div class="header-content">
-        <a href="#/" class="back-button back-button--grade-${grade.id}">${backIcon} Ana Sayfa</a>
-        <h1 class="logo logo--small logo--grade-${grade.id}">${grade.displayName}</h1>
+        <a href="#/" class="back-button back-button--grade-${safeGradeId}">${backIcon} Ana Sayfa</a>
+        <h1 class="logo logo--small logo--grade-${safeGradeId}">${safeGradeDisplayName}</h1>
         <p class="tagline">Üniteleri keşfet, videoları izle!</p>
       </div>
     </header>
@@ -173,15 +224,18 @@ async function renderUnitsPage(grade: Grade): Promise<string> {
 // ==================== VIDEOS PAGE ====================
 async function renderVideosPage(grade: Grade, unit: Unit): Promise<string> {
   const videoCards = unit.videos.map(createVideoCard).join('');
+  const safeGradeId = escapeHTML(grade.id);
+  const safeGradeDisplayName = escapeHTML(grade.displayName);
+  const safeUnitName = escapeHTML(unit.name);
 
   return `
     ${createVisitorCounter()}
-    <header class="header header--compact header--grade-${grade.id}">
+    <header class="header header--compact header--grade-${safeGradeId}">
       <div class="header-content">
-        <a href="#/sinif/${grade.id}" class="back-button back-button--grade-${grade.id}">${backIcon} Üniteler</a>
-        <h1 class="logo logo--small logo--grade-${grade.id}">${grade.displayName}</h1>
-        <p class="tagline">${unit.name}</p>
-        <div class="video-count video-count--grade-${grade.id}">
+        <a href="#/sinif/${safeGradeId}" class="back-button back-button--grade-${safeGradeId}">${backIcon} Üniteler</a>
+        <h1 class="logo logo--small logo--grade-${safeGradeId}">${safeGradeDisplayName}</h1>
+        <p class="tagline">${safeUnitName}</p>
+        <div class="video-count video-count--grade-${safeGradeId}">
           <span class="video-count-number">${unit.videos.length}</span>
           <span class="video-count-text">Video</span>
         </div>

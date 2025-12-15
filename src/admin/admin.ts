@@ -2,9 +2,41 @@ import './admin.css';
 import { auth } from '../firebase.config';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit, updateVideoOrder, updateUnitOrder } from '../services/firebase.service';
+import { validateVideoForm, validateUnitForm } from '../utils/security';
 import type { Grade, Unit, Video } from '../types';
 import Sortable from 'sortablejs';
-import { sanitize, validateVideoForm, validateUnitForm } from '../utils/security';
+
+const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
+const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
+const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
+
+function escapeHTML(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeYouTubeId(value: string | undefined): string | null {
+    if (!value) return null;
+    const trimmed = value.trim();
+    return YOUTUBE_ID_PATTERN.test(trimmed) ? trimmed : null;
+}
+
+function sanitizeExternalLink(raw: string | undefined | null, allowedHosts: Set<string>): string | null {
+    if (!raw) return null;
+    try {
+        const url = new URL(raw);
+        if (url.protocol !== 'https:') return null;
+        const host = url.hostname.toLowerCase();
+        if (!allowedHosts.has(host)) return null;
+        return url.toString();
+    } catch {
+        return null;
+    }
+}
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen')!;
@@ -204,19 +236,25 @@ function renderVideosList() {
         return;
     }
 
-    videosListEl.innerHTML = unit.videos.map((video: any) => `
-    <div class="item-card" data-id="${video._docId}">
-      <div class="drag-handle">⋮⋮</div>
-      <div class="item-info">
-        <h4>${sanitize(video.title)}</h4>
-        <p class="item-meta">YouTube ID: ${sanitize(video.youtubeId)}</p>
-      </div>
-      <div class="item-actions">
-        <button class="btn btn-smBtn-secondary" onclick="editVideo('${video._docId}')">Düzenle</button>
-        <button class="btn btn-sm btn-danger" onclick="removeVideo('${video._docId}')">Sil</button>
-      </div>
-    </div>
-  `).join('');
+    videosListEl.innerHTML = unit.videos.map((video: any) => {
+        const safeDocId = escapeHTML(video._docId || '');
+        const safeTitle = escapeHTML(video.title || '');
+        const safeYoutubeId = escapeHTML(video.youtubeId || '');
+
+        return `
+        <div class="item-card" data-id="${safeDocId}">
+          <div class="drag-handle">⋮⋮</div>
+          <div class="item-info">
+            <h4>${safeTitle}</h4>
+            <p class="item-meta">YouTube ID: ${safeYoutubeId}</p>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-sm btn-secondary js-edit-video" data-id="${safeDocId}">Düzenle</button>
+            <button class="btn btn-sm btn-danger js-remove-video" data-id="${safeDocId}">Sil</button>
+          </div>
+        </div>
+      `;
+    }).join('');
 
     // Initialize Sortable for drag-drop
     Sortable.create(videosListEl, {
@@ -249,6 +287,35 @@ function renderVideosList() {
         }
     });
 }
+
+videosListEl.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+    const editButton = target.closest<HTMLButtonElement>('.js-edit-video');
+    const removeButton = target.closest<HTMLButtonElement>('.js-remove-video');
+
+    const docId = editButton?.dataset.id || removeButton?.dataset.id;
+    if (!docId) return;
+
+    const grade = currentGrades.find(g => g.id === selectedGradeId);
+    const unit = grade?.units.find(u => u.id === selectedUnitId);
+    const video = unit?.videos.find((v: any) => v._docId === docId);
+
+    if (editButton) {
+        if (video) openVideoModal(video);
+        return;
+    }
+
+    if (removeButton) {
+        if (!confirm('Bu videoyu silmek istediğinize emin misiniz?')) return;
+        try {
+            await deleteVideo(selectedGradeId, selectedUnitId, docId);
+            await loadData();
+            alert('Video silindi!');
+        } catch (error) {
+            alert('Hata oluştu: ' + error);
+        }
+    }
+});
 
 addVideoBtn.addEventListener('click', () => {
     if (!selectedGradeId || !selectedUnitId) {
@@ -315,18 +382,41 @@ videoForm.addEventListener('submit', async (e) => {
 
     const videoId = (document.getElementById('video-id') as HTMLInputElement).value;
     const youtubeInput = (document.getElementById('youtube-id') as HTMLInputElement).value;
-    const title = (document.getElementById('video-title') as HTMLInputElement).value;
-    const kahootLink = (document.getElementById('kahoot-link') as HTMLInputElement).value;
-    const wordwallKitaplik = (document.getElementById('wordwall-kitaplik') as HTMLInputElement).value;
-    const wordwallCarkifelek = (document.getElementById('wordwall-carkifelek') as HTMLInputElement).value;
+    const title = (document.getElementById('video-title') as HTMLInputElement).value.trim();
+    const kahootLink = (document.getElementById('kahoot-link') as HTMLInputElement).value.trim();
+    const wordwallKitaplik = (document.getElementById('wordwall-kitaplik') as HTMLInputElement).value.trim();
+    const wordwallCarkifelek = (document.getElementById('wordwall-carkifelek') as HTMLInputElement).value.trim();
+
+    const extractedYouTubeId = extractYouTubeId(youtubeInput);
+    const sanitizedYouTubeId = sanitizeYouTubeId(extractedYouTubeId);
+    const sanitizedKahoot = sanitizeExternalLink(kahootLink, ALLOWED_KAHOOT_HOSTS);
+    const sanitizedKitaplik = sanitizeExternalLink(wordwallKitaplik, ALLOWED_WORDWALL_HOSTS);
+    const sanitizedCarki = sanitizeExternalLink(wordwallCarkifelek, ALLOWED_WORDWALL_HOSTS);
+
+    if (!sanitizedYouTubeId) {
+        alert('Geçersiz YouTube ID. Lütfen yalnızca 11 karakterlik YouTube video ID girin.');
+        return;
+    }
+    if (kahootLink && !sanitizedKahoot) {
+        alert('Kahoot linki yalnızca https://create.kahoot.it veya kahoot.it adreslerinden olmalıdır.');
+        return;
+    }
+    if (wordwallKitaplik && !sanitizedKitaplik) {
+        alert('Wordwall Kitaplık linki yalnızca https://wordwall.net adresinden olmalıdır.');
+        return;
+    }
+    if (wordwallCarkifelek && !sanitizedCarki) {
+        alert('Wordwall Çarkıfelek linki yalnızca https://wordwall.net adresinden olmalıdır.');
+        return;
+    }
 
     const videoData: Video = {
         id: videoId || `${selectedUnitId}-${Date.now()}`,
-        title: title.trim(),
-        youtubeId: extractYouTubeId(youtubeInput),
-        kahootLink: kahootLink.trim(),
-        wordwallKitaplik: wordwallKitaplik.trim(),
-        wordwallCarkifelek: wordwallCarkifelek.trim()
+        title,
+        youtubeId: sanitizedYouTubeId || '',
+        kahootLink: sanitizedKahoot || undefined,
+        wordwallKitaplik: sanitizedKitaplik || undefined,
+        wordwallCarkifelek: sanitizedCarki || undefined
     };
 
     // Validate form data
@@ -359,26 +449,6 @@ document.querySelectorAll('.modal-close, .modal-cancel').forEach(btn => {
     });
 });
 
-// Global functions for onclick handlers
-(window as any).editVideo = function (videoDocId: string) {
-    const grade = currentGrades.find(g => g.id === selectedGradeId);
-    const unit = grade?.units.find(u => u.id === selectedUnitId);
-    const video = unit?.videos.find((v: any) => v._docId === videoDocId);
-    if (video) openVideoModal(video);
-};
-
-(window as any).removeVideo = async function (videoDocId: string) {
-    if (!confirm('Bu videoyu silmek istediğinize emin misiniz?')) return;
-
-    try {
-        await deleteVideo(selectedGradeId, selectedUnitId, videoDocId);
-        await loadData();
-        alert('Video silindi!');
-    } catch (error) {
-        alert('Hata oluştu: ' + error);
-    }
-};
-
 // ==================== UNITS VIEW ====================
 const unitsGradeSelect = document.getElementById('units-grade-select') as HTMLSelectElement;
 const unitsListEl = document.getElementById('units-list')!;
@@ -410,15 +480,15 @@ function renderUnitsList() {
     }
 
     unitsListEl.innerHTML = grade.units.map((unit, index) => `
-    <div class="item-card" data-id="${unit.id}">
+    <div class="item-card" data-id="${escapeHTML(unit.id)}" data-grade="${escapeHTML(gradeId)}">
       <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
-        <h4>${index + 1}. ${sanitize(unit.name)}</h4>
+        <h4>${index + 1}. ${escapeHTML(unit.name)}</h4>
         <p class="item-meta">${unit.videos.length} video</p>
       </div>
       <div class="item-actions">
-        <button class="btn btn-sm btn-secondary" onclick="editUnit('${gradeId}', '${unit.id}')">Düzenle</button>
-        <button class="btn btn-sm btn-danger" onclick="removeUnit('${gradeId}', '${unit.id}')">Sil</button>
+        <button class="btn btn-sm btn-secondary js-edit-unit" data-grade="${escapeHTML(gradeId)}" data-id="${escapeHTML(unit.id)}">Düzenle</button>
+        <button class="btn btn-sm btn-danger js-remove-unit" data-grade="${escapeHTML(gradeId)}" data-id="${escapeHTML(unit.id)}">Sil</button>
       </div>
     </div>
   `).join('');
@@ -454,6 +524,35 @@ function renderUnitsList() {
         }
     });
 }
+
+unitsListEl.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement;
+    const editButton = target.closest<HTMLButtonElement>('.js-edit-unit');
+    const removeButton = target.closest<HTMLButtonElement>('.js-remove-unit');
+
+    const gradeId = editButton?.dataset.grade || removeButton?.dataset.grade;
+    const unitId = editButton?.dataset.id || removeButton?.dataset.id;
+    if (!gradeId || !unitId) return;
+
+    const grade = currentGrades.find(g => g.id === gradeId);
+    const unit = grade?.units.find(u => u.id === unitId);
+
+    if (editButton) {
+        if (unit) openUnitModal(gradeId, unit);
+        return;
+    }
+
+    if (removeButton) {
+        if (!confirm('Bu üniteyi silmek istediğinize emin misiniz? İçindeki tüm videolar silinecek!')) return;
+        try {
+            await deleteUnit(gradeId, unitId);
+            await loadData();
+            alert('Ünite silindi!');
+        } catch (error) {
+            alert('Hata oluştu: ' + error);
+        }
+    }
+});
 
 addUnitBtn.addEventListener('click', () => {
     const gradeId = unitsGradeSelect.value;
@@ -526,22 +625,3 @@ unitForm.addEventListener('submit', async (e) => {
         alert('Ünite kaydedilirken hata oluştu: ' + error);
     }
 });
-
-// Global functions
-(window as any).editUnit = function (gradeId: string, unitId: string) {
-    const grade = currentGrades.find(g => g.id === gradeId);
-    const unit = grade?.units.find(u => u.id === unitId);
-    if (unit) openUnitModal(gradeId, unit);
-};
-
-(window as any).removeUnit = async function (gradeId: string, unitId: string) {
-    if (!confirm('Bu üniteyi silmek istediğinize emin misiniz? İçindeki tüm videolar silinecek!')) return;
-
-    try {
-        await deleteUnit(gradeId, unitId);
-        await loadData();
-        alert('Ünite silindi!');
-    } catch (error) {
-        alert('Hata oluştu: ' + error);
-    }
-};

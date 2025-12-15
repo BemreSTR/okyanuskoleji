@@ -1,7 +1,7 @@
 # 📚 Din Akademi
 
 <div align="center">
-  <img src="public/images/DA-logo.png" alt="Din Akademi Logo" width="200"/>
+  <img src="public/images/dinakademi.png" alt="Din Akademi Logo" width="400"/>
   
   ### Öğrenciler için Eğitici Video Platformu
   

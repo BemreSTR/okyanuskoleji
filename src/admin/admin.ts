@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebas
 import { loadGrades, addVideo, updateVideo, deleteVideo, addUnit, updateUnit, deleteUnit, updateVideoOrder, updateUnitOrder } from '../services/firebase.service';
 import type { Grade, Unit, Video } from '../types';
 import Sortable from 'sortablejs';
+import { sanitize, validateVideoForm, validateUnitForm } from '../utils/security';
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen')!;
@@ -207,11 +208,11 @@ function renderVideosList() {
     <div class="item-card" data-id="${video._docId}">
       <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
-        <h4>${video.title}</h4>
-        <p class="item-meta">YouTube ID: ${video.youtubeId}</p>
+        <h4>${sanitize(video.title)}</h4>
+        <p class="item-meta">YouTube ID: ${sanitize(video.youtubeId)}</p>
       </div>
       <div class="item-actions">
-        <button class="btn btn-sm btn-secondary" onclick="editVideo('${video._docId}')">Düzenle</button>
+        <button class="btn btn-smBtn-secondary" onclick="editVideo('${video._docId}')">Düzenle</button>
         <button class="btn btn-sm btn-danger" onclick="removeVideo('${video._docId}')">Sil</button>
       </div>
     </div>
@@ -314,15 +315,26 @@ videoForm.addEventListener('submit', async (e) => {
 
     const videoId = (document.getElementById('video-id') as HTMLInputElement).value;
     const youtubeInput = (document.getElementById('youtube-id') as HTMLInputElement).value;
+    const title = (document.getElementById('video-title') as HTMLInputElement).value;
+    const kahootLink = (document.getElementById('kahoot-link') as HTMLInputElement).value;
+    const wordwallKitaplik = (document.getElementById('wordwall-kitaplik') as HTMLInputElement).value;
+    const wordwallCarkifelek = (document.getElementById('wordwall-carkifelek') as HTMLInputElement).value;
 
     const videoData: Video = {
         id: videoId || `${selectedUnitId}-${Date.now()}`,
-        title: (document.getElementById('video-title') as HTMLInputElement).value,
+        title: title.trim(),
         youtubeId: extractYouTubeId(youtubeInput),
-        kahootLink: (document.getElementById('kahoot-link') as HTMLInputElement).value,
-        wordwallKitaplik: (document.getElementById('wordwall-kitaplik') as HTMLInputElement).value,
-        wordwallCarkifelek: (document.getElementById('wordwall-carkifelek') as HTMLInputElement).value
+        kahootLink: kahootLink.trim(),
+        wordwallKitaplik: wordwallKitaplik.trim(),
+        wordwallCarkifelek: wordwallCarkifelek.trim()
     };
+
+    // Validate form data
+    const validation = validateVideoForm(videoData);
+    if (!validation.valid) {
+        alert('Form hataları:\n\n' + validation.errors.join('\n'));
+        return;
+    }
 
     try {
         if (videoId) {
@@ -333,9 +345,10 @@ videoForm.addEventListener('submit', async (e) => {
 
         closeVideoModal();
         await loadData();
-        alert('Video kaydedildi!');
+        alert('Video başarıyla kaydedildi!');
     } catch (error) {
-        alert('Hata oluştu: ' + error);
+        console.error('Video save error:', error);
+        alert('Video kaydedilirken hata oluştu: ' + error);
     }
 });
 
@@ -400,7 +413,7 @@ function renderUnitsList() {
     <div class="item-card" data-id="${unit.id}">
       <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
-        <h4>${index + 1}. ${unit.name}</h4>
+        <h4>${index + 1}. ${sanitize(unit.name)}</h4>
         <p class="item-meta">${unit.videos.length} video</p>
       </div>
       <div class="item-actions">
@@ -484,8 +497,15 @@ unitForm.addEventListener('submit', async (e) => {
     const unitId = (document.getElementById('unit-id') as HTMLInputElement).value.trim();
     const unitName = (document.getElementById('unit-name') as HTMLInputElement).value.trim();
 
-    if (!unitName) {
-        alert('Ünite adını doldurun!');
+    const unitData = {
+        id: unitId || '',
+        name: unitName
+    };
+
+    // Validate form data
+    const validation = validateUnitForm(unitData);
+    if (!validation.valid) {
+        alert('Form hataları:\n\n' + validation.errors.join('\n'));
         return;
     }
 
@@ -500,9 +520,10 @@ unitForm.addEventListener('submit', async (e) => {
 
         closeUnitModal();
         await loadData();
-        alert('Ünite kaydedildi!');
+        alert('Ünite başarıyla kaydedildi!');
     } catch (error) {
-        alert('Hata oluştu: ' + error);
+        console.error('Unit save error:', error);
+        alert('Ünite kaydedilirken hata oluştu: ' + error);
     }
 });
 

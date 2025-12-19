@@ -2,6 +2,56 @@ import './style.css';
 import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
+// Login Constants
+const VALID_EMAIL = 'alioflu@gmail.com';
+const VALID_PASSWORD = 'alioflu1';
+const LOGIN_SESSION_KEY = 'alioflu_logged_in';
+
+// Initialize login
+function initializeLogin(): void {
+  const loginForm = document.getElementById('login-form') as HTMLFormElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+  const loginError = document.getElementById('login-error');
+
+  // Check if already logged in
+  if (sessionStorage.getItem(LOGIN_SESSION_KEY)) {
+    showMainApp();
+    return;
+  }
+
+  loginForm.addEventListener('submit', (e: Event) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+      sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
+      loginForm.reset();
+      if (loginError) loginError.classList.remove('show');
+      showMainApp();
+    } else {
+      if (loginError) {
+        loginError.textContent = 'E-posta veya şifre hatalı';
+        loginError.classList.add('show');
+      }
+      passwordInput.value = '';
+    }
+  });
+}
+
+function showMainApp(): void {
+  const loginScreen = document.getElementById('login-screen');
+  const appContainer = document.getElementById('app');
+
+  if (loginScreen) loginScreen.classList.add('hidden');
+  if (appContainer) appContainer.classList.remove('hidden');
+
+  // Start the main application
+  startRouter();
+}
+
 // Basic output sanitizers to reduce XSS surface when rendering Firestore data
 const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
 const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
@@ -316,5 +366,14 @@ async function router(): Promise<void> {
 
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
-window.addEventListener('DOMContentLoaded', router);
-router();
+
+// Initialize login first, then app
+document.addEventListener('DOMContentLoaded', () => {
+  initializeLogin();
+});
+
+// Only start router after app is shown
+function startRouter() {
+  window.addEventListener('hashchange', router);
+  router();
+}

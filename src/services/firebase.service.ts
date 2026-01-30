@@ -63,7 +63,7 @@ export async function loadGrades(): Promise<Grade[]> {
                             name: '1. TEMA: NESNELERİN GEOMETRİSİ', 
                             order: 1,
                             videos: [
-                                { id: 't1-k1', title: 'Geometrik Cisimler', youtubeId: '', order: 1 },
+                                { id: 't1-k1', title: 'Geometrik Cisimler', youtubeId: '', materialUrl: '/ders-materyal/Geometrik-Cisimler/index.html', order: 1 },
                                 { id: 't1-k2', title: 'Geometrik Cisim Modelleri', youtubeId: '', order: 2 },
                                 { id: 't1-k3', title: 'Geometrik Şekil Modelleri', youtubeId: '', order: 3 },
                                 { id: 't1-k4', title: 'Geometrik Cisim ve Şekillerin Biçimsel Özellikleri', youtubeId: '', order: 4 },

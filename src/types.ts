@@ -5,6 +5,7 @@ export interface Video {
   kahootLink?: string;
   wordwallKitaplik?: string;
   wordwallCarkifelek?: string;
+  materialUrl?: string; // Local interactive material path
   order?: number; // For drag-drop ordering
 }
 

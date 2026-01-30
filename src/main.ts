@@ -138,71 +138,35 @@ const backIcon = `<svg class="back-icon" viewBox="0 0 24 24" fill="currentColor"
 // ==================== VIDEO CARD ====================
 function createVideoCard(video: Video): string {
   const safeTitle = escapeHTML(video.title);
-  const safeYoutubeId = sanitizeYouTubeId(video.youtubeId);
-  const safeKahoot = sanitizeExternalLink(video.kahootLink, ALLOWED_KAHOOT_HOSTS);
-  const safeKitaplik = sanitizeExternalLink(video.wordwallKitaplik, ALLOWED_WORDWALL_HOSTS);
-  const safeCarki = sanitizeExternalLink(video.wordwallCarkifelek, ALLOWED_WORDWALL_HOSTS);
+  const materialUrl = video.materialUrl ? escapeHTML(video.materialUrl) : null;
 
-  const kahootButton = safeKahoot
-    ? `<a href="${safeKahoot}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--kahoot">
-        ${kahootIcon}
-        <span>Kahoot</span>
-      </a>`
-    : `<button class="link-btn link-btn--kahoot link-btn--disabled" disabled>
-        ${kahootIcon}
-        <span>Kahoot</span>
-      </button>`;
-
-  const kitaplikButton = safeKitaplik
-    ? `<a href="${safeKitaplik}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-kitaplik">
-        ${bookIcon}
-        <span>Kitaplık</span>
-      </a>`
-    : `<button class="link-btn link-btn--wordwall-kitaplik link-btn--disabled" disabled>
-        ${bookIcon}
-        <span>Kitaplık</span>
-      </button>`;
-
-  const carkifelekButton = safeCarki
-    ? `<a href="${safeCarki}" target="_blank" rel="noopener noreferrer" class="link-btn link-btn--wordwall-carkifelek">
-        ${wheelIcon}
-        <span>Çarkıfelek</span>
-      </a>`
-    : `<button class="link-btn link-btn--wordwall-carkifelek link-btn--disabled" disabled>
-        ${wheelIcon}
-        <span>Çarkıfelek</span>
-      </button>`;
-
-  const wordwallButtons = `
-    <div class="wordwall-buttons">
-      ${kitaplikButton}
-      ${carkifelekButton}
-    </div>
-  `;
-
-  const videoEmbed = safeYoutubeId
-    ? `<iframe
-          src="https://www.youtube.com/embed/${safeYoutubeId}"
-          title="${safeTitle}"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>`
-    : '<div class="video-error">Video ID geçersiz</div>';
-
-  return `
+  if (materialUrl) {
+    // Özel İnteraktif Materyal Varsa
+    return `
     <article class="video-card">
       <h3 class="video-title">${safeTitle}</h3>
-      <div class="video-wrapper">
-        ${videoEmbed}
-      </div>
-      <div class="video-links">
-        ${kahootButton}
-        ${wordwallButtons}
+      <div class="material-wrapper" style="padding: 2rem; display: flex; justify-content: center; align-items: center; background: #f8fafc; border-radius: 8px;">
+         <a href="${materialUrl}" target="_blank" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; border: none; border-radius: 12px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+           <span>🚀</span>
+           <span>İnteraktif Konu Anlatımını Başlat</span>
+         </a>
       </div>
     </article>
   `;
+  } else {
+    // Henüz Materyal Yoksa - İnaktif Buton
+    return `
+    <article class="video-card">
+      <h3 class="video-title">${safeTitle}</h3>
+      <div class="material-wrapper" style="padding: 2rem; display: flex; justify-content: center; align-items: center; background: #f8fafc; border-radius: 8px;">
+         <button class="btn btn-secondary" disabled style="font-size: 1.2rem; padding: 1rem 2rem; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 12px; cursor: not-allowed; display: flex; align-items: center; gap: 10px;">
+           <span>⏳</span>
+           <span>İnteraktif Konu Anlatımı Hazırlanıyor...</span>
+         </button>
+      </div>
+    </article>
+  `;
+  }
 }
 
 // ==================== HOME PAGE ====================

@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa18-19</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap&family=Comic+Neue:wght@400;700"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CORE LAYOUT */
+        html {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+        }
+
+        body {
+            width: 1024px;
+            height: 768px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #e8eaf6;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #e8eaf6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #e8eaf6;
+            overflow: hidden;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        /* Giriş ekranını göster */
+        .stage {
+            display: none;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        /* Genel düzeltmeler */
+        .nav-row {
+            padding: 8px 15px !important;
+            gap: 10px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .nav-btn {
+            padding: 10px 15px !important;
+            font-size: 1em !important;
+        }
+
+        /* HEADER - Tüm sayfalar için standart büyük boyut */
+        .header,
+        .pdf-header {
+            padding: 12px 20px !important;
+            flex-shrink: 0 !important;
+            background: linear-gradient(135deg, #ff9800, #f57c00) !important;
+        }
+
+        .header h2,
+        .pdf-header h2 {
+            font-size: 1.3em !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+            color: #fff !important;
+        }
+
+        .header .page-num,
+        .pdf-header .page-num {
+            font-size: 0.9em !important;
+            padding: 0.4em 1em !important;
+            font-weight: 700 !important;
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: #fff !important;
+            border-radius: 20px !important;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .progress-row {
+            padding: 5px 15px !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* MASCOT & INSTRUCTIONS */
+        .instruction-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 30px 8px 45px;
+            background: #fff;
+            border: 3px dashed #ff5757;
+            border-radius: 20px;
+            margin: 10px 40px;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            min-height: 70px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .mascot-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: -55px;
+        }
+
+        .mascot-img-small {
+            height: 95px;
+            width: auto;
+            z-index: 5;
+            margin-bottom: -5px;
+        }
+
+        .stage-badge {
+            position: absolute;
+            top: 0px;
+            left: 65px;
+            background: #fff;
+            color: #ff5757;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 800;
+            z-index: 10;
+            border: 2px solid #ff5757;
+        }
+
+        .instruction-text {
+            flex: 1;
+        }
+
+        .instruction-text p {
+            color: #333;
+            font-size: 1.5rem;
+            line-height: 1.3;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .audio-btn {
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+            margin-left: 10px;
+        }
+
+        /* NEW CHARACTER LAYOUT (sayfa14-15 style) */
+        .character-corner {
+            position: absolute;
+            bottom: 60px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .character-corner img {
+            height: 350px;
+            width: auto;
+            display: block;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+        }
+
+        .left-char {
+            left: 10px;
+        }
+
+        .right-char {
+            right: 10px;
+        }
+
+        /* SPEECH BUBBLES WITH TAILS */
+        .bubble-container {
+            position: absolute;
+            z-index: 60;
+            width: auto;
+            max-width: 650px;
+        }
+
+        .ela-bubble-pos {
+            top: 150px;
+            left: 250px;
+        }
+
+        .kerem-bubble-pos {
+            top: 480px;
+            left: 400px;
+            right: auto;
+        }
+
+        .modern-bubble {
+            background: #fff;
+            border-radius: 30px;
+            padding: 15px 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 5px solid transparent;
+            min-height: 120px;
+            width: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modern-bubble.ela {
+            border-color: #e91e63;
+        }
+
+        .modern-bubble.kerem {
+            border-color: #2196f3;
+        }
+
+        .modern-bubble::before,
+        .modern-bubble::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        /* Tale: Points to character */
+        .ela-bubble-pos .modern-bubble::before {
+            bottom: -25px;
+            left: 50px;
+            border-width: 25px 25px 0 0;
+            border-color: #e91e63 transparent transparent transparent;
+        }
+
+        .ela-bubble-pos .modern-bubble::after {
+            bottom: -18px;
+            left: 54px;
+            border-width: 18px 18px 0 0;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        /* Kerem Tail: Point to the right towards character */
+        .kerem-bubble-pos .modern-bubble::before {
+            right: -25px;
+            bottom: 40px;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent #2196f3;
+        }
+
+        .kerem-bubble-pos .modern-bubble::after {
+            right: -18px;
+            bottom: 44px;
+            border-width: 11px 0 11px 18px;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .modern-bubble .dialogue-text {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            line-height: 1.3;
+        }
+
+        /* INTERACTIVE SHAPE (ELA SHOWS THIS) */
+        .interactive-shape-container {
+            width: 220px;
+            height: 220px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: none;
+        }
+
+        .interactive-shape-container:hover {
+            transform: scale(1.05);
+        }
+
+        .interactive-shape-container img {
+            max-width: 85%;
+            max-height: 85%;
+            object-fit: contain;
+        }
+
+        .main-content {
+            padding: 10px 15px !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
+
+
+
+
+
+
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            padding: 1.5% 3%;
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.4em 1em;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px)
+        }
+
+        /* PROGRESS */
+        .progress-row {
+            padding: 1% 3%;
+            display: flex;
+            align-items: center;
+            gap: 2%;
+            flex-shrink: 0
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background: #ffe082;
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #e65100
+        }
+
+        /* SCENE BOX */
+        .scene-box {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 2%;
+            margin: 0 3% 1.5%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3%;
+            flex-shrink: 0
+        }
+
+        .scene-objects {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .scene-obj {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+        }
+
+        /* DIALOGUE */
+        .dialogue-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 3%;
+            min-height: 0;
+            overflow: hidden;
+            justify-content: flex-start;
+            gap: 20%
+        }
+
+        .character-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 0
+        }
+
+        .character-row.right {
+            flex-direction: row-reverse;
+            margin-top: auto
+        }
+
+        .char-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2em;
+            flex-shrink: 0;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15)
+        }
+
+        .char-avatar.teacher {
+            background: linear-gradient(135deg, #e1bee7, #ce93d8);
+            border: 3px solid #9c27b0
+        }
+
+        .char-avatar.ela {
+            background: linear-gradient(135deg, #f8bbd9, #f48fb1);
+            border: 3px solid #e91e63
+        }
+
+        .char-avatar.kerem {
+            background: linear-gradient(135deg, #bbdefb, #90caf9);
+            border: 3px solid #2196f3
+        }
+
+        .dialogue-bubble {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2% 3%;
+            flex: 1;
+            position: relative;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            border: 3px solid transparent;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease
+        }
+
+        .dialogue-bubble.disabled {
+            pointer-events: none
+        }
+
+        .dialogue-bubble.correct-border {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.3), 0 6px 25px rgba(76, 175, 80, 0.4);
+            animation: correctPulse 0.6s ease
+        }
+
+        .dialogue-bubble.wrong-border {
+            border-color: #f44336;
+            box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.3), 0 6px 25px rgba(244, 67, 54, 0.4);
+            animation: wrongShake 0.5s ease
+        }
+
+        .dialogue-bubble.teacher {
+            border: 2px solid #9c27b0
+        }
+
+        .dialogue-bubble.ela {
+            border: 2px solid #e91e63
+        }
+
+        .dialogue-bubble.kerem {
+            border: 2px solid #2196f3
+        }
+
+        .dialogue-bubble::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent
+        }
+
+        .character-row:not(.right) .dialogue-bubble::before {
+            left: -12px;
+            border-right: 14px solid #fff
+        }
+
+        .character-row.right .dialogue-bubble::before {
+            right: -12px;
+            border-left: 14px solid #fff
+        }
+
+        .char-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px
+        }
+
+        .char-name.teacher {
+            color: #9c27b0
+        }
+
+        .char-name.ela {
+            color: #e91e63
+        }
+
+        .char-name.kerem {
+            color: #2196f3
+        }
+
+        .dialogue-text {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            color: #333
+        }
+
+        .dialogue-text .blank {
+            display: inline-block;
+            min-width: 150px;
+            height: 50px;
+            border: 4px dashed #999;
+            border-radius: 12px;
+            vertical-align: middle;
+            margin: 0 10px;
+            background: #f5f5f5;
+            text-align: center;
+            line-height: 42px;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+            font-size: 1.5rem
+        }
+
+        .dialogue-text .blank.filled {
+            border: 2px solid #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32
+        }
+
+        .audio-btn {
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1em;
+            cursor: pointer;
+            margin-left: 10px;
+            vertical-align: middle
+        }
+
+        /* MASA KARTI */
+        .table-card {
+            background: linear-gradient(180deg, #8d6e63, #6d4c41);
+            border-radius: 20px 20px 0 0;
+            padding: 2% 3% 3%;
+            margin: 0;
+            box-shadow: inset 0 3px 15px rgba(0, 0, 0, 0.3), 0 -3px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .table-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #a1887f 0%, #8d6e63 50%, #a1887f 100%);
+            border-radius: 20px 20px 0 0
+        }
+
+        .table-objects {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 10px 0
+        }
+
+        /* CHOICES */
+        .choices-area {
+            padding: 0;
+            flex-shrink: 0
+        }
+
+        .choices-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        .choice-btn {
+            background: #fff;
+            border: 3px solid #ff9800;
+            border-radius: 16px;
+            padding: 18px 30px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15)
+        }
+
+        .choice-btn:hover {
+            background: #fff3e0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.3)
+        }
+
+        .choice-btn.selected {
+            background: #ff9800;
+            color: #fff;
+            border-color: #e65100
+        }
+
+        .choice-btn.used {
+            opacity: 0.5;
+            pointer-events: none;
+            transform: scale(0.95)
+        }
+
+        .choice-btn .emoji {
+            font-size: 2.5rem
+        }
+
+        /* INFO CARD */
+        .info-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 3%;
+            margin: 0 3%;
+            border: 2px solid #ff9800;
+            text-align: center
+        }
+
+        .info-card h3 {
+            color: #e65100;
+            font-size: 1.1em;
+            margin-bottom: 10px
+        }
+
+        .info-card p {
+            color: #555;
+            font-size: 1em;
+            line-height: 1.6
+        }
+
+        .info-card .highlight {
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 600
+        }
+
+        /* OBJECTS GRID */
+        .objects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 2% 3%;
+            margin-bottom: 2%
+        }
+
+        .object-item {
+            background: #fff;
+            border: 3px solid #ff9800;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+        }
+
+        .object-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3)
+        }
+
+        .object-item.used {
+            opacity: 0.5;
+            pointer-events: none
+        }
+
+        .object-icon {
+            font-size: 2.5em;
+            flex-shrink: 0
+        }
+
+        .object-name {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #333
+        }
+
+        /* SUMMARY */
+        .summary-row {
+            display: flex;
+            gap: 3%;
+            flex: 1;
+            min-height: 0;
+            padding: 0 3%
+        }
+
+        .summary-box {
+            flex: 1;
+            border-radius: 16px;
+            padding: 3%;
+            display: flex;
+            flex-direction: column;
+            border: 3px dashed
+        }
+
+        .summary-box.orange {
+            background: linear-gradient(180deg, #fff8e1, #ffecb3);
+            border-color: #ff9800
+        }
+
+        .summary-box.purple {
+            background: linear-gradient(180deg, #f3e5f5, #e1bee7);
+            border-color: #9c27b0
+        }
+
+        .summary-box h3 {
+            font-size: 1.1em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-align: center
+        }
+
+        .summary-box.orange h3 {
+            color: #e65100
+        }
+
+        .summary-box.purple h3 {
+            color: #7b1fa2
+        }
+
+        .summary-box .items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center
+        }
+
+        .summary-box .item {
+            width: 45px;
+            height: 45px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+        }
+
+        .summary-box .desc {
+            font-size: 0.85em;
+            text-align: center;
+            margin-top: auto;
+            padding-top: 8px;
+            font-weight: 600;
+            color: #555
+        }
+
+        /* FINAL */
+        .final-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3%
+        }
+
+        .final-bubble {
+            background: #fff;
+            border-radius: 20px;
+            padding: 4% 5%;
+            max-width: 85%;
+            text-align: center;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+            border: 3px solid #ff9800;
+            position: relative
+        }
+
+        .final-bubble::before {
+            content: '📝';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.2em;
+            background: #fff;
+            border-radius: 50%;
+            padding: 5px;
+            border: 3px solid #ff9800
+        }
+
+        .final-bubble p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            color: #333;
+            margin-top: 15px
+        }
+
+        /* ANIMATIONS */
+        @keyframes confetti {
+            0% {
+                transform: translateY(-768px) rotate(0deg);
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(768px) rotate(720deg);
+                opacity: 0
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f44336;
+            top: -20px;
+            z-index: 100;
+            animation: confetti 3s ease-in-out
+        }
+
+        .confetti:nth-child(2n) {
+            background: #2196f3;
+            animation-duration: 2.5s
+        }
+
+        .confetti:nth-child(3n) {
+            background: #4caf50;
+            animation-duration: 3.5s
+        }
+
+        .confetti:nth-child(4n) {
+            background: #ff9800;
+            animation-duration: 2.8s
+        }
+
+        .confetti:nth-child(5n) {
+            background: #9c27b0;
+            animation-duration: 3.2s
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg)
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1) rotate(180deg)
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            font-size: 2rem;
+            animation: sparkle 1s ease-in-out;
+            pointer-events: none;
+            z-index: 60
+        }
+
+        @keyframes correctPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* WRONG BALLOON */
+        @keyframes wrongBalloonIn {
+            0% {
+                transform: scale(0);
+                opacity: 0
+            }
+
+            60% {
+                transform: scale(1.05);
+                opacity: 1
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .wrong-balloon {
+            position: absolute;
+            top: -100px;
+            right: -15px;
+            z-index: 100;
+            display: none;
+            background: #f44336;
+            padding: 12px 18px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px rgba(244, 67, 54, 0.5);
+            max-width: 220px;
+            border: 3px solid #fff
+        }
+
+        .wrong-balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            right: 25px;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 15px solid #f44336
+        }
+
+        .wrong-balloon.show {
+            display: block;
+            animation: wrongBalloonIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+        }
+
+        .wrong-icon {
+            font-size: 2rem;
+            margin-bottom: 6px
+        }
+
+        .wrong-text {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3)
+        }
+
+        .wrong-message {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            opacity: 0.95
+        }
+
+        /* NAV */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 1.5% 3%;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 2%;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff
+        }
+
+        .nav-btn:disabled {
+            cursor: not-allowed
+        }
+
+
+        /* TOUCH SUPPORT */
+        button,
+        .choice-btn,
+        .nav-btn,
+        .audio-btn,
+        .level-btn {
+            cursor: pointer !important;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2) !important;
+            touch-action: manipulation !important;
+            user-select: none !important;
+        }
+
+        button:active,
+        .choice-btn:active,
+        .nav-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        /* Hover efektlerini kaldır, active kullan */
+        @media (hover: none) {
+
+            button:hover,
+            .choice-btn:hover,
+            .nav-btn:hover {
+                transform: none !important;
+            }
+        }
+
+        /* POINTER EVENTS FIX FOR WEB */
+        button,
+        .choice-btn,
+        .nav-btn,
+        .start-btn,
+        .word-chip,
+        .paint-dot,
+        .audio-btn,
+        .blank,
+        .level-btn,
+        a {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative !important;
+            z-index: 1000 !important;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        button:hover,
+        .choice-btn:hover,
+        .nav-btn:hover {
+            opacity: 0.9 !important;
+            transform: scale(1.05) !important;
+        }
+
+        button:active,
+        .choice-btn:active,
+        .nav-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        .page,
+        .stage,
+        .main-content {
+            pointer-events: auto !important;
+        }
+
+        .shape-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .geo-shape {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // CLICK TEST DEBUG
+        console.log("Page loaded:", window.location.href);
+        document.addEventListener("click", function (e) {
+            console.log("Click detected:", e.target.tagName, e.target.className, e.target.onclick);
+        }, true);
+    </script>
+
+    <div class="page">
+        <!-- GİRİŞ -->
+        <div class="stage active" id="stage0">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:12.5%"></div>
+                </div>
+                <span class="progress-text">1 / 8</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Okuma_Sembolu.png" class="mascot-img-small">
+                    <div class="stage-badge">4</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Ela ve Kerem geometrik cisimlerden yararlanarak aşağıdaki yapıyı oluşturdular. Bu yapıyı
+                        oluştururken hangi geometrik cisimlerden yararlanmışlardır? Arkadaşlarımızla paylaşalım. Ela ve
+                        Kerem’in konuşmalarını okuyalım.</p>
+                    <button class="audio-btn" onclick="playAudio('intro')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <img src="../images/sayfa18-19/geometrik_sekiller.png" alt="Yapı"
+                    style="max-height: 95%; max-width: 95%; object-fit: contain; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="location.href='sayfa17.html'">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(1)">Başla →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 1: KONUŞMA (YENİ) -->
+        <div class="stage" id="stage1">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:25%"></div>
+                </div>
+                <span class="progress-text">2 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA LEFT -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/Ela.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela" style="width: 520px;">
+                        <div class="dialogue-text" style="display:flex; align-items:center; gap:10px;">
+                            <span>Kerem, yapılarda kullandığımız geometrik cisimlerin adlarını biliyor musun?</span>
+                            <button class="audio-btn" onclick="playAudio('ela1')">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM RIGHT -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" style="display:flex; align-items:center; gap:10px;">
+                            <span>Evet, biliyorum.</span>
+                            <button class="audio-btn" onclick="playAudio('kerem1')">🔊</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(0)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(2)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 2: KÜP (ESKİ 1) -->
+        <div class="stage" id="stage2">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:37.5%"></div>
+                </div>
+                <span class="progress-text">3 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA LEFT -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(2)">
+                            <img src="../images/sayfa18-19/kirmizi_kup.png" alt="Küp">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM RIGHT -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer2" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(1)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(3)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 3: KÜRE (ESKİ 2) -->
+        <div class="stage" id="stage3">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:50%"></div>
+                </div>
+                <span class="progress-text">4 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(3)">
+                            <img src="../images/sayfa18-19/mavi_kure.png" alt="Küre">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer3" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(2)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(4)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 4: DİKDÖRTGEN PRİZMA (ESKİ 3) -->
+        <div class="stage" id="stage4">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:62.5%"></div>
+                </div>
+                <span class="progress-text">5 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(4)">
+                            <img src="../images/sayfa18-19/mavi_dikdortgen_prizmasi.png" alt="Dikdörtgen Prizma">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer4" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(3)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(5)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 5: KARE PRİZMA (ESKİ 4) -->
+        <div class="stage" id="stage5">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:75%"></div>
+                </div>
+                <span class="progress-text">6 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(5)">
+                            <img src="../images/sayfa18-19/lacivert_dikdortgen_prizmasi.png" alt="Kare Prizma">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer5" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(4)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(6)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 6: SİLİNDİR (ESKİ 5) -->
+        <div class="stage" id="stage6">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:87.5%"></div>
+                </div>
+                <span class="progress-text">7 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(6)">
+                            <img src="../images/sayfa18-19/yesil_silindir.png" alt="Silindir">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer6" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(5)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(7)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 7: ÜÇGEN PRİZMA (ESKİ 6) -->
+        <div class="stage" id="stage7">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Geometrik Cisimlerin Adları</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">18-19</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:100%"></div>
+                </div>
+                <span class="progress-text">8 / 8</span>
+            </div>
+
+            <div class="main-content">
+                <!-- ELA -->
+                <div class="character-corner left-char">
+                    <img src="../images/sayfa18-19/bune_yukari.png" alt="Ela">
+                </div>
+                <div class="bubble-container ela-bubble-pos">
+                    <div class="modern-bubble ela">
+                        <div class="interactive-shape-container" onclick="revealAnswer(7)">
+                            <img src="../images/sayfa18-19/mavi_ucgen_prizma.png" alt="Üçgen Prizma">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEREM -->
+                <div class="character-corner right-char">
+                    <img src="../images/sayfa18-19/Kerem.png" alt="Kerem">
+                </div>
+                <div class="bubble-container kerem-bubble-pos">
+                    <div class="modern-bubble kerem">
+                        <div class="dialogue-text" id="answer7" style="color:#999; font-style:italic">...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(6)">← Geri</button>
+                <button class="nav-btn next" onclick="location.href='sayfa20-21.html'">Sonraki Sayfa →</button>
+            </div>
+        </div>
+
+
+
+        <script type="text/javascript">
+
+
+            const answers = {
+                2: { text: 'Bu bir küp.', audio: 'kerem_kup' },
+                3: { text: 'Bu bir küre.', audio: 'kerem_kure' },
+                4: { text: 'Bu bir dikdörtgen prizma.', audio: 'kerem_DikdortgenPrizma' },
+                5: { text: 'Bu bir kare prizma.', audio: 'kerem_karePrizma' },
+                6: { text: 'Bu bir silindir.', audio: 'kerem_silindir' },
+                7: { text: 'Bu bir üçgen prizma.', audio: 'kerem_ucgenPrizma' }
+            };
+
+            function goStage(n) {
+                document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+                document.getElementById('stage' + n).classList.add('active');
+            }
+
+            function typeWriter(element, text, speed = 50) {
+                let i = 0;
+                element.textContent = '';
+                element.style.color = '#333';
+                element.style.fontStyle = 'normal';
+
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    }
+                }
+                type();
+            }
+
+            function revealAnswer(stageNum) {
+                const answerEl = document.getElementById('answer' + stageNum);
+                const answer = answers[stageNum];
+
+                if (answerEl && answer) {
+                    // 1. Play Ela's "bu ne?" question first
+                    playAudio('ela2');
+
+                    // 2. Wait 2 seconds before showing Kerem's answer
+                    setTimeout(() => {
+                        // 3. Show Kerem's answer with typewriter effect
+                        typeWriter(answerEl, answer.text, 60);
+
+                        // 4. Play Kerem's shape-specific audio after typewriter finishes
+                        setTimeout(() => {
+                            playAudio(answer.audio);
+                        }, answer.text.length * 10 + 50);
+                    }, 2000);
+                }
+            }
+
+
+            function playAudio(id) {
+                var audio = new Audio('../audio/sayfa18-19_' + id + '.mp3');
+                audio.play();
+            }
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa16</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* EPUB FIXED LAYOUT */
+        html {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+        }
+
+        body {
+            width: 1024px;
+            height: 768px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #e8f5e9;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #e8f5e9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        .header {
+            display: none !important;
+        }
+
+        body,
+        .page {
+            background: #fff !important;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff;
+            z-index: 10;
+        }
+
+        .framed-container {
+            margin: 15px 15px 5px 15px;
+            border: 4px dashed #ff9800;
+            border-radius: 30px;
+            background: #cfeef1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: visible;
+            /* Maskotun taşabilmesi için */
+            position: relative;
+        }
+
+        /* Genel düzeltmeler */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 12px 20px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff;
+        }
+
+        /* HEADER - Tüm sayfalar için standart büyük boyut */
+        .header,
+        .pdf-header {
+            padding: 12px 20px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .header h2,
+        .pdf-header h2 {
+            font-size: 1.3em !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+        }
+
+        .progress-row {
+            padding: 5px 40px !important;
+            flex-shrink: 0 !important;
+            margin-top: 0;
+        }
+
+        .custom-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 40px 0 40px;
+            margin-top: 5px;
+            flex-shrink: 0;
+            z-index: 110;
+            /* Başlık alanını öne çıkar */
+        }
+
+        .activity-info {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hands-circle {
+            width: 120px;
+            height: 120px;
+            background-image: url('../images/yapalim_ogrenelim.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            /* Sticker gibi olması için absolute yaptık */
+            top: -35px;
+            /* Kesilmemesi için biraz aşağı çektik */
+            left: -50px;
+            /* Yazının üzerine çok binmemesi için sola kaydırdık */
+            z-index: 120;
+            pointer-events: none;
+            /* Tıklamaları engellememesi için */
+        }
+
+        .activity-title {
+            background: #fff;
+            border: 3px dashed #ff9800;
+            border-radius: 40px;
+            padding: 8px 30px 8px 60px;
+            /* Sol taraftan aslan için boşluk bıraktık */
+            color: #ff9800;
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-left: 10px;
+        }
+
+        .time-badge-new {
+            background: #fff;
+            border-radius: 30px;
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff9800;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 2px solid #ff98001a;
+        }
+
+        .clock-icon {
+            font-size: 1.4rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-badge {
+            background: rgba(255, 152, 0, 0.8);
+            color: #fff;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .mascot-row {
+            padding: 6px 15px !important;
+            gap: 10px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .speech-bubble {
+            padding: 8px 12px !important;
+        }
+
+        .speech-bubble p {
+            font-size: 1em !important;
+            padding-right: 40px !important;
+        }
+
+        .main-content {
+            padding: 10px 15px !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
+        }
+
+        /* SAYFA 16 - Yapalım Öğrenelim - Malzemeler 2 sıra */
+        .materials-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            padding: 5px 10px !important;
+            max-width: 100% !important;
+        }
+
+        .material-card {
+            flex: 0 0 calc(14% - 6px) !important;
+            max-width: calc(14% - 6px) !important;
+            padding: 6px 4px !important;
+            min-height: auto !important;
+        }
+
+        .material-card .icon {
+            font-size: 1.8em !important;
+        }
+
+        .material-card .name {
+            font-size: 0.75em !important;
+        }
+
+        .activity-card {
+            padding: 10px !important;
+            margin-top: 5px !important;
+        }
+
+        .activity-hint {
+            padding: 5px 8px !important;
+            font-size: 0.85em !important;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
+
+
+
+
+
+
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            padding: 1.5% 3%;
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .header h2 {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px
+        }
+
+        .header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.5em 1.2em;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700
+        }
+
+        .header .time-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.5em 1.2em;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px)
+        }
+
+        /* PROGRESS */
+        .progress-row {
+            padding: 1% 3%;
+            display: flex;
+            align-items: center;
+            gap: 2%;
+            flex-shrink: 0
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background: #c8e6c9;
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s
+        }
+
+        .progress-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #E65100
+        }
+
+        /* MASCOT - REMOVED */
+
+        /* MATERIALS ROW - Two rows: 3 top, 4 bottom */
+        .materials-row {
+            padding: 1.5% 3%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: stretch;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin: 0 2% 1% 2%;
+            flex-shrink: 0
+        }
+
+        .materials-row .material-badge {
+            background: #fff;
+            padding: 15px 12px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+            border: 3px solid #FFB74D;
+            min-width: 100px;
+            flex: 0 0 auto
+        }
+
+        .materials-row .material-badge:nth-child(-n+3) {
+            flex-basis: calc(33.333% - 12px)
+        }
+
+        .materials-row .material-badge:nth-child(n+4) {
+            flex-basis: calc(25% - 12px)
+        }
+
+        .materials-row .material-badge .emoji {
+            font-size: 2rem
+        }
+
+        .materials-row .material-badge span:not(.emoji) {
+            font-size: 1.1rem;
+            font-weight: 700
+        }
+
+        .materials-row .material-badge .emoji {
+            font-size: 2.5rem
+        }
+
+        .audio-btn {
+            background: #FF9800;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1em;
+            cursor: pointer;
+            margin-left: 10px;
+            vertical-align: middle
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3% 3%;
+            min-height: 0
+        }
+
+        /* INSTRUCTION CARD */
+        .instruction-card {
+            background: #fff;
+            border-radius: 25px;
+            padding: 4% 5%;
+            width: 95%;
+            max-width: 850px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border: 4px solid #FFB74D;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            position: relative;
+            /* Badge için eklendi */
+        }
+
+        .check-badge {
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            border: 3px solid #FFB74D;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            transition: all 0.2s;
+        }
+
+        .check-badge:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .instruction-card.completed {
+            border-color: #4CAF50 !important;
+        }
+
+        .check-badge .tick {
+            display: none;
+            color: #4CAF50;
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .instruction-card.completed .check-badge {
+            border-color: #4CAF50;
+        }
+
+        .instruction-card.completed .check-badge .tick {
+            display: block;
+        }
+
+        .step-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: #fff;
+            padding: 12px 35px;
+            border-radius: 25px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+        }
+
+        .step-badge.prep {
+            background: linear-gradient(135deg, #42a5f5, #1e88e5)
+        }
+
+        .step-badge.activity {
+            background: linear-gradient(135deg, #FF9800, #F57C00)
+        }
+
+        .step-badge.eval {
+            background: linear-gradient(135deg, #ff9800, #f57c00)
+        }
+
+        .instruction-icon {
+            font-size: 4.5rem;
+            margin-bottom: 20px
+        }
+
+        .instruction-text {
+            font-size: 1.8rem;
+            line-height: 1.5;
+            color: #333;
+            font-weight: 600;
+            overflow-wrap: break-word;
+            word-wrap: break-word
+        }
+
+        .instruction-text strong {
+            color: #E65100
+        }
+
+        .instruction-note {
+            margin-top: 20px;
+            padding: 18px;
+            background: #f1f8e9;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            color: #558b2f;
+            font-weight: 500;
+            overflow-wrap: break-word;
+            word-wrap: break-word
+        }
+
+        .location-banner {
+            background: rgba(33, 150, 243, 0.15);
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            color: #1565c0;
+            font-weight: 700;
+            text-align: center;
+            width: 85%;
+            max-width: 600px
+        }
+
+        /* EVALUATION - Two side by side cards */
+        .eval-container {
+            display: flex;
+            gap: 3%;
+            width: 90%;
+            max-width: 1100px;
+            justify-content: center;
+            align-items: stretch
+        }
+
+        .eval-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3% 4%;
+            flex: 1;
+            max-width: 500px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid #ff9800;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
+        }
+
+        .eval-card h3 {
+            color: #e65100;
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 800
+        }
+
+        .eval-question {
+            font-size: 1.5rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .eval-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center
+        }
+
+        .eval-btn {
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: 3px solid;
+            transition: all 0.2s;
+            min-width: 130px
+        }
+
+        .eval-btn.yes {
+            background: #fff;
+            color: #4caf50;
+            border-color: #4caf50
+        }
+
+        .eval-btn.yes.selected {
+            background: #4caf50;
+            color: #fff
+        }
+
+        .eval-btn.no {
+            background: #fff;
+            color: #f44336;
+            border-color: #f44336
+        }
+
+        .eval-btn.no.selected {
+            background: #f44336;
+            color: #fff
+        }
+
+        /* FINAL */
+        .final-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 5%;
+            width: 85%;
+            max-width: 550px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid #FFB74D
+        }
+
+        .final-card .trophy {
+            font-size: 5rem;
+            margin-bottom: 20px
+        }
+
+        .final-card h2 {
+            color: #E65100;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-weight: 900
+        }
+
+        .final-card p {
+            color: #555;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            font-weight: 500
+        }
+
+        /* EPUB Touch Support */
+        button,
+        .choice-btn,
+        .nav-btn,
+        .audio-btn,
+        .level-btn {
+            cursor: pointer !important;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2) !important;
+            touch-action: manipulation !important;
+            user-select: none !important;
+        }
+
+        button:active,
+        .choice-btn:active,
+        .nav-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        /* Hover efektlerini kaldır, active kullan */
+        @media (hover: none) {
+
+            button:hover,
+            .choice-btn:hover,
+            .nav-btn:hover {
+                transform: none !important;
+            }
+        }
+
+        /* POINTER EVENTS FIX FOR WEB */
+        button,
+        .choice-btn,
+        .nav-btn,
+        .start-btn,
+        .word-chip,
+        .paint-dot,
+        .audio-btn,
+        .blank,
+        .level-btn,
+        a {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative !important;
+            z-index: 1000 !important;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        button:hover,
+        .choice-btn:hover,
+        .nav-btn:hover {
+            opacity: 0.9 !important;
+            transform: scale(1.05) !important;
+        }
+
+        button:active,
+        .choice-btn:active,
+        .nav-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        .page,
+        .stage,
+        .main-content {
+            pointer-events: auto !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // CLICK TEST DEBUG
+        console.log("Page loaded:", window.location.href);
+        document.addEventListener("click", function (e) {
+            console.log("Click detected:", e.target.tagName, e.target.className, e.target.onclick);
+        }, true);
+    </script>
+
+    <div class="page">
+        <!-- AŞAMA 0: GİRİŞ -->
+        <div class="stage active" id="stage0">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:11%"></div>
+                    </div>
+                    <span class="progress-text">1 / 9</span>
+                </div>
+                <div class="main-content" style="justify-content: center; flex: 1;">
+                    <div class="location-banner">
+                        📍 Etkinlik Alanı: <strong>Sınıf</strong>
+                    </div>
+                </div>
+                <h3 style="color: #ff9800; font-size: 1.4rem; font-weight: 800; margin: 10px 0; text-align: center;">📦
+                    Malzemeler</h3>
+                <div class="materials-row" style="margin-top: 5px;">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="location.href='sayfa14-15.html'">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(1)">Başla →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 1: HAZIRLIK 1 -->
+        <div class="stage" id="stage1">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:22%"></div>
+                    </div>
+                    <span class="progress-text">2 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Sınıfımızı <strong>dörder kişilik gruplara</strong> ayıralım.
+                            <button class="audio-btn" onclick="playAudio('1')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(0)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(2)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 2: HAZIRLIK 2 -->
+        <div class="stage" id="stage2">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:33%"></div>
+                    </div>
+                    <span class="progress-text">3 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Getirdiğimiz malzemeleri <strong>sıramızın üzerine</strong>
+                            koyalım.
+                            <button class="audio-btn" onclick="playAudio('2')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(1)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(3)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 3: ETKİNLİK 1 -->
+        <div class="stage" id="stage3">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:44%"></div>
+                    </div>
+                    <span class="progress-text">4 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Sıramızın üzerindeki nesneleri <strong>inceleyelim</strong>.
+                            <button class="audio-btn" onclick="playAudio('3')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(2)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(4)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 4: ETKİNLİK 2 -->
+        <div class="stage" id="stage4">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:56%"></div>
+                    </div>
+                    <span class="progress-text">5 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Nesnelerden <strong>biçimsel özellikleri birbirine
+                                benzeyenleri</strong> bulalım.
+                            <button class="audio-btn" onclick="playAudio('4')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(3)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(5)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 5: ETKİNLİK 3 -->
+        <div class="stage" id="stage5">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:67%"></div>
+                    </div>
+                    <span class="progress-text">6 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Nesnelerden <strong>köşeleri olanları
+                                gruplandıralım</strong>.<br />Köşeli nesnelerin adlarını kâğıda yazalım.
+                            <button class="audio-btn" onclick="playAudio('5')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(4)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(6)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 6: ETKİNLİK 4 -->
+        <div class="stage" id="stage6">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:78%"></div>
+                    </div>
+                    <span class="progress-text">7 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Nesnelerden <strong>yuvarlak olanları
+                                gruplandıralım</strong>.<br />Yuvarlak nesnelerin adlarını kâğıda yazalım.
+                            <button class="audio-btn" onclick="playAudio('6')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(5)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(7)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 7: ETKİNLİK 5 -->
+        <div class="stage" id="stage7">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:89%"></div>
+                    </div>
+                    <span class="progress-text">8 / 9</span>
+                </div>
+                <div class="main-content">
+                    <div class="instruction-card">
+                        <div class="instruction-text">Çevremizden <strong>yuvarlak ve köşeli nesnelere farklı
+                                örnekler</strong> bulalım. Bulduğumuz örnekleri defterimize yazarak
+                            arkadaşlarımızla
+                            paylaşalım.
+                            <button class="audio-btn" onclick="playAudio('7')">🔊</button>
+                        </div>
+                        <div class="check-badge" onclick="this.parentElement.classList.toggle('completed')">
+                            <span class="tick">✓</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(6)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(8)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- AŞAMA 8: DEĞERLENDİRME -->
+        <div class="stage" id="stage8">
+            <div class="framed-container">
+                <div class="custom-header">
+                    <div class="activity-info">
+                        <div class="hands-circle"></div>
+                        <div class="activity-title">YAPALIM ÖĞRENELİM</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="time-badge-new">
+                            <span class="clock-icon">⏰</span>
+                            <span>1 ders saati</span>
+                        </div>
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <div class="page-badge">16</div>
+                    </div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:100%"></div>
+                    </div>
+                    <span class="progress-text">9 / 9</span>
+                </div>
+                <div class="main-content">
+
+                    <div class="eval-container">
+                        <div class="eval-card">
+                            <div class="eval-question">Köşeli nesneleri biliyorum.</div>
+                            <div class="eval-buttons">
+                                <button class="eval-btn yes" id="q1-yes" onclick="selectEval(1,'yes')">✓ Evet</button>
+                                <button class="eval-btn no" id="q1-no" onclick="selectEval(1,'no')">✗ Hayır</button>
+                            </div>
+                        </div>
+                        <div class="eval-card">
+                            <div class="eval-question">Yuvarlak nesneleri biliyorum.</div>
+                            <div class="eval-buttons">
+                                <button class="eval-btn yes" id="q2-yes" onclick="selectEval(2,'yes')">✓ Evet</button>
+                                <button class="eval-btn no" id="q2-no" onclick="selectEval(2,'no')">✗ Hayır</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="materials-row">
+                    <div class="material-badge"><span class="emoji">⚽</span><span>Futbol topu</span></div>
+                    <div class="material-badge"><span class="emoji">🧊</span><span>Küp şeker</span></div>
+                    <div class="material-badge"><span class="emoji">🥫</span><span>Konserve kutusu</span></div>
+                    <div class="material-badge"><span class="emoji">🥛</span><span>Süt kutuları</span></div>
+                    <div class="material-badge"><span class="emoji">📦</span><span>Kutular</span></div>
+                    <div class="material-badge"><span class="emoji">📝</span><span>Kâğıt</span></div>
+                    <div class="material-badge"><span class="emoji">✏️</span><span>Kalem</span></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(7)">← Geri</button>
+                <button class="nav-btn next" onclick="location.href='sayfa17.html'">Sonraki Sayfa →</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+
+
+        function goStage(n) {
+            var all = document.querySelectorAll('.stage');
+            for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
+            document.getElementById('stage' + n).classList.add('active');
+        }
+
+        function selectEval(q, answer) {
+            document.getElementById('q' + q + '-yes').classList.remove('selected');
+            document.getElementById('q' + q + '-no').classList.remove('selected');
+            document.getElementById('q' + q + '-' + answer).classList.add('selected');
+        }
+
+        function playAudio(id) {
+            var audio = new Audio('../audio/sayfa16_' + id + '.mp3');
+            audio.play();
+        }
+
+        //]]​>
+
+
+    </script>
+
+</body>
+
+</html>

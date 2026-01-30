@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa20-21</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap&family=Comic+Neue:wght@400;700"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* CORE LAYOUT */
+        html,
+        body {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: #fff3e0;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #fff3e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff3e0;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .stage.active {
+            display: flex;
+            z-index: 20;
+        }
+
+        /* HEADER & PROGRESS */
+        .pdf-header {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            padding: 12px 20px;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 200;
+        }
+
+        .pdf-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pdf-header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pdf-header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.4em 1em;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .pdf-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px);
+        }
+
+        .progress-row {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #ffe0b2;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s;
+        }
+
+        .progress-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e65100;
+        }
+
+        /* INSTRUCTIONS (Taken from sayfa12.html style) */
+        .instruction-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 2px 30px 2px 45px;
+            background: #fff;
+            border: 3px dashed #ff5757;
+            border-radius: 15px;
+            margin: 2px 40px 8px 40px;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            min-height: 50px;
+        }
+
+        .mascot-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: -75px;
+        }
+
+        .mascot-img-small {
+            height: 90px;
+            width: auto;
+            z-index: 5;
+            margin-bottom: -5px;
+        }
+
+        .stage-badge {
+            position: absolute;
+            top: 0px;
+            left: 72px;
+            background: #fff;
+            color: #ff5757;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            z-index: 10;
+            border: 2px solid #ff5757;
+        }
+
+        .instruction-box {
+            flex: 1;
+        }
+
+        .instruction-box p {
+            color: #333;
+            font-size: 1.3rem;
+            line-height: 1.2;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .audio-btn {
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+            margin-left: 10px;
+        }
+
+        .audio-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* MAIN */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 5px 20px;
+            overflow: hidden;
+            min-height: 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 9 KART GRID */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5px 0;
+        }
+
+        .card-item {
+            background: linear-gradient(180deg, #fff9e6, #ffe9b3);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+            border: 4px solid #ff9800;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 120px;
+        }
+
+        .card-item:hover {
+            border-color: #f57c00;
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(255, 152, 0, 0.35);
+        }
+
+        .card-item.selected {
+            border-color: #4caf50;
+            background: linear-gradient(180deg, #e8f5e9, #c8e6c9);
+            animation: correctPulse 0.6s ease;
+            box-shadow: 0 6px 18px rgba(76, 175, 80, 0.35);
+        }
+
+        .card-item.wrong-select {
+            border-color: #f44336;
+            background: linear-gradient(180deg, #ffebee, #ffcdd2);
+            animation: wrongShake 0.5s ease;
+            box-shadow: 0 6px 18px rgba(244, 67, 54, 0.35);
+        }
+
+        .card-img {
+            max-width: 100%;
+            max-height: 70px;
+            object-fit: contain;
+            margin-bottom: 3px;
+        }
+
+        .card-item .emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .card-item .num {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            background: #ff9800;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 3px solid #fff;
+        }
+
+        .card-item .name {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        /* INPUT AREA */
+        .input-slot {
+            min-width: 60px;
+            height: 40px;
+            border: 2px dashed #bbb;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            font-weight: 700;
+            color: #333;
+            background: #fafafa;
+            font-size: 1.4rem;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+
+        .input-slot.filled {
+            border: 2px solid #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* NAVIGATION BAR */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 10px 15px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ANIMATIONS */
+        @keyframes correctPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes wrongShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: none;
+            text-align: center;
+            background: rgba(76, 175, 80, 0.95);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .celebration-overlay.show {
+            display: block;
+            animation: correctPulseOverlay 0.5s ease-in-out;
+        }
+
+        .celebration-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        @keyframes correctPulseOverlay {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // CLICK TEST DEBUG
+        console.log("Page loaded:", window.location.href);
+        document.addEventListener("click", function (e) {
+            console.log("Click detected:", e.target.tagName, e.target.className, e.target.onclick);
+        }, true);
+    </script>
+
+    <div class="page">
+        <!-- AŞAMA 0: GİRİŞ - 9 Kartı Göster -->
+        <div class="stage active" id="stage0">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:11%"></div>
+                </div><span class="progress-text">1 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                    <div class="stage-badge">5</div>
+                </div>
+                <div class="instruction-box" style="display: flex; align-items: center; gap: 10px;">
+                    <div>
+                        <p>Aşağıdaki numaralı kartlarda geometrik cisimler ve geometrik cisimlere benzeyen nesneler
+                            verilmiştir. Kartlardaki geometrik cisimleri ve nesneleri inceleyelim. Noktalı yerlere uygun
+                            ifadeleri yazalım.</p>
+                    </div>
+                    <button class="audio-btn" onclick="playAudio('intro')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid">
+                    <div class="card-item">
+                        <img src="../images/sayfa20/silindir.png" class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/sekil_oyunu_kutusu.png" class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/mor_kup.png" class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/sivi_sabun_kutusu.png" class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/kirmizi_kure.png" class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/ocak.png" class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item">
+                        <img src="../images/sayfa20/yesil_ucgen_prizma.png" class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="location.href='sayfa18-19.html'">←
+                    Geri</button><button class="nav-btn next" onclick="goStage(1)">Başla →</button></div>
+        </div>
+
+        <!-- AŞAMA 1: Köşeli cisimlere benzeyen nesneler -->
+        <div class="stage" id="stage1">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:22%"></div>
+                </div><span class="progress-text">2 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Köşeli cisimlerin görseline benzeyen nesnelerin olduğu kartların numaralarını yazalım. <span
+                            class="input-slot" id="slot1">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s1')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid1">
+                    <div class="card-item" onclick="toggleCard(1,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(1,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(0)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(2)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 2: Yuvarlak cisimlerin görselleri -->
+        <div class="stage" id="stage2">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:33%"></div>
+                </div><span class="progress-text">3 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Yuvarlak cisimlerin görsellerinin olduğu kartların numaralarını yazalım. <span class="input-slot"
+                            id="slot2">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s2')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid2">
+                    <div class="card-item" onclick="toggleCard(2,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(2,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(1)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(3)">Sonraki →</button></div>
+        </div>
+        <!-- AŞAMA 3: Küp görseline benzeyen -->
+        <div class="stage" id="stage3">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:44%"></div>
+                </div><span class="progress-text">4 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Küp görseline benzeyen nesnelerin olduğu kartların numaralarını yazalım. <span class="input-slot"
+                            id="slot3">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s3')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid3">
+                    <div class="card-item" onclick="toggleCard(3,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(3,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(2)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(4)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 4: Kare prizma görseline benzeyen -->
+        <div class="stage" id="stage4">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:56%"></div>
+                </div><span class="progress-text">5 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Kare prizma görseline benzeyen nesnelerin olduğu kartların numaralarını yazalım. <span
+                            class="input-slot" id="slot4">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s4')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid4">
+                    <div class="card-item" onclick="toggleCard(4,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(4,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(3)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(5)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 5: Dikdörtgen prizma görseline benzeyen -->
+        <div class="stage" id="stage5">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:67%"></div>
+                </div><span class="progress-text">6 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Dikdörtgen prizma görseline benzeyen nesnenin olduğu kartın numarasını yazalım. <span
+                            class="input-slot" id="slot5">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s5')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid5">
+                    <div class="card-item" onclick="toggleCard(5,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(5,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(4)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(6)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 6: Üçgen prizma görseline benzeyen -->
+        <div class="stage" id="stage6">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:78%"></div>
+                </div><span class="progress-text">7 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Üçgen prizma görseline benzeyen nesnenin olduğu kartın numarasını yazalım. <span
+                            class="input-slot" id="slot6">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s6')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid6">
+                    <div class="card-item" onclick="toggleCard(6,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(6,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(5)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(7)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 7: Silindir görseline benzeyen -->
+        <div class="stage" id="stage7">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:89%"></div>
+                </div><span class="progress-text">8 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Silindir görseline benzeyen nesnelerin olduğu kartların numaralarını yazalım. <span
+                            class="input-slot" id="slot7">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s7')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid7">
+                    <div class="card-item" onclick="toggleCard(7,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(7,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(6)">← Geri</button><button
+                    class="nav-btn next" onclick="goStage(8)">Sonraki →</button></div>
+        </div>
+
+        <!-- AŞAMA 8: Küre görseline benzeyen -->
+        <div class="stage" id="stage8">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Kartları Eşleştirelim</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">20-21</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:100%"></div>
+                </div><span class="progress-text">9 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" alt="Mascot" class="mascot-img-small">
+                </div>
+                <div class="instruction-box"
+                    style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <p>Küre görseline benzeyen nesnenin olduğu kartın numarasını yazalım. <span class="input-slot"
+                            id="slot8">........</span></p>
+                    <button class="audio-btn" onclick="playAudio('s8')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cards-grid" id="grid8">
+                    <div class="card-item" onclick="toggleCard(8,1)"><img src="../images/sayfa20/silindir.png"
+                            class="card-img">
+                        <div class="num">1</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,2)"><img src="../images/sayfa20/sekil_oyunu_kutusu.png"
+                            class="card-img">
+                        <div class="num">2</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,3)"><img src="../images/sayfa20/mor_kup.png"
+                            class="card-img">
+                        <div class="num">3</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,4)"><img
+                            src="../images/sayfa20/mavi_dikdortgen_prizma.png" class="card-img">
+                        <div class="num">4</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,5)"><img src="../images/sayfa20/sivi_sabun_kutusu.png"
+                            class="card-img">
+                        <div class="num">5</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,6)"><img src="../images/sayfa20/kirmizi_kure.png"
+                            class="card-img">
+                        <div class="num">6</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,7)"><img
+                            src="../images/sayfa20/yesil_diktorgen_prizma.png" class="card-img">
+                        <div class="num">7</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,8)"><img src="../images/sayfa20/ocak.png"
+                            class="card-img">
+                        <div class="num">8</div>
+                    </div>
+                    <div class="card-item" onclick="toggleCard(8,9)"><img src="../images/sayfa20/yesil_ucgen_prizma.png"
+                            class="card-img">
+                        <div class="num">9</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 10px; font-style: italic;">*
+                    Aynı numara birden fazla sorunun cevabı olarak kullanılabilir.</p>
+            </div>
+            <div class="nav-row"><button class="nav-btn prev" onclick="goStage(7)">← Geri</button><button
+                    class="nav-btn next" onclick="window.top.location.href='../index.html'">🏠 Ana Sayfa</button></div>
+        </div>
+    </div>
+
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-text">✓ DOĞRU!</div>
+    </div>
+
+
+    <script type="text/javascript">
+        var selections = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
+        var correctAnswers = {
+            1: [2, 3, 4, 7, 8, 9],  // Köşeli: Zar, Mor küp, Mavi dikdörtgen prizma, Yeşil dikdörtgen prizma, Ocak
+            2: [1, 5, 6],        // Yuvarlak: Silindir, Sabun şişesi (silindir), Top (küre)
+            3: [2, 3],           // Küp: Zar, Mor küp
+            4: [4, 8],           // Kare prizma: Ocak (en yakın)
+            5: [4, 7, 8],        // Dikdörtgen prizma: Mavi dikdörtgen prizma, Yeşil dikdörtgen prizma, Ocak
+            6: [9],              // Üçgen prizma: Yeşil üçgen prizma
+            7: [1, 5],           // Silindir: Silindir, Sabun şişesi
+            8: [6]               // Küre: Top
+        };
+
+        function goStage(n) {
+            var all = document.querySelectorAll('.stage');
+            all.forEach(function (s) { s.classList.remove('active'); });
+            document.getElementById('stage' + n).classList.add('active');
+        }
+
+        function toggleCard(stage, cardNum) {
+            var stageSelections = selections[stage];
+            var slot = document.getElementById('slot' + stage);
+            var card = event.target.closest('.card-item');
+
+            if (!card) return;
+
+            var index = stageSelections.indexOf(cardNum);
+            var correct = correctAnswers[stage];
+
+            if (index > -1) {
+                // Deselect
+                stageSelections.splice(index, 1);
+                card.classList.remove('selected');
+            } else {
+                // Check if this card is a correct answer before allowing selection
+                if (correct && correct.indexOf(cardNum) === -1) {
+                    // Wrong answer - show feedback and reject
+                    card.classList.add('wrong-select');
+                    setTimeout(function () {
+                        card.classList.remove('wrong-select');
+                    }, 500);
+                    return; // Don't add to selection
+                }
+
+                // Select (only if correct)
+                stageSelections.push(cardNum);
+                card.classList.add('selected');
+            }
+
+            // Update input slot
+            if (slot) {
+                if (stageSelections.length > 0) {
+                    slot.textContent = stageSelections.sort(function (a, b) { return a - b; }).join(', ');
+                    slot.classList.add('filled');
+                } else {
+                    slot.textContent = '........';
+                    slot.classList.remove('filled');
+                }
+            }
+
+            // Check if all correct answers are selected
+            if (correct && stageSelections.length === correct.length) {
+                var isCorrect = correct.every(function (val) {
+                    return stageSelections.indexOf(val) > -1;
+                });
+
+                if (isCorrect) {
+                    showSuccess();
+                }
+            }
+        }
+
+        function showSuccess() {
+            var overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.add('show');
+            setTimeout(function () {
+                overlay.classList.remove('show');
+            }, 1500);
+            playAudio('soru');
+        }
+
+        function playAudio(id) {
+            try {
+                var audio = new Audio('../audio/sayfa20-21_' + id + '.mp3');
+                audio.play();
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

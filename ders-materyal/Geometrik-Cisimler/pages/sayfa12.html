@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa12</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* CORE LAYOUT */
+        html,
+        body {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            background: #fce4ec;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #fce4ec;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fce4ec;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .stage.active {
+            display: flex;
+            z-index: 20;
+        }
+
+        /* HEADER & PROGRESS */
+        .pdf-header {
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            padding: 12px 20px;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 200;
+        }
+
+        .pdf-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pdf-header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pdf-header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.4em 1em;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .pdf-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px);
+        }
+
+        .progress-row {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #f8bbd0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s;
+        }
+
+        .progress-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #c2185b;
+        }
+
+        /* MASCOT & INSTRUCTIONS */
+        .instruction-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 2px 30px 2px 45px;
+            background: #fff;
+            border: 3px dashed #ff5757;
+            border-radius: 15px;
+            margin: 2px 40px;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            min-height: 50px;
+        }
+
+        .mascot-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: -75px;
+        }
+
+        .mascot-img-small {
+            height: 90px;
+            width: auto;
+            z-index: 5;
+            margin-bottom: -5px;
+        }
+
+        .stage-badge {
+            position: absolute;
+            top: 0px;
+            left: 72px;
+            background: #fff;
+            color: #ff5757;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            z-index: 10;
+            border: 2px solid #ff5757;
+        }
+
+        .instruction-text {
+            flex: 1;
+        }
+
+        .instruction-text p {
+            color: #333;
+            font-size: 1.3rem;
+            line-height: 1.2;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .audio-btn {
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+
+        .audio-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 5px 20px;
+            overflow: hidden;
+            min-height: 0;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* SCENE BOX */
+        .scene-box {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #87CEEB url('../images/kamp-gorseli.png') no-repeat center center;
+            background-size: 100% 100%;
+            aspect-ratio: 1366/768;
+            width: 88%;
+            max-width: 900px;
+            align-self: center;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .hotspot {
+            position: absolute;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s;
+            z-index: 50;
+            transform: translate(-50%, -50%);
+            border: 3px dashed transparent;
+            width: 56px;
+            height: 56px;
+        }
+
+        .hotspot:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: #fff;
+        }
+
+        .paint-dot {
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #fff;
+            border: 4px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            transform: translate(-50%, -50%);
+        }
+
+        .paint-dot.orange {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-color: #e65100;
+        }
+
+        .paint-dot.purple {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+            border-color: #4a148c;
+        }
+
+        .paint-dot.shake {
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) translateX(0);
+            }
+
+            25% {
+                transform: translate(-50%, -50%) translateX(-8px);
+            }
+
+            75% {
+                transform: translate(-50%, -50%) translateX(8px);
+            }
+        }
+
+        .info-popup {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 15px 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            font-size: 1.4rem;
+            color: #333;
+            text-align: center;
+            display: none;
+            z-index: 200;
+            border: 4px solid #e91e63;
+            max-width: 80%;
+        }
+
+        .info-popup.show {
+            display: block;
+            animation: fadeUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* QUESTION OVERLAY */
+        .question-overlay {
+            position: absolute;
+            top: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: fit-content;
+            max-width: 95%;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 12px;
+            border: 2px dashed #e91e63;
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* QUESTION CARD REMOVAL / ADJUSTMENT */
+        .question-card {
+            display: none;
+        }
+
+        .q-title {
+            font-size: 1.8rem;
+            color: #c2185b;
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .objects-row {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 30px;
+        }
+
+        .obj-item {
+            text-align: center;
+        }
+
+        .obj-item .icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .obj-item .dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .obj-item .dot.purple {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+        }
+
+        .obj-item .dot.orange {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .obj-item .name {
+            font-size: 1.4rem;
+            color: #555;
+            font-weight: 800;
+        }
+
+        .sentence-area {
+            background: #fff;
+            border: 2px solid #f8bbd0;
+            border-radius: 12px;
+            padding: 12px 25px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .word-slot {
+            min-width: 90px;
+            height: 36px;
+            border: 2px dashed #c2185b;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #c2185b;
+            background: #fff;
+            cursor: pointer;
+            padding: 0 10px;
+            font-weight: 800;
+            transition: all 0.3s;
+        }
+
+        .word-slot.wrong {
+            border-color: #f44336 !important;
+            background-color: #ffebee !important;
+            color: #c62828 !important;
+        }
+
+        .word-slot.filled {
+            border-style: solid;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #4caf50;
+        }
+
+        .static-word {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .word-chip {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: #fff;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 10px rgba(33, 150, 243, 0.2);
+            transition: all 0.2s;
+        }
+
+        .word-chip:active {
+            transform: scale(0.94);
+        }
+
+        .word-chip.used {
+            opacity: 0.3;
+            pointer-events: none;
+            transform: scale(0.9);
+        }
+
+        /* FEEDBACKS */
+        @keyframes correctPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: none;
+            text-align: center;
+            background: rgba(76, 175, 80, 0.95);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .celebration-overlay.show {
+            display: block;
+            animation: correctPulseOverlay 0.5s ease-in-out;
+        }
+
+        .celebration-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        @keyframes correctPulseOverlay {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* FINAL */
+        .final-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .final-bubble {
+            background: #fff;
+            border-radius: 30px;
+            padding: 40px 60px;
+            max-width: 80%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 5px solid #e91e63;
+            position: relative;
+        }
+
+        .final-bubble::before {
+            content: '🦝';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            background: #fff;
+            border-radius: 50%;
+            padding: 10px;
+            border: 4px solid #e91e63;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .final-bubble p {
+            font-size: 1.8rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* NAVIGATION */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 10px 15px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* UTIL */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <!-- AŞAMA 1: KEŞFET -->
+        <div class="stage active" id="stage1">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:16.6%"></div>
+                </div>
+                <span class="progress-text">1 / 6</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" class="mascot-img-small" />
+                    <div class="stage-badge">1</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Kamp görselini inceleyelim! Nesnelere dokunarak özelliklerini öğrenelim.</p>
+                    <button class="audio-btn" onclick="playAudio('a1')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="scene-box">
+                    <div class="hotspot" onclick="showInfo('Hoparlör - Dikdörtgen prizma şeklinde, köşeli bir nesne.')"
+                        style="top:63%;left:7%;"></div>
+                    <div class="hotspot" onclick="showInfo('Çadır - Üçgen prizma şeklinde, köşeli bir nesne.')"
+                        style="top:45%;left:53%;"></div>
+                    <div class="hotspot" onclick="showInfo('Teyp - Dikdörtgen prizma şeklinde, köşeli bir nesne.')"
+                        style="top:58%;left:86%;"></div>
+                    <div class="hotspot" onclick="showInfo('Kütük - Silindir şeklinde, yuvarlak bir nesne.')"
+                        style="top:89%;left:30%;"></div>
+                    <div class="hotspot" onclick="showInfo('Çanta - Dikdörtgen prizma şeklinde, köşeli bir nesne.')"
+                        style="top:78%;left:43.5%;"></div>
+                    <div class="hotspot" onclick="showInfo('Termos - Silindir şeklinde, yuvarlak bir nesne.')"
+                        style="top:70%;left:70%;"></div>
+                    <div class="hotspot"
+                        onclick="showInfo('Buzluk - Yuvarlak hatlara sahip, silindir benzeri bir nesne.')"
+                        style="top:87%;left:70%;"></div>
+                    <div class="hotspot" onclick="showInfo('Top - Küre şeklinde, yuvarlak bir nesne.')"
+                        style="top:82.5%;left:94.2%;"></div>
+                    <div class="info-popup" id="infoPopup"></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="window.top.location.href='../index.html'">🏠 Ana Sayfa</button>
+                <button class="nav-btn next" onclick="goStage(2)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 2: TURUNCU BOYA -->
+        <div class="stage" id="stage2">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:33.3%"></div>
+                </div>
+                <span class="progress-text">2 / 6</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" class="mascot-img-small" />
+                    <div class="stage-badge">2</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Köşeli nesnelerin yanındaki yuvarlağı <strong style="color:#ff9800">TURUNCUYA</strong> boyayalım!
+                    </p>
+                    <button class="audio-btn" onclick="playAudio('a2')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="scene-box">
+                    <div class="paint-dot" data-id="1" onclick="paintOrange(1,'koseli')" style="top:63%;left:13%;">
+                    </div>
+                    <div class="paint-dot" data-id="2" onclick="paintOrange(2,'koseli')" style="top:45%;left:67%;">
+                    </div>
+                    <div class="paint-dot" data-id="3" onclick="paintOrange(3,'koseli')" style="top:58%;left:93%;">
+                    </div>
+                    <div class="paint-dot" data-id="4" onclick="paintOrange(4,'yuvarlak')" style="top:92%;left:20%;">
+                    </div>
+                    <div class="paint-dot" data-id="5" onclick="paintOrange(5,'koseli')" style="top:78%;left:51%;">
+                    </div>
+                    <div class="paint-dot" data-id="6" onclick="paintOrange(6,'yuvarlak')" style="top:70%;left:65%;">
+                    </div>
+                    <div class="paint-dot" data-id="7" onclick="paintOrange(7,'yuvarlak')" style="top:87%;left:61%;">
+                    </div>
+                    <div class="paint-dot" data-id="8" onclick="paintOrange(8,'yuvarlak')" style="top:83%;left:88%;">
+                    </div>
+                    <div class="info-popup" id="info2"></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(1)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(3)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 3: MOR BOYA -->
+        <div class="stage" id="stage3">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:50%"></div>
+                </div>
+                <span class="progress-text">3 / 6</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" class="mascot-img-small" />
+                    <div class="stage-badge">3</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Yuvarlak nesnelerin yanındaki yuvarlağı <strong style="color:#9c27b0">MORA</strong> boyayalım!
+                    </p>
+                    <button class="audio-btn" onclick="playAudio('a3')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="scene-box">
+                    <div class="paint-dot" data-id="1" onclick="paintPurple(1,'koseli')" style="top:63%;left:13%;">
+                    </div>
+                    <div class="paint-dot" data-id="2" onclick="paintPurple(2,'koseli')" style="top:45%;left:67%;">
+                    </div>
+                    <div class="paint-dot" data-id="3" onclick="paintPurple(3,'koseli')" style="top:58%;left:93%;">
+                    </div>
+                    <div class="paint-dot" data-id="4" onclick="paintPurple(4,'yuvarlak')" style="top:92%;left:20%;">
+                    </div>
+                    <div class="paint-dot" data-id="5" onclick="paintPurple(5,'koseli')" style="top:78%;left:51%;">
+                    </div>
+                    <div class="paint-dot" data-id="6" onclick="paintPurple(6,'yuvarlak')" style="top:70%;left:65%;">
+                    </div>
+                    <div class="paint-dot" data-id="7" onclick="paintPurple(7,'yuvarlak')" style="top:87%;left:61%;">
+                    </div>
+                    <div class="paint-dot" data-id="8" onclick="paintPurple(8,'yuvarlak')" style="top:83%;left:88%;">
+                    </div>
+                    <div class="info-popup" id="info3"></div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(2)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(4)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 4: SORU 1 -->
+        <div class="stage" id="stage4">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:66.6%"></div>
+                </div>
+                <span class="progress-text">4 / 6</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" class="mascot-img-small" />
+                    <div class="stage-badge">4</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Termos ve teypin yanındaki yuvarlağı aynı renge mi boyadık? Neden?</p>
+                    <button class="audio-btn" onclick="playAudio('a4')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="scene-box">
+                    <div class="paint-dot" data-id="1" style="top:63%;left:13%;"></div>
+                    <div class="paint-dot" data-id="2" style="top:45%;left:67%;"></div>
+                    <div class="paint-dot" data-id="3" style="top:58%;left:93%;"></div>
+                    <div class="paint-dot" data-id="4" style="top:92%;left:20%;"></div>
+                    <div class="paint-dot" data-id="5" style="top:78%;left:51%;"></div>
+                    <div class="paint-dot" data-id="6" style="top:70%;left:65%;"></div>
+                    <div class="paint-dot" data-id="7" style="top:87%;left:61%;"></div>
+                    <div class="paint-dot" data-id="8" style="top:83%;left:88%;"></div>
+
+                    <div class="question-overlay">
+                        <div class="sentence-area">
+                            <span class="word-slot" id="s1-0" onclick="removeWord(1,0)"></span>
+                            <span class="static-word">, çünkü termos</span>
+                            <span class="word-slot" id="s1-1" onclick="removeWord(1,1)"></span>
+                            <span class="static-word">, teyp</span>
+                            <span class="word-slot" id="s1-2" onclick="removeWord(1,2)"></span>
+                            <span class="static-word">.</span>
+                        </div>
+                        <div class="word-bank" id="bank1">
+                            <button class="word-chip" onclick="addWord(1,'Hayır')">Hayır</button>
+                            <button class="word-chip" onclick="addWord(1,'Evet')">Evet</button>
+                            <button class="word-chip" onclick="addWord(1,'yuvarlak')">yuvarlak</button>
+                            <button class="word-chip" onclick="addWord(1,'köşeli')">köşeli</button>
+                        </div>
+                        <div class="feedback" id="fb1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(3)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(5)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 5: SORU 2 -->
+        <div class="stage" id="stage5">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:83.3%"></div>
+                </div>
+                <span class="progress-text">5 / 6</span>
+            </div>
+            <div class="instruction-container">
+                <div class="mascot-container">
+                    <img src="../images/Yazma_Sembolu.png" class="mascot-img-small" />
+                    <div class="stage-badge">5</div>
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Teyp ve kutunun yanındaki yuvarlağı aynı renge mi boyadık? Neden?</p>
+                    <button class="audio-btn" onclick="playAudio('a5')">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="scene-box">
+                    <div class="paint-dot" data-id="1" style="top:63%;left:13%;"></div>
+                    <div class="paint-dot" data-id="2" style="top:45%;left:67%;"></div>
+                    <div class="paint-dot" data-id="3" style="top:58%;left:93%;"></div>
+                    <div class="paint-dot" data-id="4" style="top:92%;left:20%;"></div>
+                    <div class="paint-dot" data-id="5" style="top:78%;left:51%;"></div>
+                    <div class="paint-dot" data-id="6" style="top:70%;left:65%;"></div>
+                    <div class="paint-dot" data-id="7" style="top:87%;left:61%;"></div>
+                    <div class="paint-dot" data-id="8" style="top:83%;left:88%;"></div>
+
+                    <div class="question-overlay">
+                        <div class="sentence-area">
+                            <span class="word-slot" id="s2-0" onclick="removeWord(2,0)"></span>
+                            <span class="static-word">, çünkü ikisi de</span>
+                            <span class="word-slot" id="s2-1" onclick="removeWord(2,1)"></span>
+                            <span class="static-word">.</span>
+                        </div>
+                        <div class="word-bank" id="bank2">
+                            <button class="word-chip" onclick="addWord(2,'Hayır')">Hayır</button>
+                            <button class="word-chip" onclick="addWord(2,'Evet')">Evet</button>
+                            <button class="word-chip" onclick="addWord(2,'yuvarlak')">yuvarlak</button>
+                            <button class="word-chip" onclick="addWord(2,'köşeli')">köşeli</button>
+                        </div>
+                        <div class="feedback" id="fb2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(4)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(7)">Sonraki →</button>
+            </div>
+        </div>
+
+        <!-- AŞAMA 7: FİNAL -->
+        <div class="stage" id="stage7">
+            <div class="pdf-header">
+                <div class="pdf-header-content">
+                    <h2>Hatırlayalım</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:100%"></div>
+                </div>
+                <span class="progress-text">6 / 6</span>
+            </div>
+            <div class="main-content">
+                <div class="final-box">
+                    <div class="final-bubble">
+                        <p>Çevremizde yuvarlak veya köşeli olan nesnelere örnekler verelim.<br /><br />Bu
+                            nesnelerden
+                            birer tane sınıfımıza getirelim.<br /><br />Nesnelerin özelliklerini arkadaşlarımızla
+                            paylaşalım.</p>
+                        <button class="audio-btn" style="position:absolute; bottom:20px; right:20px;"
+                            onclick="playAudio('a6')">🔊</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(5)">← Geri</button>
+                <button class="nav-btn next" onclick="location.href='sayfa13.html'">Sonraki Sayfa →</button>
+            </div>
+        </div>
+
+        <div class="celebration-overlay" id="celebration-overlay">
+            <div class="celebration-text">✓ DOĞRU!</div>
+        </div>
+
+        <script>
+            var slots = { 1: [null, null, null], 2: [null, null] };
+            var answers = { 1: ['Hayır', 'yuvarlak', 'köşeli'], 2: ['Evet', 'köşeli'] };
+            var paintState = {}; // { dotId: 'orange' | 'purple' }
+
+            function goStage(n) {
+                var all = document.querySelectorAll('.stage');
+                all.forEach(s => s.classList.remove('active'));
+                document.getElementById('stage' + n).classList.add('active');
+                updateAllDots();
+            }
+
+            function updateAllDots() {
+                var dots = document.querySelectorAll('.paint-dot');
+                dots.forEach(dot => {
+                    var id = dot.getAttribute('data-id');
+                    dot.classList.remove('orange', 'purple');
+                    if (paintState[id]) {
+                        dot.classList.add(paintState[id]);
+                    }
+                });
+            }
+
+            function showInfo(txt) {
+                var p = document.getElementById('infoPopup');
+                p.textContent = txt;
+                p.classList.add('show');
+                setTimeout(() => { p.classList.remove('show'); }, 3000);
+            }
+
+            function paintOrange(id, type) {
+                if (type === 'koseli') {
+                    paintState[id] = 'orange';
+                    updateAllDots();
+                } else {
+                    var el = document.querySelector('#stage2 [data-id="' + id + '"]');
+                    el.classList.add('shake');
+                    const originalBorder = el.style.borderColor;
+                    el.style.borderColor = "#f44336";
+                    setTimeout(() => {
+                        el.classList.remove('shake');
+                        el.style.borderColor = originalBorder;
+                    }, 1000);
+                }
+            }
+
+            function paintPurple(id, type) {
+                if (type === 'yuvarlak') {
+                    paintState[id] = 'purple';
+                    updateAllDots();
+                } else {
+                    var el = document.querySelector('#stage3 [data-id="' + id + '"]');
+                    el.classList.add('shake');
+                    const originalBorder = el.style.borderColor;
+                    el.style.borderColor = "#f44336";
+                    setTimeout(() => {
+                        el.classList.remove('shake');
+                        el.style.borderColor = originalBorder;
+                    }, 1000);
+                }
+            }
+
+            function addWord(q, word) {
+                var arr = slots[q];
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i] === null) {
+                        arr[i] = word;
+                        var sl = document.getElementById('s' + q + '-' + i);
+                        sl.textContent = word;
+                        sl.classList.add('filled');
+                        var chips = document.querySelectorAll('#bank' + q + ' .word-chip');
+                        chips.forEach(c => { if (c.textContent === word) c.classList.add('used'); });
+                        break;
+                    }
+                }
+                if (arr.every(v => v !== null)) checkAns(q);
+            }
+
+            function removeWord(q, idx) {
+                var word = slots[q][idx];
+                if (!word) return;
+                slots[q][idx] = null;
+                var sl = document.getElementById('s' + q + '-' + idx);
+                sl.textContent = '';
+                sl.classList.remove('filled');
+                var chips = document.querySelectorAll('#bank' + q + ' .word-chip');
+                chips.forEach(c => { if (c.textContent === word) c.classList.remove('used'); });
+                document.getElementById('fb' + q).style.display = 'none';
+            }
+
+            function checkAns(q) {
+                var ok = slots[q].every((v, i) => v === answers[q][i]);
+                if (ok) {
+                    showSuccess();
+                    // Clear any "wrong" classes
+                    for (var i = 0; i < slots[q].length; i++) {
+                        var sl = document.getElementById('s' + q + '-' + i);
+                        sl.classList.remove('wrong');
+                    }
+                } else {
+                    // Shake and turn slots red
+                    for (var i = 0; i < slots[q].length; i++) {
+                        var sl = document.getElementById('s' + q + '-' + i);
+                        sl.classList.add('wrong');
+                        setTimeout(() => {
+                            sl.classList.remove('wrong');
+                        }, 1500);
+                    }
+                }
+            }
+
+            function showSuccess() {
+                const overlay = document.getElementById('celebration-overlay');
+                overlay.classList.add('show');
+                setTimeout(() => overlay.classList.remove('show'), 1500);
+                playAudio('soru');
+            }
+
+            function playAudio(id) {
+                try {
+                    var audio = new Audio('../audio/sayfa12_' + id + '.mp3');
+                    audio.play();
+                } catch (e) { }
+            }
+        </script>
+</body>
+
+</html>

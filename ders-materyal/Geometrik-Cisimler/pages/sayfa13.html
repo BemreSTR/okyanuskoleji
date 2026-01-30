@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa13</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CORE LAYOUT */
+        html {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+        }
+
+        body {
+            width: 1024px;
+            height: 768px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #fff3e0;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #fff3e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff3e0;
+            overflow: hidden;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        /* Intro gizleme kaldırıldı */
+        /* #stage1 forced display removed to allow proper stage navigation */
+
+        /* Genel düzeltmeler */
+        .nav-row {
+            padding: 8px 15px !important;
+            gap: 10px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .nav-btn {
+            padding: 10px 15px !important;
+            font-size: 1em !important;
+        }
+
+        /* HEADER - Tüm sayfalar için standart büyük boyut */
+        .header,
+        .pdf-header {
+            padding: 12px 20px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .header h2,
+        .pdf-header h2 {
+            font-size: 1.3em !important;
+            font-weight: 800 !important;
+            letter-spacing: 1px !important;
+        }
+
+        .header .page-num,
+        .pdf-header .page-num {
+            font-size: 0.9em !important;
+            padding: 0.4em 1em !important;
+            font-weight: 700 !important;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .progress-row {
+            padding: 5px 15px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .mascot-row {
+            padding: 6px 15px !important;
+            gap: 10px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .speech-bubble {
+            padding: 8px 12px !important;
+        }
+
+        .speech-bubble p {
+            font-size: 1.8rem !important;
+            padding-right: 40px !important;
+        }
+
+        .main-content {
+            padding: 10px 15px !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            overflow: visible !important;
+            z-index: 10;
+        }
+
+        /* SAYFA 13 - Hazır mıyız - Kompakt kart, sayfa 17 stili */
+        .object-card {
+            padding: 30px !important;
+            width: 450px !important;
+            height: 540px !important;
+            margin: 0 auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            position: relative !important;
+            z-index: 20;
+        }
+
+        .object-img {
+            width: 260px !important;
+            height: 260px !important;
+            margin: auto 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .object-img img {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            object-fit: contain !important;
+        }
+
+        .object-name {
+            display: none !important;
+        }
+
+        .choices-row {
+            gap: 20px !important;
+            margin-bottom: 20px !important;
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .choice-btn {
+            padding: 18px 35px !important;
+            font-size: 1.5rem !important;
+            /* Slightly larger than 1.4rem */
+            min-height: 75px !important;
+            /* Slightly larger than 70px */
+            min-width: 170px !important;
+            /* Matches the visual weight of the scaled button */
+            border-radius: 30px !important;
+            border: 4px solid !important;
+            cursor: pointer !important;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s !important;
+            transform: none !important;
+            /* Disable scale changes */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
+
+
+
+
+
+
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #42a5f5, #1976d2);
+            padding: 10px 15px;
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .header h2 {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.5em 1.2em;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px)
+        }
+
+        /* PROGRESS */
+        .progress-row {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 2%;
+            flex-shrink: 0
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #bbdefb;
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1976d2
+        }
+
+        /* MASCOT */
+        .mascot-row {
+            padding: 8px 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex-shrink: 0
+        }
+
+        .mascot-avatar {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+            flex-shrink: 0;
+            border: 2px solid #42a5f5
+        }
+
+        .speech-bubble {
+            background: #fff;
+            border-radius: 14px;
+            padding: 12px 15px;
+            flex: 1;
+            position: relative;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #42a5f5
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 18px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 14px solid #42a5f5
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 12px solid #fff
+        }
+
+        .speech-bubble p {
+            color: #333;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            font-weight: 600;
+            padding-right: 45px
+        }
+
+        .audio-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #42a5f5;
+            color: #fff;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer
+        }
+
+        /* MAIN */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 12px 15px;
+            overflow-y: auto;
+            min-height: 0;
+            align-items: center;
+            justify-content: center
+        }
+
+        /* OBJECT CARD */
+        .object-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+            border: 4px solid #90caf9;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: visible
+        }
+
+        .object-card.correct-border {
+            border: 4px solid #4caf50;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.3), 0 8px 35px rgba(76, 175, 80, 0.4);
+        }
+
+        .object-card.wrong-border {
+            border: 6px solid #f44336;
+            box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.3), 0 8px 35px rgba(244, 67, 54, 0.4);
+        }
+
+        @keyframes correctPulseCard {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1)
+            }
+        }
+
+        @keyframes wrongShake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-10px)
+            }
+
+            75% {
+                transform: translateX(10px)
+            }
+        }
+
+        @keyframes balloonShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) translateX(0);
+            }
+
+            25% {
+                transform: translate(0, 0) translateX(-10px);
+            }
+
+            75% {
+                transform: translate(0, 0) translateX(10px);
+            }
+        }
+
+        .object-img {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background: transparent;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden
+        }
+
+        .object-img img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain
+        }
+
+        .object-img .emoji {
+            font-size: 8rem
+        }
+
+        .object-img img {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .object-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 20px
+        }
+
+        .color-dot {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 5px solid #ddd;
+            background: #fff;
+            transition: all 0.3s
+        }
+
+        .color-dot.orange {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-color: #e65100
+        }
+
+        .color-dot.purple {
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
+            border-color: #4a148c
+        }
+
+        /* CHOICES */
+        .choices-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 25px
+        }
+
+        .choice-btn {
+            padding: 18px 40px;
+            border-radius: 30px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: 4px solid;
+            transition: all 0.2s;
+            min-height: 70px
+        }
+
+        .choice-btn.orange-choice {
+            background: #fff3e0;
+            color: #ef6c00;
+            border-color: #ff9800;
+        }
+
+        .choice-btn.orange-choice:hover,
+        .choice-btn.orange-choice.selected {
+            background: #ff9800;
+            color: #fff;
+            border-color: #ef6c00;
+        }
+
+        .choice-btn.purple-choice {
+            background: #f3e5f5;
+            color: #7b1fa2;
+            border-color: #9c27b0;
+        }
+
+        .choice-btn.purple-choice:hover,
+        .choice-btn.purple-choice.selected {
+            background: #9c27b0;
+            color: #fff;
+            border-color: #7b1fa2;
+        }
+
+        /* NAV */
+        .nav-row {
+            display: flex;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 50
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            min-height: 50px
+        }
+
+        .result-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 5%;
+            width: 85%;
+            max-width: 700px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12)
+        }
+
+        .result-card .trophy {
+            font-size: 4em;
+            margin-bottom: 15px
+        }
+
+        .result-card h2 {
+            font-size: 1.8em;
+            color: #2e7d32;
+            margin-bottom: 10px
+        }
+
+        .result-card .score {
+            font-size: 3em;
+            font-weight: 800;
+            color: #1976d2;
+            margin: 15px 0
+        }
+
+        .result-card .message {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px
+        }
+
+        .summary-mini {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px
+        }
+
+        .mini-box {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 15px 25px;
+            text-align: center
+        }
+
+        .mini-box h4 {
+            font-size: 0.9em;
+            margin-bottom: 8px
+        }
+
+        .mini-box.orange-mini h4 {
+            color: #e65100
+        }
+
+        .mini-box.purple-mini h4 {
+            color: #7b1fa2
+        }
+
+        .mini-box .icons {
+            font-size: 1.5em
+        }
+
+        /* FINAL */
+        .final-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .final-bubble {
+            background: #fff;
+            border-radius: 20px;
+            padding: 4% 5%;
+            max-width: 85%;
+            text-align: center;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+            border: 3px solid #42a5f5;
+            position: relative
+        }
+
+        .final-bubble::before {
+            content: '🎨';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.2em;
+            background: #fff;
+            border-radius: 50%;
+            padding: 5px;
+            border: 3px solid #42a5f5
+        }
+
+        .final-bubble p {
+            font-size: 1.15em;
+            line-height: 1.7;
+            color: #333;
+            margin-top: 15px
+        }
+
+        /* NAV */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 1.5% 3%;
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 1.5%;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            border: none;
+            cursor: pointer
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: #fff
+        }
+
+        /* ANIMATIONS */
+        @keyframes correctPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: none;
+            text-align: center;
+            background: rgba(76, 175, 80, 0.95);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .celebration-overlay.show {
+            display: block;
+            animation: correctPulseOverlay 0.5s ease-in-out;
+        }
+
+        .celebration-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        @keyframes correctPulseOverlay {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes wrongOverlayIn {
+            0% {
+                transform: scale(0);
+                opacity: 0
+            }
+
+            60% {
+                transform: scale(1.05);
+                opacity: 1
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        /* Prevents button size jump */
+        .choice-btn.selected,
+        .choice-btn:hover {
+            transform: none !important;
+        }
+
+        .wrong-overlay {
+            position: absolute;
+            top: 100px;
+            right: -280px;
+            z-index: 3000 !important;
+            display: none;
+            background: #f44336;
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(244, 67, 54, 0.5);
+            max-width: 260px;
+            border: 4px solid #fff;
+        }
+
+        .wrong-overlay::after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 20px solid #f44336;
+        }
+
+        .wrong-overlay.show {
+            display: block;
+            animation: balloonShake 0.4s;
+        }
+
+        .wrong-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .wrong-text {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .wrong-message {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        @keyframes starBurst {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 1
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(3) rotate(360deg);
+                opacity: 0
+            }
+        }
+
+        .star-burst {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            font-size: 3rem;
+            animation: starBurst 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes correctBounce {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            25% {
+                transform: scale(0.95)
+            }
+
+            50% {
+                transform: scale(1.05)
+            }
+
+            75% {
+                transform: scale(0.98)
+            }
+        }
+
+
+        /* POINTER EVENTS FIX FOR WEB */
+        button,
+        .choice-btn,
+        .nav-btn,
+        .start-btn,
+        .word-chip,
+        .paint-dot,
+        .audio-btn,
+        .blank,
+        .level-btn,
+        a {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+            position: relative !important;
+            z-index: 1000 !important;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        button:hover,
+        .choice-btn:hover,
+        .nav-btn:hover {
+            opacity: 0.9 !important;
+            transform: scale(1.05) !important;
+        }
+
+        button:active,
+        .choice-btn:active,
+        .nav-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        .page,
+        .stage,
+        .main-content {
+            pointer-events: auto !important;
+        }
+
+        /* INSTRUCTION CONTAINER - Inek ve Konuşma Balonu */
+        .instruction-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 30px 8px 45px;
+            background: #fff;
+            border: 3px dashed #ff5757;
+            border-radius: 15px;
+            margin: 8px 40px;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            min-height: 60px;
+        }
+
+        .animal-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: -65px;
+            flex-shrink: 0;
+        }
+
+        .animal-img {
+            height: 85px;
+            width: auto;
+            z-index: 5;
+            margin-bottom: -5px;
+        }
+
+        .instruction-text {
+            flex: 1;
+        }
+
+        .instruction-text p {
+            color: #333;
+            font-size: 1.25rem;
+            line-height: 1.3;
+            font-weight: 400;
+            margin: 0;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // CLICK TEST DEBUG
+        console.log("Page loaded:", window.location.href);
+        document.addEventListener("click", function (e) {
+            console.log("Click detected:", e.target.tagName, e.target.className, e.target.onclick);
+        }, true);
+    </script>
+
+    <div class="page">
+        <!-- SORU 1: Yağ Kutusu -->
+        <div class="stage active" id="stage1">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:11%"></div>
+                </div>
+                <span class="progress-text">1 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card1">
+                    <div class="object-img"><img src="../images/sayfa13/yag_kutusu.png" alt="Yağ Kutusu"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(1,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(1,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="location.href='sayfa12.html'">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(2)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 2: Plaj Topu -->
+        <div class="stage" id="stage2">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:22%"></div>
+                </div>
+                <span class="progress-text">2 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card2">
+                    <div class="object-img"><img src="../images/sayfa13/deniz_topu.png" alt="Deniz Topu"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(2,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(2,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(1)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(3)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 3: Fıçı -->
+        <div class="stage" id="stage3">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:33%"></div>
+                </div>
+                <span class="progress-text">3 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card3">
+                    <div class="object-img"><img src="../images/sayfa13/fici.png" alt="Fıçı"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(3,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(3,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(2)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(4)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 4: Konserve -->
+        <div class="stage" id="stage4">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:44%"></div>
+                </div>
+                <span class="progress-text">4 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card4">
+                    <div class="object-img"><img src="../images/sayfa13/konserve.png" alt="Konserve"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(4,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(4,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(3)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(5)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 5: Pizza Kutusu -->
+        <div class="stage" id="stage5">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:55%"></div>
+                </div>
+                <span class="progress-text">5 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card5">
+                    <div class="object-img"><img src="../images/sayfa13/salkama_kutusu.png" alt="Salçalık Kutusu"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(5,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(5,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(4)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(6)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 6: Buzdolabı -->
+        <div class="stage" id="stage6">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:66%"></div>
+                </div>
+                <span class="progress-text">6 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card6">
+                    <div class="object-img"><img src="../images/sayfa13/buzdolabi.png" alt="Buzdolabı"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(6,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(6,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(5)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(7)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 7: Çikolata -->
+        <div class="stage" id="stage7">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:77%"></div>
+                </div>
+                <span class="progress-text">7 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card7">
+                    <div class="object-img"><img src="../images/sayfa13/tahta.png" alt="Tahta"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(7,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(7,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(6)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(8)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 8: Kitap -->
+        <div class="stage" id="stage8">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:88%"></div>
+                </div>
+                <span class="progress-text">8 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card8">
+                    <div class="object-img"><img src="../images/sayfa13/kitap.png" alt="Kitap"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(8,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(8,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(7)">← Geri</button>
+                <button class="nav-btn next" onclick="goStage(9)">Sonraki →</button>
+            </div>
+        </div>
+        <!-- SORU 9: Basketbol -->
+        <div class="stage" id="stage9">
+            <div class="header">
+                <div class="header-content">
+                    <h2>Hazır mıyız?</h2>
+                    <div class="header-right">
+                        <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                        <span class="page-num">13</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:100%"></div>
+                </div>
+                <span class="progress-text">9 / 9</span>
+            </div>
+            <div class="instruction-container">
+                <div class="animal-container">
+                    <img src="../images/Boyama_Sembolu.png" class="animal-img" />
+                </div>
+                <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                    <p>Aşağıdaki nesnelerden biçimsel özellikleri birbirine benzeyenlerin altındaki yuvarlağı aynı
+                        renge boyayalım.</p>
+                    <button class="audio-btn" onclick="playAudio('yonerge')"
+                        style="position:static; transform:none;">🔊</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="object-card" id="card9">
+                    <div class="object-img"><img src="../images/sayfa13/basketbol_topu.png" alt="Basketbol Topu"></div>
+                    <div class="choices-row">
+                        <button class="choice-btn orange-choice" onclick="choose(9,'koseli')">🟠 Köşeli</button>
+                        <button class="choice-btn purple-choice" onclick="choose(9,'yuvarlak')">🟣 Yuvarlak</button>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-row">
+                <button class="nav-btn prev" onclick="goStage(8)">← Geri</button>
+                <button class="nav-btn next" onclick="location.href='sayfa14-15.html'">Sonraki Sayfa →</button>
+            </div>
+        </div>
+        <!-- SONUÇ -->
+        <!-- FİNAL -->
+
+    </div>
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-text">✓ DOĞRU!</div>
+    </div>
+
+
+    <script type="text/javascript">
+
+
+
+        var correctAnswers = ['intro', 'koseli', 'yuvarlak', 'yuvarlak', 'yuvarlak', 'koseli', 'koseli', 'koseli', 'koseli', 'yuvarlak'];
+        var score = 0;
+        var answered = [false, false, false, false, false, false, false, false, false, false];
+
+        function goStage(n) {
+            var all = document.querySelectorAll('.stage');
+            for (var i = 0; i < all.length; i++) all[i].classList.remove('active');
+            document.getElementById('stage' + n).classList.add('active');
+            if (n === 10) updateScore();
+        }
+
+        function choose(q, answer) {
+            if (answered[q]) return;
+
+            var card = document.getElementById('card' + q);
+            var correct = correctAnswers[q];
+
+            // Visual feedback for button
+            var btnClass = (answer === 'koseli') ? 'orange-choice' : 'purple-choice';
+            var clickedBtn = card.querySelector('.' + btnClass);
+            if (clickedBtn) clickedBtn.classList.add('selected');
+
+            if (answer === correct) {
+                answered[q] = true;
+                score++;
+                if (card) {
+                    card.classList.remove('wrong-border');
+                    var balloon = card.querySelector('.wrong-overlay');
+                    if (balloon) balloon.remove();
+                    card.classList.add('correct-border');
+                    card.style.borderColor = "#4caf50";
+                }
+                showCelebration();
+            } else {
+                if (card) {
+                    card.classList.add('wrong-border');
+                    card.style.borderColor = "#f44336";
+                    showWrongBalloon(card);
+                    card.style.animation = 'none';
+                    void card.offsetWidth;
+                    card.style.animation = 'wrongShake 0.4s';
+                }
+
+                // Temporarily turn clicked button red
+                if (clickedBtn) {
+                    const originalBorder = clickedBtn.style.borderColor;
+                    clickedBtn.style.borderColor = "#f44336";
+                    setTimeout(function () {
+                        clickedBtn.classList.remove('selected');
+                        clickedBtn.style.borderColor = originalBorder;
+                    }, 1000);
+                }
+            }
+        }
+
+        function showWrongBalloon(card) {
+            // Don't create if already exists
+            var existing = card.querySelector('.wrong-overlay');
+            if (existing) return;
+
+            // Create balloon
+            var balloon = document.createElement('div');
+            balloon.className = 'wrong-overlay';
+            balloon.innerHTML = '<div class="wrong-icon">⚠️</div><div class="wrong-text">Tekrar Dene!</div><div class="wrong-message">Nesnenin şeklini ve köşelerini incele. Yuvarlak mı köşeli mi?</div>';
+            card.appendChild(balloon);
+
+            setTimeout(function () {
+                balloon.classList.add('show');
+            }, 10);
+
+            // Don't auto-remove - stays until correct answer
+        }
+
+        function showCelebration() {
+            var overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.add('show');
+            setTimeout(function () {
+                overlay.classList.remove('show');
+            }, 1500);
+        }
+
+        function updateScore() {
+            document.getElementById('finalScore').textContent = score + ' / 9';
+        }
+
+        function playAudio(id) {
+            var audio = new Audio('../audio/sayfa13_' + id + '.mp3');
+            audio.play();
+        }
+
+        //]]​>
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometrik Cisimler - İnteraktif Matematik</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* CORE LAYOUT */
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #cbcbcb;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        #shellContainer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Sabit Boyutlu İçerik Alanı - Köşeler Yuvarlatıldı */
+        #mainShell {
+            width: 1024px;
+            height: 768px;
+            position: relative;
+            background: #fff;
+            border-radius: 18px;
+            /* Köşeler yuvarlatıldı */
+            overflow: hidden;
+            box-shadow: none;
+            /* Gölge tamamen kaldırıldı */
+            transform-origin: center center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Menü İçin Gradient Arka Plan */
+        #mainShell.menu-active {
+            background: linear-gradient(180deg,
+                    #1ea6da 0%,
+                    #1ea6da 15%,
+                    rgba(255, 255, 255, 0.9) 50%,
+                    #1ea6da 85%,
+                    #1ea6da 100%) !important;
+        }
+
+        .bg-shell {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 409px;
+            height: 460px;
+            background: url('images/bursluluk_bg.png') no-repeat bottom left;
+            background-size: contain;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* --- Menü Tasarımı --- */
+        #menuLayer {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: -80px;
+        }
+
+        .subject {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            margin-bottom: 15px;
+        }
+
+        .title {
+            color: #f77f00;
+            font-size: 3.2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 45px;
+            width: 100%;
+        }
+
+        .row {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .level-btn {
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 150px;
+        }
+
+        .level-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .level-icon {
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.23));
+            font-size: 4.5rem;
+        }
+
+        .level-icon img {
+            width: 1.1em;
+            height: auto;
+            display: block;
+        }
+
+        .level-text {
+            color: #1a365d;
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-align: center;
+            text-shadow: none;
+        }
+
+        /* --- Iframe Katmanı --- */
+        #iframeLayer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            z-index: 20;
+            background: #fff;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body id="masterBody">
+    <div id="shellContainer">
+        <div id="mainShell" class="menu-active">
+            <div class="bg-shell"></div>
+
+            <!-- Menü Katmanı -->
+            <div id="menuLayer">
+                <div class="header">
+                    <div class="subject">2. Sınıf Matematik</div>
+                    <div class="title">GEOMETRİK CİSİMLER</div>
+                </div>
+                <div class="pyramid">
+                    <div class="row">
+                        <div class="level-btn" onclick="openPage('sayfa12')">
+                            <div class="level-icon"><img src="images/Yazma_Sembolu.png"></div>
+                            <div class="level-text">Hatırlayalım</div>
+                        </div>
+                        <div class="level-btn" onclick="openPage('sayfa13')">
+                            <div class="level-icon"><img src="images/Boyama_Sembolu.png"></div>
+                            <div class="level-text">Hazır mıyız?</div>
+                        </div>
+                        <div class="level-btn" onclick="openPage('sayfa14-15')">
+                            <div class="level-icon"><img src="images/Yazma_Sembolu.png"></div>
+                            <div class="level-text">Öğrenelim</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="level-btn" onclick="openPage('sayfa16')">
+                            <div class="level-icon"><img src="images/yapalim_ogrenelim.png"></div>
+                            <div class="level-text">Yapalım Öğrenelim</div>
+                        </div>
+                        <div class="level-btn" onclick="openPage('sayfa17')">
+                            <div class="level-icon"><img src="images/Yazma_Sembolu.png"></div>
+                            <div class="level-text">Eşleştirme</div>
+                        </div>
+                        <div class="level-btn" onclick="openPage('sayfa18-19')">
+                            <div class="level-icon"><img src="images/Okuma_Sembolu.png"></div>
+                            <div class="level-text">Cisim Adları</div>
+                        </div>
+                        <div class="level-btn" onclick="openPage('sayfa20-21')">
+                            <div class="level-icon"><img src="images/Yazma_Sembolu.png"></div>
+                            <div class="level-text">Quiz</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Iframe Katmanı -->
+            <div id="iframeLayer">
+                <iframe id="contentIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const shell = document.getElementById('mainShell');
+        const menuLayer = document.getElementById('menuLayer');
+        const iframeLayer = document.getElementById('iframeLayer');
+        const contentIframe = document.getElementById('contentIframe');
+
+        // Ölçeklendirme
+        function updateScale() {
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            const scale = Math.min(winW / 1024, winH / 768) * 0.96; // Kenarlardan pay bırakmak için 0.96 ile çarptık
+            shell.style.transform = `scale(${scale})`;
+        }
+
+        window.addEventListener('resize', updateScale);
+        updateScale();
+
+        // Sayfa Açma
+        function openPage(pageName) {
+            contentIframe.src = `pages/${pageName}.html`;
+            menuLayer.style.display = 'none';
+            iframeLayer.style.display = 'block';
+            shell.classList.remove('menu-active');
+
+            const url = new URL(window.location);
+            url.searchParams.set('page', pageName);
+            window.history.pushState({}, '', url);
+        }
+
+        // Ana Sayfaya Dönüş
+        function goHome() {
+            contentIframe.src = "";
+            iframeLayer.style.display = 'none';
+            menuLayer.style.display = 'flex';
+            shell.classList.add('menu-active');
+
+            const url = new URL(window.location);
+            url.searchParams.delete('page');
+            window.history.pushState({}, '', url);
+        }
+
+        // Parent dinleyici
+        window.addEventListener('message', function (e) {
+            if (e.data === 'goHome') {
+                goHome();
+            }
+        });
+
+        // URL kontrolü
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const page = urlParams.get('page');
+            if (page) {
+                openPage(page);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1024, height=768">
+    <title>sayfa17</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* CORE LAYOUT */
+        html,
+        body {
+            width: 1024px;
+            height: 768px;
+            overflow: hidden;
+            background: #fce4ec;
+            font-family: "Comic Sans MS", cursive, sans-serif;
+        }
+
+        .page {
+            width: 1024px;
+            height: 768px;
+            display: flex;
+            flex-direction: column;
+            background: #fce4ec;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage {
+            display: none;
+            flex-direction: column;
+            width: 1024px;
+            height: 768px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fce4ec;
+            overflow: hidden;
+        }
+
+        .stage.active {
+            display: flex;
+        }
+
+        /* HEADER & PROGRESS */
+        .pdf-header {
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            padding: 12px 20px;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 200;
+        }
+
+        .pdf-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pdf-header h2 {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pdf-header .page-num {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            padding: 0.4em 1em;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        .pdf-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 3%;
+            right: 3%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, transparent 10px, transparent 20px);
+        }
+
+        .progress-row {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #f8bbd0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            border-radius: 10px;
+            transition: width 0.4s;
+        }
+
+        .progress-text {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #c2185b;
+        }
+
+        /* MASCOT & INSTRUCTIONS */
+        .instruction-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 2px 30px 2px 45px;
+            background: #fff;
+            border: 3px dashed #ff5757;
+            border-radius: 15px;
+            margin: 2px 40px;
+            position: relative;
+            z-index: 100;
+            flex-shrink: 0;
+            min-height: 50px;
+        }
+
+        .mascot-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: -55px;
+        }
+
+        .mascot-img-small {
+            height: 80px;
+            width: auto;
+            z-index: 5;
+            margin-bottom: -5px;
+        }
+
+        .stage-badge {
+            position: absolute;
+            top: 0px;
+            left: 65px;
+            background: #fff;
+            color: #ff5757;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 800;
+            z-index: 10;
+            border: 2px solid #ff5757;
+        }
+
+        .instruction-text {
+            flex: 1;
+        }
+
+        .instruction-text p {
+            color: #333;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .audio-btn {
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.2s;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 5px 20px;
+            overflow: hidden;
+            min-height: 0;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* OBJECT CARD */
+        .object-card {
+            background: #fff;
+            border: 8px solid #f6a21e;
+            /* Thicker orange border matching book */
+            border-radius: 25px;
+            padding: 15px;
+            width: 280px;
+            height: 280px;
+            /* Kare form */
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .object-img {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .object-img img {
+            max-height: 95%;
+            /* Daha büyük resim */
+            max-width: 95%;
+            object-fit: contain;
+        }
+
+        .object-name {
+            display: none;
+            /* İsim kaldırıldı */
+        }
+
+        .card-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #ffd54f;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            border: 3px solid #f6a21e;
+            /* Border matching card stroke */
+            box-shadow: none;
+            color: #333;
+            z-index: 20;
+        }
+
+        /* CLIPBOARD ANSWER BOXES */
+        .result-boxes {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .clipboard {
+            flex: 1;
+            background: #fff;
+            border: 3px solid #4caf50;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clipboard:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .clipboard-handle {
+            background: #fff;
+            border: 3px solid #4caf50;
+            border-radius: 12px;
+            margin: -25px auto 5px;
+            padding: 5px;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .clipboard-badge-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .clipboard-name {
+            display: none;
+            /* İsim kaldırıldı */
+        }
+
+        .clipboard-body {
+            flex: 1;
+            min-height: 80px;
+            /* İsim gidince biraz daha yüksek olsun */
+            border-top: 2px solid #eee;
+            background: #fdfdfd;
+            border-radius: 0 0 12px 12px;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .num-tag {
+            background: #ffc107;
+            color: #333;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* NAVIGATION */
+        .nav-row {
+            display: flex;
+            gap: 12px;
+            padding: 10px 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn.prev {
+            background: linear-gradient(135deg, #0ea5e9, #0077aa);
+            color: #fff;
+        }
+
+        .nav-btn.next {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        /* FEEDBACKS */
+        @keyframes correctPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes wrongShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        @keyframes balloonShake {
+
+            0%,
+            100% {
+                transform: translateY(-50%) translateX(0);
+            }
+
+            25% {
+                transform: translateY(-50%) translateX(-10px);
+            }
+
+            75% {
+                transform: translateY(-50%) translateX(10px);
+            }
+        }
+
+        .celebration-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: none;
+            text-align: center;
+            background: rgba(76, 175, 80, 0.95);
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .celebration-overlay.show {
+            display: block;
+            animation: correctPulseOverlay 0.5s ease-in-out;
+        }
+
+        .celebration-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: none;
+            color: #fff;
+            padding: 2px 8px;
+            font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        @keyframes correctPulseOverlay {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        .wrong-balloon {
+            position: absolute;
+            top: 50%;
+            right: -280px;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: none;
+            background: #f44336;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(244, 67, 54, 0.3);
+            width: 250px;
+            border: 3px solid #fff;
+            color: #fff;
+            text-align: center;
+        }
+
+        .wrong-balloon::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 15px solid #f44336;
+        }
+
+        .wrong-balloon.show {
+            display: block;
+            animation: balloonShake 0.4s;
+        }
+
+        .wrong-title {
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .wrong-msg {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f44336;
+            top: -20px;
+            z-index: 1100;
+            animation: confetti-fall 3s ease-in-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(800px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <!-- Stages will be generated here -->
+    </div>
+
+    <div class="celebration-overlay" id="celebration-overlay">
+        <div class="celebration-text">✓ DOĞRU!</div>
+    </div>
+
+    <script>
+        const stagesData = [
+            { id: 1, name: "Süt Kutusu", img: "../images/sayfa17/sut_kutusu.png", correct: "kare" },
+            { id: 2, name: "Futbol Topu", img: "../images/sayfa17/futbol_topu.png", correct: "kure" },
+            { id: 3, name: "Koli", img: "../images/sayfa17/koli.png", correct: "kup" },
+            { id: 4, name: "Çadır", img: "../images/sayfa17/cadir.png", correct: "ucgen" },
+            { id: 5, name: "Zeka Küpü", img: "../images/sayfa17/kutu.png", correct: "kup" },
+            { id: 6, name: "Çamaşır Makinesi", img: "../images/sayfa17/camasir_makinasi.png", correct: "kare" },
+            { id: 7, name: "Pil", img: "../images/sayfa17/pil.png", correct: "silindir" },
+            { id: 8, name: "Mendil Kutusu", img: "../images/sayfa17/mendil_kutusu.png", correct: "dikdortgen" },
+            { id: 9, name: "Kağıt Havlu", img: "../images/sayfa17/rulo_pecete.png", correct: "silindir" },
+            { id: 10, name: "Tenis Topu", img: "../images/sayfa17/golf_topu.png", correct: "kure" },
+            { id: 11, name: "Peynir", img: null, emoji: "🧀", correct: "ucgen" },
+            { id: 12, name: "Çanta", img: "../images/sayfa17/canta.png", correct: "dikdortgen" }
+        ];
+
+        const shapesData = [
+            { id: "ucgen", name: "Üçgen Prizma", img: "../images/sayfa20/yesil_ucgen_prizma.png" },
+            { id: "kure", name: "Küre", img: "../images/sayfa20/kirmizi_kure.png" },
+            { id: "dikdortgen", name: "Dikdörtgen Prizma", img: "../images/sayfa20/yesil_diktorgen_prizma.png" },
+            { id: "silindir", name: "Silindir", img: "../images/sayfa20/silindir.png" },
+            { id: "kup", name: "Küp", img: "../images/sayfa20/mor_kup.png" },
+            { id: "kare", name: "Kare Prizma", img: "../images/sayfa20/mavi_dikdortgen_prizma.png" }
+        ];
+
+        let currentStage = 1;
+        let userAnswers = {}; // { stageId: shapeId }
+
+        function init() {
+            const pageEl = document.querySelector('.page');
+            stagesData.forEach((stage, index) => {
+                const stageEl = document.createElement('div');
+                stageEl.className = `stage ${stage.id === 1 ? 'active' : ''}`;
+                stageEl.id = `stage${stage.id}`;
+
+                const progress = Math.round(((index + 1) / stagesData.length) * 100);
+
+                stageEl.innerHTML = `
+                    <div class="pdf-header">
+                        <div class="pdf-header-content">
+                            <h2>Geometrik Cisimleri Eşleştirelim</h2>
+                            <div class="header-right">
+                                <a href="../index.html" target="_top" class="home-btn" title="Ana Sayfa">🏠</a>
+                                <span class="page-num">17</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-row">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:${progress}%"></div>
+                        </div>
+                        <span class="progress-text">${index + 1} / ${stagesData.length}</span>
+                    </div>
+                    <div class="instruction-container">
+                        <div class="mascot-container">
+                            <img src="../images/Yazma_Sembolu.png" class="mascot-img-small">
+                            <div class="stage-badge">3</div>
+                        </div>
+                        <div class="instruction-text" style="display:flex; align-items:center; gap:10px;">
+                            <p>Görsellerdeki nesneleri inceleyelim. Bu nesnelerin numaralarını benzedikleri geometrik cisimlerin olduğu aşağıdaki kutuların içine yazalım.</p>
+                            <button class="audio-btn" onclick="playAudio('intro')">🔊</button>
+                        </div>
+                    </div>
+                    <div class="main-content">
+                        <div class="object-card" id="card-${stage.id}">
+                            <div class="object-img">
+                                ${stage.img ? `<img src="${stage.img}" alt="${stage.name}">` : `<span style="font-size: 6rem;">${stage.emoji}</span>`}
+                            </div>
+                            <div class="object-name">${stage.name}</div>
+                            <div class="card-badge">${stage.id}</div>
+                            <div class="wrong-balloon">
+                                <div class="wrong-title">Tekrar Deneyelim!</div>
+                                <div class="wrong-msg">Şekle biraz daha dikkatli bakabilir misin?</div>
+                            </div>
+                        </div>
+                        <div class="result-boxes">
+                            ${shapesData.map(shape => `
+                                <div class="clipboard" id="clipboard-${stage.id}-${shape.id}" onclick="checkAnswer('${shape.id}', this)">
+                                    <div class="clipboard-handle">
+                                        <img src="${shape.img}" class="clipboard-badge-img">
+                                    </div>
+                                    <div class="clipboard-name">${shape.name}</div>
+                                    <div class="clipboard-body nums" data-shape="${shape.id}"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="nav-row">
+                        <button class="nav-btn prev" onclick="${stage.id === 1 ? "location.href='sayfa16.html'" : `goStage(${stage.id - 1})`}">← Geri</button>
+                        <button class="nav-btn next" onclick="${stage.id === 12 ? "location.href='sayfa18-19.html'" : `goStage(${stage.id + 1})`}">${stage.id === 12 ? 'Sonraki Sayfa →' : 'Sonraki →'}</button>
+                    </div>
+                `;
+                pageEl.appendChild(stageEl);
+            });
+            updateAllClipboards();
+        }
+
+        function goStage(n) {
+            if (n < 1 || n > stagesData.length) return;
+            currentStage = n;
+            document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+            document.getElementById(`stage${n}`).classList.add('active');
+        }
+
+        function checkAnswer(shapeId, clickedEl) {
+            const stage = stagesData.find(s => s.id === currentStage);
+            const card = document.getElementById(`card-${currentStage}`);
+            const balloon = card.querySelector('.wrong-balloon');
+
+            if (shapeId === stage.correct) {
+                userAnswers[currentStage] = shapeId;
+                showSuccess();
+                balloon.classList.remove('show');
+                card.style.borderColor = "#4caf50";
+                updateAllClipboards();
+            } else {
+                showError();
+                balloon.classList.add('show');
+                card.style.borderColor = "#f44336";
+
+                // Temporarily turn clicked clipboard red
+                if (clickedEl) {
+                    const originalBorder = clickedEl.style.borderColor;
+                    const handle = clickedEl.querySelector('.clipboard-handle');
+                    const originalHandleBorder = handle.style.borderColor;
+
+                    clickedEl.style.borderColor = "#f44336";
+                    handle.style.borderColor = "#f44336";
+
+                    setTimeout(() => {
+                        clickedEl.style.borderColor = originalBorder;
+                        handle.style.borderColor = originalHandleBorder;
+                    }, 1000);
+                }
+            }
+        }
+
+        function updateAllClipboards() {
+            document.querySelectorAll('.clipboard-body').forEach(body => {
+                const shapeId = body.getAttribute('data-shape');
+                body.innerHTML = '';
+
+                stagesData.forEach(stage => {
+                    if (userAnswers[stage.id] === shapeId) {
+                        const tag = document.createElement('div');
+                        tag.className = 'num-tag';
+                        tag.textContent = stage.id;
+                        body.appendChild(tag);
+                    }
+                });
+            });
+        }
+
+        function showSuccess() {
+            const overlay = document.getElementById('celebration-overlay');
+            overlay.classList.add('show');
+            setTimeout(() => overlay.classList.remove('show'), 1500);
+            playAudio('soru'); // Using soru as a placeholder if tebrik doesn't exist, or just no sound
+        }
+
+        function showError() {
+            const card = document.getElementById(`card-${currentStage}`);
+            card.style.animation = 'none';
+            void card.offsetWidth;
+            card.style.animation = 'wrongShake 0.4s';
+            // playAudio('wrong'); 
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.backgroundColor = ['#f44336', '#2196f3', '#4caf50', '#ffeb3b', '#9c27b0'][Math.floor(Math.random() * 5)];
+                c.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        function playAudio(type) {
+            try {
+                const audio = new Audio(`../audio/sayfa17_${type}.mp3`);
+                audio.play().catch(e => console.log('Audio play failed:', e));
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+
+</html>

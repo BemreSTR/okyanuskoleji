@@ -112,7 +112,14 @@ const backIcon = `<svg class="back-icon" viewBox="0 0 24 24" fill="currentColor"
 // ==================== VIDEO CARD ====================
 function createVideoCard(video: Video): string {
   const safeTitle = escapeHTML(video.title);
-  const materialUrl = video.materialUrl ? escapeHTML(video.materialUrl) : null;
+  
+  // Base URL'i dikkate alarak link oluştur
+  let materialUrl = null;
+  if(video.materialUrl) {
+    const baseUrl = import.meta.env.BASE_URL; // e.g., '/okyanuskoleji/' or '/'
+    const cleanMaterialPath = video.materialUrl.startsWith('/') ? video.materialUrl.substring(1) : video.materialUrl;
+    materialUrl = escapeHTML(baseUrl + cleanMaterialPath);
+  }
 
   if (materialUrl) {
     // Özel İnteraktif Materyal Varsa

@@ -2,60 +2,14 @@ import './style.css';
 import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
-// Login Constants
-const VALID_EMAIL = 'okyanuskoleji@gmail.com';
-const VALID_PASSWORD = 'okyanuskoleji1';
-const LOGIN_SESSION_KEY = 'okyanuskoleji_logged_in';
-
-// Initialize login
-function initializeLogin(): void {
-  // Login screen is currently bypasssed as per user request
-  showMainApp();
-  return;
-
-  /* Original login logic kept for future activation
-  const loginForm = document.getElementById('login-form') as HTMLFormElement;
-  const emailInput = document.getElementById('email') as HTMLInputElement;
-  const passwordInput = document.getElementById('password') as HTMLInputElement;
-  const loginError = document.getElementById('login-error');
-
-  // Check if already logged in
-  if (sessionStorage.getItem(LOGIN_SESSION_KEY)) {
-    showMainApp();
-    return;
-  }
-
-  loginForm.addEventListener('submit', (e: Event) => {
-    e.preventDefault();
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-      sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
-      loginForm.reset();
-      if (loginError) loginError.classList.remove('show');
-      showMainApp();
-    } else {
-      if (loginError) {
-        loginError.textContent = 'E-posta veya şifre hatalı';
-        loginError.classList.add('show');
-      }
-      passwordInput.value = '';
-    }
-  });
-  */
-}
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    startRouter();
+});
 
 function showMainApp(): void {
-  const loginScreen = document.getElementById('login-screen');
   const appContainer = document.getElementById('app');
-
-  if (loginScreen) loginScreen.classList.add('hidden');
   if (appContainer) appContainer.classList.remove('hidden');
-
-  // Start the main application
-  startRouter();
 }
 
 // Basic output sanitizers to reduce XSS surface when rendering Firestore data
@@ -336,11 +290,6 @@ async function router(): Promise<void> {
 
 // ==================== INIT ====================
 window.addEventListener('hashchange', router);
-
-// Initialize login first, then app
-document.addEventListener('DOMContentLoaded', () => {
-  initializeLogin();
-});
 
 // Only start router after app is shown
 function startRouter() {

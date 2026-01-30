@@ -56,8 +56,8 @@
                 <!-- Sidebar -->
                 <aside class="admin-sidebar">
                     <nav class="admin-nav">
-                        <button class="nav-btn active" data-view="videos">📹 Videolar</button>
-                        <button class="nav-btn" data-view="units">📚 Üniteler</button>
+                        <button class="nav-btn active" data-view="videos">📹 Konular</button>
+                        <button class="nav-btn" data-view="units">📚 Temalar</button>
                     </nav>
                 </aside>
 
@@ -66,8 +66,8 @@
                     <!-- Videos View -->
                     <div id="videos-view" class="content-view">
                         <div class="view-header">
-                            <h2>Video Yönetimi</h2>
-                            <button id="add-video-btn" class="btn btn-primary">+ Yeni Video</button>
+                            <h2>Konu Yönetimi</h2>
+                            <button id="add-video-btn" class="btn btn-primary">+ Yeni Konu</button>
                         </div>
 
                         <!-- Grade & Unit Selector -->
@@ -76,15 +76,15 @@
                                 <label>Sınıf</label>
                                 <select id="grade-select" class="select-input">
                                     <option value="">Sınıf Seçin</option>
-                                    <option value="5">5. Sınıf</option>
-                                    <option value="6">6. Sınıf</option>
-                                    <option value="7">7. Sınıf</option>
-                                    <option value="8">8. Sınıf</option>
+                                    <option value="1">1. Sınıf</option>
+                                    <option value="2">2. Sınıf</option>
+                                    <option value="3">3. Sınıf</option>
+                                    <option value="4">4. Sınıf</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label>Ünite</label>
+                                <label>Tema</label>
                                 <select id="unit-select" class="select-input" disabled>
                                     <option value="">Önce sınıf seçin</option>
                                 </select>
@@ -93,15 +93,15 @@
 
                         <!-- Videos List -->
                         <div id="videos-list" class="items-list">
-                            <p class="empty-state">Sınıf ve ünite seçin</p>
+                            <p class="empty-state">Sınıf ve tema seçin</p>
                         </div>
                     </div>
 
                     <!-- Units View -->
                     <div id="units-view" class="content-view" style="display: none;">
                         <div class="view-header">
-                            <h2>Ünite Yönetimi</h2>
-                            <button id="add-unit-btn" class="btn btn-primary">+ Yeni Ünite</button>
+                            <h2>Tema Yönetimi</h2>
+                            <button id="add-unit-btn" class="btn btn-primary">+ Yeni Tema</button>
                         </div>
 
                         <!-- Grade Selector -->
@@ -109,10 +109,10 @@
                             <label>Sınıf</label>
                             <select id="units-grade-select" class="select-input">
                                 <option value="">Sınıf Seçin</option>
-                                <option value="5">5. Sınıf</option>
-                                <option value="6">6. Sınıf</option>
-                                <option value="7">7. Sınıf</option>
-                                <option value="8">8. Sınıf</option>
+                                <option value="1">1. Sınıf</option>
+                                <option value="2">2. Sınıf</option>
+                                <option value="3">3. Sınıf</option>
+                                <option value="4">4. Sınıf</option>
                             </select>
                         </div>
 
@@ -129,7 +129,7 @@
         <div id="video-modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="video-modal-title">Yeni Video</h3>
+                    <h3 id="video-modal-title">Yeni Konu</h3>
                     <button class="modal-close">&times;</button>
                 </div>
 
@@ -137,7 +137,7 @@
                     <input type="hidden" id="video-id" />
 
                     <div class="form-group">
-                        <label for="video-title">Video Başlığı *</label>
+                        <label for="video-title">Konu Başlığı *</label>
                         <input type="text" id="video-title" required />
                     </div>
 
@@ -174,7 +174,7 @@
         <div id="unit-modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="unit-modal-title">Yeni Ünite</h3>
+                    <h3 id="unit-modal-title">Yeni Tema</h3>
                     <button class="modal-close">&times;</button>
                 </div>
 
@@ -182,9 +182,9 @@
                     <input type="hidden" id="unit-id" />
 
                     <div class="form-group">
-                        <label for="unit-name">Ünite Adı *</label>
-                        <input type="text" id="unit-name" placeholder="Allah İnancı" required />
-                        <small>Ünite sırasını sürükle-bırak ile değiştirebilirsiniz</small>
+                        <label for="unit-name">Tema Adı *</label>
+                        <input type="text" id="unit-name" placeholder="Geometrik Şekiller" required />
+                        <small>Tema sırasını sürükle-bırak ile değiştirebilirsiniz</small>
                     </div>
 
                     <div class="modal-actions">

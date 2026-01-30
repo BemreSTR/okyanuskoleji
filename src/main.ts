@@ -252,7 +252,7 @@ async function renderUnitsPage(grade: Grade): Promise<string> {
     <a href="#/sinif/${safeGradeId}/unite/${escapeHTML(unit.id)}" class="unit-card unit-card--grade-${safeGradeId}">
       <span class="unit-number">${index + 1}</span>
       <span class="unit-name">${escapeHTML(unit.name)}</span>
-      <span class="unit-video-count">${unit.videos.length} Video</span>
+      <span class="unit-video-count">${unit.videos.length} Konu</span>
     </a>
   `).join('');
 
@@ -262,11 +262,11 @@ async function renderUnitsPage(grade: Grade): Promise<string> {
       <div class="header-content">
         <a href="#/" class="back-button back-button--grade-${safeGradeId}">${backIcon} Ana Sayfa</a>
         <h1 class="logo logo--small logo--grade-${safeGradeId}">${safeGradeDisplayName}</h1>
-        <p class="tagline">Üniteleri keşfet, videoları izle!</p>
+        <p class="tagline">Temaları keşfet, konuları öğren!</p>
       </div>
     </header>
     <main class="container">
-      <h2 class="section-title">Üniteler</h2>
+      <h2 class="section-title">Temalar</h2>
       <div class="unit-grid">
         ${unitCards}
       </div>
@@ -288,12 +288,12 @@ async function renderVideosPage(grade: Grade, unit: Unit): Promise<string> {
     ${createVisitorCounter()}
     <header class="header header--compact header--grade-${safeGradeId}">
       <div class="header-content">
-        <a href="#/sinif/${safeGradeId}" class="back-button back-button--grade-${safeGradeId}">${backIcon} Üniteler</a>
+        <a href="#/sinif/${safeGradeId}" class="back-button back-button--grade-${safeGradeId}">${backIcon} Temalar</a>
         <h1 class="logo logo--small logo--grade-${safeGradeId}">${safeGradeDisplayName}</h1>
         <p class="tagline">${safeUnitName}</p>
         <div class="video-count video-count--grade-${safeGradeId}">
           <span class="video-count-number">${unit.videos.length}</span>
-          <span class="video-count-text">Video</span>
+          <span class="video-count-text">Konu</span>
         </div>
       </div>
     </header>
@@ -350,8 +350,8 @@ async function router(): Promise<void> {
     return;
   }
 
-  // Ünite sayfası: #/sinif/5/unite/1
-  const unitMatch = hash.match(/^#\/sinif\/(\d+)\/unite\/(\d+)$/);
+  // Ünite sayfası: #/sinif/2/unite/tema-1
+  const unitMatch = hash.match(/^#\/sinif\/(\d+)\/unite\/([a-zA-Z0-9_-]+)$/);
   if (unitMatch) {
     const gradeId = unitMatch[1];
     const unitId = unitMatch[2];

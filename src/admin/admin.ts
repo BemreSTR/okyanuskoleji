@@ -190,7 +190,7 @@ gradeSelect.addEventListener('change', () => {
     if (selectedGradeId) {
         const grade = currentGrades.find(g => g.id === selectedGradeId);
         unitSelect.disabled = false;
-        unitSelect.innerHTML = '<option value="">Ünite Seçin</option>';
+        unitSelect.innerHTML = '<option value="">Tema Seçin</option>';
 
         grade?.units.forEach((unit, index) => {
             const option = document.createElement('option');
@@ -224,7 +224,7 @@ function renderVideosView() {
 
 function renderVideosList() {
     if (!selectedGradeId || !selectedUnitId) {
-        videosListEl.innerHTML = '<p class="empty-state">Sınıf ve ünite seçin</p>';
+        videosListEl.innerHTML = '<p class="empty-state">Sınıf ve tema seçin</p>';
         return;
     }
 
@@ -232,7 +232,7 @@ function renderVideosList() {
     const unit = grade?.units.find(u => u.id === selectedUnitId);
 
     if (!unit || unit.videos.length === 0) {
-        videosListEl.innerHTML = '<p class="empty-state">Henüz video yok</p>';
+        videosListEl.innerHTML = '<p class="empty-state">Henüz konu yok</p>';
         return;
     }
 
@@ -306,11 +306,11 @@ videosListEl.addEventListener('click', async (event) => {
     }
 
     if (removeButton) {
-        if (!confirm('Bu videoyu silmek istediğinize emin misiniz?')) return;
+        if (!confirm('Bu konuyu silmek istediğinize emin misiniz?')) return;
         try {
             await deleteVideo(selectedGradeId, selectedUnitId, docId);
             await loadData();
-            alert('Video silindi!');
+            alert('Konu silindi!');
         } catch (error) {
             alert('Hata oluştu: ' + error);
         }
@@ -319,7 +319,7 @@ videosListEl.addEventListener('click', async (event) => {
 
 addVideoBtn.addEventListener('click', () => {
     if (!selectedGradeId || !selectedUnitId) {
-        alert('Önce sınıf ve ünite seçin!');
+        alert('Önce sınıf ve tema seçin!');
         return;
     }
     openVideoModal();
@@ -330,7 +330,7 @@ const videoModal = document.getElementById('video-modal')!;
 const videoForm = document.getElementById('video-form') as HTMLFormElement;
 
 function openVideoModal(video?: any) {
-    document.getElementById('video-modal-title')!.textContent = video ? 'Video Düzenle' : 'Yeni Video';
+    document.getElementById('video-modal-title')!.textContent = video ? 'Konu Düzenle' : 'Yeni Konu';
 
     if (video) {
         (document.getElementById('video-id') as HTMLInputElement).value = video._docId || '';
@@ -435,10 +435,10 @@ videoForm.addEventListener('submit', async (e) => {
 
         closeVideoModal();
         await loadData();
-        alert('Video başarıyla kaydedildi!');
+        alert('Konu başarıyla kaydedildi!');
     } catch (error) {
         console.error('Video save error:', error);
-        alert('Video kaydedilirken hata oluştu: ' + error);
+        alert('Konu kaydedilirken hata oluştu: ' + error);
     }
 });
 
@@ -475,7 +475,7 @@ function renderUnitsList() {
     const grade = currentGrades.find(g => g.id === gradeId);
 
     if (!grade || grade.units.length === 0) {
-        unitsListEl.innerHTML = '<p class="empty-state">Henüz ünite yok</p>';
+        unitsListEl.innerHTML = '<p class="empty-state">Henüz tema yok</p>';
         return;
     }
 
@@ -484,7 +484,7 @@ function renderUnitsList() {
       <div class="drag-handle">⋮⋮</div>
       <div class="item-info">
         <h4>${index + 1}. ${escapeHTML(unit.name)}</h4>
-        <p class="item-meta">${unit.videos.length} video</p>
+        <p class="item-meta">${unit.videos.length} konu</p>
       </div>
       <div class="item-actions">
         <button class="btn btn-sm btn-secondary js-edit-unit" data-grade="${escapeHTML(gradeId)}" data-id="${escapeHTML(unit.id)}">Düzenle</button>
@@ -543,11 +543,11 @@ unitsListEl.addEventListener('click', async (event) => {
     }
 
     if (removeButton) {
-        if (!confirm('Bu üniteyi silmek istediğinize emin misiniz? İçindeki tüm videolar silinecek!')) return;
+        if (!confirm('Bu temayı silmek istediğinize emin misiniz? İçindeki tüm konular silinecek!')) return;
         try {
             await deleteUnit(gradeId, unitId);
             await loadData();
-            alert('Ünite silindi!');
+            alert('Tema silindi!');
         } catch (error) {
             alert('Hata oluştu: ' + error);
         }
@@ -570,7 +570,7 @@ let editingUnitGradeId = '';
 
 function openUnitModal(gradeId: string, unit?: Unit) {
     editingUnitGradeId = gradeId;
-    document.getElementById('unit-modal-title')!.textContent = unit ? 'Ünite Düzenle' : 'Yeni Ünite';
+    document.getElementById('unit-modal-title')!.textContent = unit ? 'Tema Düzenle' : 'Yeni Tema';
 
     const unitIdInput = document.getElementById('unit-id') as HTMLInputElement;
 
@@ -619,9 +619,9 @@ unitForm.addEventListener('submit', async (e) => {
 
         closeUnitModal();
         await loadData();
-        alert('Ünite başarıyla kaydedildi!');
+        alert('Tema başarıyla kaydedildi!');
     } catch (error) {
         console.error('Unit save error:', error);
-        alert('Ünite kaydedilirken hata oluştu: ' + error);
+        alert('Tema kaydedilirken hata oluştu: ' + error);
     }
 });

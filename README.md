@@ -1,108 +1,94 @@
-# 🌊 Okyanus Koleji
+# 🌊 Okyanus Koleji - İnteraktif Eğitim Platformu
 
 <div align="center">
-  <img src="public/images/dinakademi.png" alt="Okyanus Koleji Logo" width="400"/>
+  <img src="public/images/okyanus.jpg" alt="Okyanus Koleji Logo" width="400"/>
   
-  ### Öğrenciler için Eğitici İnteraktif Platformu
+  ### Okyanus Koleji Okulları İçin İnteraktif Eğitim Materyalleri
   
-  [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://dinakademi.com)
+  [![Okyanus Koleji](https://img.shields.io/badge/Okyanus-Koleji-blue)](https://www.okyanuskoleji.k12.tr/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)](https://www.typescriptlang.org/)
   [![Vite](https://img.shields.io/badge/Vite-7.2-646CFF)](https://vitejs.dev/)
   
-  [🌐 Canlı Demo](https://dinakademi.com) | [📖 Dokümantasyon](#özellikler) | [🐛 Sorun Bildir](https://github.com/BemreSTR/okyanuskoleji/issues)
 </div>
 
 ---
 
 ## 📖 Hakkında
 
-**Okyanus Koleji**, öğrencileri için modern bir eğitim platformudur. Öğrenciler, tema ve konu bazında organize edilmiş interaktif konu anlatımlarına kolayca erişebilirler.
+Bu proje, **Okyanus Koleji** öğrencileri için özel olarak geliştirilmiş bir dijital eğitim platformudur. Platformun temel amacı, ders anlatımlarını statik videolardan çıkarıp, öğrencinin aktif olarak katılabileceği HTML5 tabanlı **interaktif eğitim materyalleri** ile zenginleştirmektir.
 
-### 🎯 Amacımız
+Platform üzerinden öğrenciler, sınıf ve tema bazında ayrıştırılmış konulara ulaşabilir ve her konu için özel olarak hazırlanmış interaktif "Yapalım Öğrenelim" etkinliklerini, oyunları ve testleri uygulayabilirler.
 
-- ✅ Kaliteli eğitim içeriğini erişilebilir kılmak
-- ✅ Öğrencilerin ders çalışmasını eğlenceli hale getirmek
-- ✅ İnteraktif öğrenme deneyimi sunmak
+---
+
+## 🎯 Proje Amacı
+
+- **Etkileşimli Öğrenme:** Öğrencilerin sadece izleyerek değil, tıklayarak, sürükleyerek ve çözerek öğrenmesini sağlamak.
+- **Dijital Dönüşüm:** Klasik ders kitaplarını ve sunumları, web tabanlı modern eğitim araçlarına dönüştürmek.
+- **Kolay Erişim:** Herhangi bir üyelik veya uygulama yüklemesi gerektirmeden, web tarayıcısı üzerinden tüm materyallere anında erişim.
 
 ---
 
 ## ✨ Özellikler
 
-### 🎓 Öğrenci Özellikleri
-
-- **📁 İnteraktif Materyaller**: Konulara özel hazırlanmış HTML tabanlı interaktif içerikler
-- **📱 Responsive Tasarım**: Mobil, tablet ve masaüstü uyumlu
-- **🔍 Kolay Navigasyon**: Sezgisel ve kullanıcı dostu arayüz
-- **⚡ Hızlı Performans**: Tamamen statik site (Static Site) yapısı sayesinde ışık hızında açılış
+- **📂 Yapılandırılmış Müfredat:** 1., 2., 3. ve 4. sınıf seviyelerine göre ayrılmış, tema ve konu bazlı organize edilmiş içerik yapısı.
+- **🚀 İnteraktif Konu Anlatımları:** Her konu için özel butonlarla başlatılan, tam ekran çalışan zengin HTML içerikleri.
+- **⚡ Yüksek Performans:** Tamamen statik site mimarisi sayesinde bekleme süresi olmadan hızlı açılan sayfalar.
+- **📱 Tüm Cihazlara Uyumlu:** Akıllı tahta, tablet, bilgisayar ve telefonlarda sorunsuz çalışır.
 
 ---
 
-## 🛠️ Teknoloji Stack
+## 🛠️ Teknik Altyapı
 
-### Frontend
-- **[Vite](https://vitejs.dev/)** - Lightning fast build tool
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
-- **Vanilla CSS** - Modern, responsive styling
-- **ES Modules** - Modern JavaScript modules
+Proje, modern web teknolojileri kullanılarak performans ve sürdürülebilirlik odaklı geliştirilmiştir:
 
-### Architecture
-- **Static Site** - Sunucu veya veritabanı gerektirmeyen yapı
-- **Config-Based Data** - Müfredat ve konuların JSON/TS dosyaları üzerinden yönetimi
+- **Frontend:** Vite, TypeScript, Vanilla CSS
+- **Mimari:** Statik Site (Serverless)
+- **Veri Yönetimi:** Konfigürasyon tabanlı (Config-Based) veri yapısı (`src/data/curriculum.ts`), veritabanı gereksinimini ortadan kaldırır.
 
 ---
 
-## 🚀 Kurulum
+## 📚 İçerik ve Müfredat Yönetimi
 
-### Ön Gereksinimler
+Bu platformda yeni bir konu veya interaktif materyal eklemek yazılım bilgisi gerektirmez, sadece bir dosya düzenlemesi yeterlidir.
 
-- **Node.js** >= 18.0.0
-- **npm** veya **pnpm**
-- **Git**
+### Yeni Bir İnteraktif Ders Nasıl Eklenir?
 
-### Adımlar
+1. **Materyali Hazırlayın:** Hazırladığınız HTML/JS/CSS tabanlı interaktif ders klasörünü (Örn: `Geometrik-Cisimler`) projenin `public/ders-materyal/` klasörü içine atın.
+2. **Sisteme Tanımlayın:** `src/data/curriculum.ts` dosyasını açın ve ilgili sınıf/tema altına şu satırı ekleyin:
 
-1. **Repository'yi klonlayın:**
+```typescript
+{
+  id: 't1-k1', 
+  title: 'Konu Başlığı', 
+  youtubeId: '', 
+  materialUrl: '/ders-materyal/KlasorAdi/index.html', // Klasör yolunu buraya yazın
+  order: 1
+}
+```
+
+3. **Yayınlayın:** Değişiklikler anında sitede görünür ve "İnteraktif Konu Anlatımını Başlat" butonu aktif hale gelir.
+
+---
+
+## 🚀 Kurulum ve Çalıştırma
+
+Projeyi yerel bilgisayarınızda çalıştırmak için:
+
+1. **Repoyu indirin:**
    ```bash
    git clone https://github.com/BemreSTR/okyanuskoleji.git
    cd okyanuskoleji
    ```
 
-2. **Bağımlılıkları yükleyin:**
+2. **Gerekli paketleri yükleyin:**
    ```bash
    npm install
-   # veya
-   pnpm install
    ```
 
-3. **Development sunucusunu başlatın:**
+3. **Projeyi başlatın:**
    ```bash
    npm run dev
    ```
 
-4. **Tarayıcıda açın:**
-   - Ana site: `http://localhost:5173`
-
----
-
-## 📚 Kullanım
-
-### Müfredat Yönetimi (Admin Yerine)
-
-Site üzerindeki tüm sınıflar, temalar ve konular `src/data/curriculum.ts` dosyası üzerinden yönetilir.
-
-**Yeni Bir Konu Eklemek İçin:**
-
-1. `src/data/curriculum.ts` dosyasını açın.
-2. İlgili sınıf ve temanın `videos` (Konular) dizisine yeni bir obje ekleyin:
-
-```typescript
-{
-  id: 'yeni-konu-id',
-  title: 'Konu Başlığı',
-  youtubeId: '', 
-  materialUrl: '/ders-materyal/KlasorAdi/index.html', // public/ders-materyal altındaki yol
-  order: 99
-},
-```
-
-3. Dosyayı kaydettiğinizde site otomatik olarak güncellenir.
+4. **Tarayıcıda görüntüleyin:** `http://localhost:5173` adresine gidin.

@@ -140,7 +140,7 @@ async function renderHomePage(): Promise<string> {
     <header class="header">
       <div class="header-content">
         <h1 class="logo">OKYANUS KOLEJİ</h1>
-        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Okyanus Koleji Banner" class="header-banner" />
+        <img src="${import.meta.env.BASE_URL}images/okyanus.jpg" alt="Okyanus Koleji Banner" class="header-banner" />
         <p class="tagline">Öğrenciler için eğitici videolar, <br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>

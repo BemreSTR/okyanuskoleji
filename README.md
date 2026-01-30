@@ -11,7 +11,7 @@
   [![Vite](https://img.shields.io/badge/Vite-7.2-646CFF)](https://vitejs.dev/)
   [![Firebase](https://img.shields.io/badge/Firebase-11.2-orange)](https://firebase.google.com/)
   
-  [🌐 Canlı Demo](https://dinakademi.com) | [📖 Dokümantasyon](#özellikler) | [🐛 Sorun Bildir](https://github.com/okyanuskoleji/Dinakademi/issues)
+  [🌐 Canlı Demo](https://dinakademi.com) | [📖 Dokümantasyon](#özellikler) | [🐛 Sorun Bildir](https://github.com/BemreSTR/okyanuskoleji/issues)
 </div>
 
 ---
@@ -85,8 +85,8 @@
 
 1. **Repository'yi klonlayın:**
    ```bash
-   git clone https://github.com/okyanuskoleji/Dinakademi.git
-   cd Dinakademi
+   git clone https://github.com/BemreSTR/okyanuskoleji.git
+   cd okyanuskoleji
    ```
 
 2. **Bağımlılıkları yükleyin:**
@@ -417,7 +417,7 @@ Bu proje eğitim amaçlıdır ve açık kaynak olarak paylaşılmaktadır.
 
 - **Website**: [dinakademi.com](https://dinakademi.com)
 - **Email**: dinakademi@gmail.com
-- **GitHub**: [okyanuskoleji](https://github.com/okyanuskoleji)
+- **GitHub**: [BemreSTR](https://github.com/BemreSTR)
 
 ---
 

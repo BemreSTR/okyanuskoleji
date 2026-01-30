@@ -2,10 +2,62 @@ import './style.css';
 import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
+// Login Constants
+const VALID_EMAIL = 'okyanuskoleji@gmail.com';
+const VALID_PASSWORD = 'okyanuskoleji1';
+const LOGIN_SESSION_KEY = 'okyanuskoleji_logged_in';
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    startRouter();
+    initializeLogin();
 });
+
+// Initialize login
+function initializeLogin(): void {
+  const loginForm = document.getElementById('login-form') as HTMLFormElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+  const loginError = document.getElementById('login-error');
+
+  // Check if already logged in
+  if (sessionStorage.getItem(LOGIN_SESSION_KEY)) {
+    showMainApp();
+    return;
+  }
+
+  if (loginForm) {
+      loginForm.addEventListener('submit', (e: Event) => {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+          sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
+          loginForm.reset();
+          if (loginError) loginError.classList.remove('show');
+          showMainApp();
+        } else {
+          if (loginError) {
+            loginError.textContent = 'E-posta veya şifre hatalı';
+            loginError.classList.add('show');
+          }
+          passwordInput.value = '';
+        }
+      });
+  }
+}
+
+function showMainApp(): void {
+  const loginScreen = document.getElementById('login-screen');
+  const appContainer = document.getElementById('app');
+
+  if (loginScreen) loginScreen.classList.add('hidden');
+  if (appContainer) appContainer.classList.remove('hidden');
+
+  // Start the main application
+  startRouter();
+}
 
 function escapeHTML(value: string): string {
   return value
@@ -257,7 +309,7 @@ async function router(): Promise<void> {
 }
 
 // ==================== INIT ====================
-window.addEventListener('hashchange', router);
+// Window listener moved to startRouter
 
 // Only start router after app is shown
 function startRouter() {

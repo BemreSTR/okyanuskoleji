@@ -24,6 +24,16 @@ export async function loadGrades(): Promise<Grade[]> {
         const gradesSnapshot = await getDocs(collection(db, COLLECTIONS.GRADES));
         const grades: Grade[] = [];
 
+        if (gradesSnapshot.empty) {
+            // Veri yoksa varsayılan Okyanus Koleji sınıflarını dön
+            return [
+                { id: '1', name: '1. Sınıf', displayName: '1. Sınıf', isActive: true, units: [] },
+                { id: '2', name: '2. Sınıf', displayName: '2. Sınıf', isActive: true, units: [{ id: 'init', name: 'Başlangıç', videos: [], order: 0 }] },
+                { id: '3', name: '3. Sınıf', displayName: '3. Sınıf', isActive: true, units: [] },
+                { id: '4', name: '4. Sınıf', displayName: '4. Sınıf', isActive: true, units: [] }
+            ];
+        }
+
         for (const gradeDoc of gradesSnapshot.docs) {
             const gradeData = gradeDoc.data();
             const units = await loadUnits(gradeDoc.id);
@@ -37,7 +47,18 @@ export async function loadGrades(): Promise<Grade[]> {
             });
         }
 
-        return grades.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+        const result = grades.filter(g => ['1', '2', '3', '4'].includes(g.id)).sort((a, b) => parseInt(a.id) - parseInt(b.id));
+        
+        if (result.length === 0) {
+            return [
+                { id: '1', name: '1. Sınıf', displayName: '1. Sınıf', isActive: true, units: [] },
+                { id: '2', name: '2. Sınıf', displayName: '2. Sınıf', isActive: true, units: [{ id: 'init', name: 'Başlangıç', videos: [], order: 0 }] },
+                { id: '3', name: '3. Sınıf', displayName: '3. Sınıf', isActive: true, units: [] },
+                { id: '4', name: '4. Sınıf', displayName: '4. Sınıf', isActive: true, units: [] }
+            ];
+        }
+
+        return result;
     } catch (error) {
         console.error('Error loading grades:', error);
         return [];

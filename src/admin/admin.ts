@@ -237,7 +237,7 @@ function renderVideosList() {
     }
 
     videosListEl.innerHTML = unit.videos.map((video: any) => {
-        const safeDocId = escapeHTML(video._docId || '');
+        const safeDocId = escapeHTML(video._docId || video.id || '');
         const safeTitle = escapeHTML(video.title || '');
         const safeYoutubeId = escapeHTML(video.youtubeId || '');
 
@@ -298,7 +298,7 @@ videosListEl.addEventListener('click', async (event) => {
 
     const grade = currentGrades.find(g => g.id === selectedGradeId);
     const unit = grade?.units.find(u => u.id === selectedUnitId);
-    const video = unit?.videos.find((v: any) => v._docId === docId);
+    const video = unit?.videos.find((v: any) => (v._docId || v.id) === docId);
 
     if (editButton) {
         if (video) openVideoModal(video);
@@ -333,7 +333,7 @@ function openVideoModal(video?: any) {
     document.getElementById('video-modal-title')!.textContent = video ? 'Konu Düzenle' : 'Yeni Konu';
 
     if (video) {
-        (document.getElementById('video-id') as HTMLInputElement).value = video._docId || '';
+        (document.getElementById('video-id') as HTMLInputElement).value = video._docId || video.id || '';
         (document.getElementById('video-title') as HTMLInputElement).value = video.title;
         (document.getElementById('youtube-id') as HTMLInputElement).value = video.youtubeId;
         (document.getElementById('kahoot-link') as HTMLInputElement).value = video.kahootLink || '';

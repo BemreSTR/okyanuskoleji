@@ -7,11 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startRouter();
 });
 
-// Basic output sanitizers to reduce XSS surface when rendering Firestore data
-const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
-const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
-const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
-
 function escapeHTML(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -19,25 +14,6 @@ function escapeHTML(value: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-}
-
-function sanitizeYouTubeId(value: string | undefined): string | null {
-  if (!value) return null;
-  const trimmed = value.trim();
-  return YOUTUBE_ID_PATTERN.test(trimmed) ? trimmed : null;
-}
-
-function sanitizeExternalLink(raw: string | undefined | null, allowedHosts: Set<string>): string | null {
-  if (!raw) return null;
-  try {
-    const url = new URL(raw);
-    if (url.protocol !== 'https:') return null;
-    const host = url.hostname.toLowerCase();
-    if (!allowedHosts.has(host)) return null;
-    return url.toString();
-  } catch {
-    return null;
-  }
 }
 
 // Visitor Counter - CounterAPI.dev (CORS-friendly JSON API)
@@ -79,9 +55,6 @@ function createVisitorCounter(): string {
 }
 
 // SVG Icons
-const kahootIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>`;
-const bookIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>`;
-const wheelIcon = `<svg class="link-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/></svg>`;
 const backIcon = `<svg class="back-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>`;
 
 // ==================== VIDEO CARD ====================

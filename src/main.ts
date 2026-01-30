@@ -3,12 +3,17 @@ import { getGrades, getGradeById, getUnitById } from './data';
 import type { Video, Unit, Grade } from './types';
 
 // Login Constants
-const VALID_EMAIL = 'alioflu@gmail.com';
-const VALID_PASSWORD = 'alioflu1';
-const LOGIN_SESSION_KEY = 'alioflu_logged_in';
+const VALID_EMAIL = 'okyanuskoleji@gmail.com';
+const VALID_PASSWORD = 'okyanuskoleji1';
+const LOGIN_SESSION_KEY = 'okyanuskoleji_logged_in';
 
 // Initialize login
 function initializeLogin(): void {
+  // Login screen is currently bypasssed as per user request
+  showMainApp();
+  return;
+
+  /* Original login logic kept for future activation
   const loginForm = document.getElementById('login-form') as HTMLFormElement;
   const emailInput = document.getElementById('email') as HTMLInputElement;
   const passwordInput = document.getElementById('password') as HTMLInputElement;
@@ -39,6 +44,7 @@ function initializeLogin(): void {
       passwordInput.value = '';
     }
   });
+  */
 }
 
 function showMainApp(): void {
@@ -94,22 +100,22 @@ async function updateVisitorCount(): Promise<void> {
 
   // Eğer bu oturumda zaten artırıldıysa, sadece göster
   if (hasIncrementedThisSession) {
-    const stored = localStorage.getItem('dinakademi_visits');
+    const stored = localStorage.getItem('okyanuskoleji_visits');
     if (stored) counterElement.textContent = parseInt(stored).toLocaleString('tr-TR');
     return;
   }
 
   try {
     // CounterAPI.dev - CORS destekli ve JSON döner
-    const response = await fetch('https://api.counterapi.dev/v1/dinakademi-website/visits/up');
+    const response = await fetch('https://api.counterapi.dev/v1/okyanuskoleji-website/visits/up');
     const data = await response.json();
     const count = data.count || 0;
     counterElement.textContent = count.toLocaleString('tr-TR');
-    localStorage.setItem('dinakademi_visits', count.toString());
+    localStorage.setItem('okyanuskoleji_visits', count.toString());
     hasIncrementedThisSession = true;
   } catch (error) {
     // API başarısız olursa localStorage'dan göster
-    const stored = localStorage.getItem('dinakademi_visits');
+    const stored = localStorage.getItem('okyanuskoleji_visits');
     counterElement.textContent = stored ? parseInt(stored).toLocaleString('tr-TR') : '0';
   }
 }
@@ -220,8 +226,8 @@ async function renderHomePage(): Promise<string> {
     ${createVisitorCounter()}
     <header class="header">
       <div class="header-content">
-        <h1 class="logo">DİN AKADEMİ</h1>
-        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Din Akademi Banner" class="header-banner" />
+        <h1 class="logo">OKYANUS KOLEJİ</h1>
+        <img src="${import.meta.env.BASE_URL}images/dinakademi.png" alt="Okyanus Koleji Banner" class="header-banner" />
         <p class="tagline">Öğrenciler için eğitici videolar, <br> Wordwall ve Kahoot yarışmaları</p>
       </div>
     </header>
@@ -232,7 +238,7 @@ async function renderHomePage(): Promise<string> {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
+      <p class="footer-text">© ${new Date().getFullYear()} OKYANUS KOLEJİ</p>
     </footer>
   `;
 }
@@ -266,7 +272,7 @@ async function renderUnitsPage(grade: Grade): Promise<string> {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
+      <p class="footer-text">© ${new Date().getFullYear()} OKYANUS KOLEJİ</p>
     </footer>
   `;
 }
@@ -297,7 +303,7 @@ async function renderVideosPage(grade: Grade, unit: Unit): Promise<string> {
       </div>
     </main>
     <footer class="footer">
-      <p class="footer-text">© ${new Date().getFullYear()} DİN AKADEMİ</p>
+      <p class="footer-text">© ${new Date().getFullYear()} OKYANUS KOLEJİ</p>
     </footer>
   `;
 }

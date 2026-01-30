@@ -1,7 +1,7 @@
-# 📚 Din Akademi
+# 🌊 Okyanus Koleji
 
 <div align="center">
-  <img src="public/images/dinakademi.png" alt="Din Akademi Logo" width="400"/>
+  <img src="public/images/dinakademi.png" alt="Okyanus Koleji Logo" width="400"/>
   
   ### Öğrenciler için Eğitici Video Platformu
   
@@ -18,7 +18,7 @@
 
 ## 📖 Hakkında
 
-**Din Akademi**, 5-8. sınıf öğrencileri için Din Kültürü ve Ahlak Bilgisi dersi içeriklerini sunan modern bir eğitim platformudur. Öğrenciler, ünite bazında organize edilmiş YouTube videoları, Kahoot testleri ve Wordwall aktivitelerine kolayca erişebilirler.
+**Okyanus Koleji**, öğrencileri için modern bir eğitim platformudur. Öğrenciler, ünite bazında organize edilmiş YouTube videoları, Kahoot testleri ve Wordwall aktivitelerine kolayca erişebilirler.
 
 ### 🎯 Amacımız
 
@@ -416,7 +416,7 @@ Bu proje eğitim amaçlıdır ve açık kaynak olarak paylaşılmaktadır.
 ## 📞 İletişim
 
 - **Website**: [dinakademi.com](https://dinakademi.com)
-- **Email**: dinakademi@gmail.com
+- **Email**: okyanuskoleji@gmail.com
 - **GitHub**: [BemreSTR](https://github.com/BemreSTR)
 
 ---

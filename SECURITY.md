@@ -1,4 +1,4 @@
-# 🔒 Din Akademi - Güvenlik Raporu
+# 🔒 Okyanus Koleji - Güvenlik Raporu
 
 **Son Güncelleme:** 15 Aralık 2025  
 **Güvenlik Durumu:** 🟢 **GÜÇLÜ** (9.2/10)  
@@ -144,7 +144,7 @@ service cloud.firestore {
 sessionStorage.setItem('admin_selectedGradeId', gradeId);
 
 // LocalStorage kullanımı (sadece visitor counter)
-localStorage.setItem('dinakademi_visits', count);
+localStorage.setItem('okyanuskoleji_visits', count);
 ```
 
 ---
@@ -340,7 +340,7 @@ const TIMEOUT = 30 * 60 * 1000; // 30 minutes
 ## 📞 İletişim
 
 **Güvenlik Sorunu Bildirimi:**
-- Email: dinakademi@gmail.com
+- Email: okyanuskoleji@gmail.com
 - Konu: [SECURITY] Güvenlik Raporu
 - Beklenen Yanıt: 24 saat
 
@@ -367,7 +367,7 @@ const TIMEOUT = 30 * 60 * 1000; // 30 minutes
 
 ## 🏆 Sonuç
 
-**Din Akademi güvenlik açısından production-ready durumda!**
+**Okyanus Koleji güvenlik açısından production-ready durumda!**
 
 **Güçlü Yönler:**
 - ✅ Multi-layer defense strategy

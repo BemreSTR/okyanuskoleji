@@ -7,11 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     startRouter();
 });
 
-function showMainApp(): void {
-  const appContainer = document.getElementById('app');
-  if (appContainer) appContainer.classList.remove('hidden');
-}
-
 // Basic output sanitizers to reduce XSS surface when rendering Firestore data
 const ALLOWED_KAHOOT_HOSTS = new Set(['kahoot.it', 'create.kahoot.it']);
 const ALLOWED_WORDWALL_HOSTS = new Set(['wordwall.net', 'www.wordwall.net']);
